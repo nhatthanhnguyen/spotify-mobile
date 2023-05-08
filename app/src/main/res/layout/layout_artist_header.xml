@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/linearLayoutHeader"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imageViewArtist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            app:srcCompat="@drawable/spotify_icon_rgb_green" />
+
+        <ImageButton
+            android:id="@+id/buttonBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_16"
+            android:layout_marginTop="@dimen/spacing_20"
+            android:background="@android:color/transparent"
+            app:srcCompat="@drawable/ic_chevron_left_without_back" />
+
+        <TextView
+            android:id="@+id/textViewArtistName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:ellipsize="end"
+            android:fontFamily="@font/circular_bold"
+            android:maxLines="2"
+            android:paddingHorizontal="@dimen/spacing_16"
+            android:paddingBottom="@dimen/spacing_8"
+            android:text="Emanuel Fremont"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_28" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:paddingHorizontal="@dimen/spacing_16"
+        android:paddingTop="@dimen/spacing_8">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewNumberOfLikes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/spacing_8"
+                android:fontFamily="@font/circular_book"
+                android:text="1.139.683 user likes"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/text_size_14" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|start">
+
+                <Button
+                    android:id="@+id/buttonFollow"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/spacing_20"
+                    android:fontFamily="@font/circular_bold"
+                    android:maxLines="1"
+                    android:text="Follow"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_12"
+                    app:strokeColor="@color/white"
+                    app:strokeWidth="1dp" />
+
+                <ImageButton
+                    android:id="@+id/buttonSettingsArtist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/ic_more" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/buttonPlayArtist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:srcCompat="@drawable/ic_play_green" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

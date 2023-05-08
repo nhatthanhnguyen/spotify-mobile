@@ -1,0 +1,15 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="SpotifyDarkTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/dark_black</item>
+        <item name="colorSurface">@android:color/transparent</item>
+        <item name="colorOnSurface">@android:color/transparent</item>
+        <item name="colorPrimary">@color/bright_lime_green</item>
+        <item name="colorPrimaryVariant">@color/gray</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/basic_black</item>
+        <item name="colorSecondaryVariant">@color/dark_black</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+</resources>

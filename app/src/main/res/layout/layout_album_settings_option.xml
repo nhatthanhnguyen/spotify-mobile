@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingHorizontal="@dimen/spacing_32">
+
+    <ImageView
+        android:id="@+id/imageViewAlbumSettingsOption"
+        android:layout_width="@dimen/album_settings_option_image"
+        android:layout_height="@dimen/album_settings_option_image"
+        android:layout_marginEnd="@dimen/spacing_12" />
+
+    <TextView
+        android:id="@+id/textViewAlbumSettingsOption"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:fontFamily="@font/circular_book"
+        android:maxLines="2"
+        android:text="Like"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_16" />
+</LinearLayout>

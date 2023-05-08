@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/spacing_24"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textViewSectionTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/circular_bold"
+        android:paddingHorizontal="@dimen/spacing_16"
+        android:text="Recently played"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_24" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_20"
+        android:orientation="horizontal"
+        android:overScrollMode="never"/>
+</LinearLayout>

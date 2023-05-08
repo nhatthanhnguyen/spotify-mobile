@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/spacing_16">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/imageViewArtist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:src="@drawable/spotify_icon_rgb_green"
+            app:riv_corner_radius="@dimen/spacing_20" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/spacing_16"
+            android:layout_gravity="bottom">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/spacing_16">
+
+                <TextView
+                    android:id="@+id/textViewNumberOfLikes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/circular_bold"
+                    android:text="544.984"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_20" />
+
+                <TextView
+                    android:id="@+id/textViewDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/circular_book"
+                    android:maxLines="3"
+                    android:text="Anders Linros is a pianist and composer. Fully trained in classical music creating very calm, peaceful and inspiring tones. Stream and save my music and Playlists"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_20" />
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/buttonMoreInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/spacing_16"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/ic_chevron_right_without_back" />
+        </LinearLayout>
+    </FrameLayout>
+</LinearLayout>

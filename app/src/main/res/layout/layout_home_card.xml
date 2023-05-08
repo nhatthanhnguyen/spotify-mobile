@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayoutCard"
+    android:layout_width="154dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="154dp"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_8"
+        android:ellipsize="end"
+        android:fontFamily="@font/circular_bold"
+        android:maxLines="1"
+        android:text="Peaceful Piano"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_14" />
+
+    <TextView
+        android:id="@+id/textViewDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:fontFamily="@font/circular_book"
+        android:maxLines="2"
+        android:text="Relax and indulge with beautiful piano pieces"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/text_size_12" />
+
+</LinearLayout>
