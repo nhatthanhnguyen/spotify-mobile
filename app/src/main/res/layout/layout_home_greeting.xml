@@ -11,22 +11,25 @@
 
     <TextView
         android:id="@+id/textViewGreeting"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="end"
         android:fontFamily="@font/circular_bold"
+        android:maxLines="1"
         android:text="Good afternoon"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_24" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:gravity="end|center_vertical">
 
         <ImageButton
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/spacing_20"
             android:background="@android:color/transparent"
             android:contentDescription="Notification"
@@ -34,7 +37,7 @@
 
         <ImageButton
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/spacing_20"
             android:background="@android:color/transparent"
             android:contentDescription="Recently played"
@@ -43,7 +46,7 @@
         <ImageButton
             android:id="@+id/buttonSettings"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:contentDescription="Settings"
             app:srcCompat="@drawable/ic_settings" />

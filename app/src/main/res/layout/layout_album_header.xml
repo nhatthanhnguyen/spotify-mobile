@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/linearLayoutHeader"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/linearLayoutHeader"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_24"
-        android:paddingHorizontal="@dimen/spacing_16">
+        android:paddingTop="@dimen/spacing_16">
+
+        <ImageView
+            android:id="@+id/imageViewAlbumImage"
+            android:layout_width="@dimen/album_image"
+            android:layout_height="@dimen/album_image"
+            android:layout_gravity="center" />
 
         <ImageButton
             android:id="@+id/buttonBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_16"
             android:background="@android:color/transparent"
-            app:srcCompat="@drawable/ic_chevron_left_without_back" />
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/imageViewAlbumImage"
-        android:layout_width="@dimen/album_image"
-        android:layout_height="@dimen/album_image"
-        android:layout_gravity="center" />
+            app:srcCompat="@drawable/ic_arrow_back" />
+    </FrameLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_40"
+        android:layout_marginTop="@dimen/spacing_20"
         android:orientation="vertical"
         android:paddingHorizontal="@dimen/spacing_16">
 
         <TextView
             android:id="@+id/textViewAlbumName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:fontFamily="@font/circular_bold"
@@ -44,98 +44,95 @@
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_24" />
 
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_12">
 
-            <LinearLayout
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageViewArtist"
+                android:layout_width="@dimen/artist_image_small"
+                android:layout_height="@dimen/artist_image_small" />
+
+            <TextView
+                android:id="@+id/textViewArtistName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/spacing_8"
+                android:fontFamily="@font/circular_bold"
+                android:text="Sun Of They"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_14" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_12">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/circular_bold"
+                android:text="Album •"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/text_size_12" />
+
+            <TextView
+                android:id="@+id/textViewAlbumDateReleased"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/circular_bold"
+                android:text=" 2022"
+                android:textColor="@color/gray"
+                android:textSize="@dimen/text_size_12" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/spacing_12"
+            android:gravity="center">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <ImageButton
+                    android:id="@+id/buttonLikeAlbum"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_12">
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/spacing_32"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/ic_like_outlined" />
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/imageViewArtist"
-                        android:layout_width="@dimen/artist_image_small"
-                        android:layout_height="@dimen/artist_image_small" />
-
-                    <TextView
-                        android:id="@+id/textViewArtistName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginStart="@dimen/spacing_8"
-                        android:fontFamily="@font/circular_bold"
-                        android:text="Sun Of They"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_14" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <ImageButton
+                    android:id="@+id/buttonDownloadAlbum"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_12">
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="@dimen/spacing_32"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/ic_download_filled" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/circular_bold"
-                        android:text="Album •"
-                        android:textColor="@color/gray"
-                        android:textSize="@dimen/text_size_12" />
-
-                    <TextView
-                        android:id="@+id/textViewAlbumDateReleased"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/circular_bold"
-                        android:text=" 2022"
-                        android:textColor="@color/gray"
-                        android:textSize="@dimen/text_size_12"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_marginTop="@dimen/spacing_12"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageButton
-                        android:id="@+id/buttonLikeAlbum"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="@dimen/spacing_32"
-                        android:background="@android:color/transparent"
-                        app:srcCompat="@drawable/ic_like_outline" />
-
-                    <ImageButton
-                        android:id="@+id/buttonDownloadAlbum"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginEnd="@dimen/spacing_32"
-                        android:background="@android:color/transparent"
-                        app:srcCompat="@drawable/ic_download_filled" />
-
-                    <ImageButton
-                        android:id="@+id/buttonMoreSettingAlbum"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:background="@android:color/transparent"
-                        app:srcCompat="@drawable/ic_more" />
-                </LinearLayout>
+                <ImageButton
+                    android:id="@+id/buttonMoreSettingAlbum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/ic_more" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center|end">
 
                 <ImageButton
@@ -143,8 +140,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    app:srcCompat="@drawable/ic_play_green" />
+                    app:srcCompat="@drawable/ic_play_green_large" />
             </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

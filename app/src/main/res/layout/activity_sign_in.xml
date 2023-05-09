@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:background="@android:color/transparent"
-            app:srcCompat="@drawable/ic_chevron_left" />
+            app:srcCompat="@drawable/ic_arrow_back" />
     </LinearLayout>
 
     <LinearLayout
