@@ -1,6 +1,5 @@
 package com.ptit.spotify.activities;
 
-import android.app.Activity;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,19 +22,19 @@ public class ContentActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment).commit();
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.home) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, homeFragment).commit();
                 return true;
             }
             if (item.getItemId() == R.id.search) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, searchFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, searchFragment).commit();
                 return true;
             }
             if (item.getItemId() == R.id.library) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, libraryFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, libraryFragment).commit();
                 return true;
             }
             return false;

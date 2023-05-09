@@ -14,15 +14,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ptit.spotify.R;
 import com.ptit.spotify.activities.AlbumSettingsActivity;
-import com.ptit.spotify.adapters.AlbumAdapter;
+import com.ptit.spotify.adapters.AlbumInfoAdapter;
 import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
-import com.ptit.spotify.models.data.AlbumHeaderData;
-import com.ptit.spotify.models.data.AlbumSongData;
+import com.ptit.spotify.dto.data.AlbumHeaderData;
+import com.ptit.spotify.dto.data.AlbumSongData;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AlbumFragment extends Fragment implements AlbumAdapter.OnItemClickedListener {
+public class AlbumFragment extends Fragment implements AlbumInfoAdapter.OnItemClickedListener {
 
     @Nullable
     @Override
@@ -34,8 +34,8 @@ public class AlbumFragment extends Fragment implements AlbumAdapter.OnItemClicke
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new VerticalViewItemDecoration(spacing));
-        AlbumAdapter albumAdapter = new AlbumAdapter(albumItems, this);
-        recyclerView.setAdapter(albumAdapter);
+        AlbumInfoAdapter albumInfoAdapter = new AlbumInfoAdapter(albumItems, this);
+        recyclerView.setAdapter(albumInfoAdapter);
         return view;
     }
 
@@ -45,7 +45,10 @@ public class AlbumFragment extends Fragment implements AlbumAdapter.OnItemClicke
                 "Saying Things",
                 "Emanuel Fremont",
                 "https://i.scdn.co/image/ab6761610000e5eb4de66b2170a9e8049a828d5f",
-                "2022")
+                "2022",
+                true,
+                false,
+                false)
         );
         albumItems.add(new AlbumSongData(
                 "song12",

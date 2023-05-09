@@ -12,17 +12,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ptit.spotify.R;
-import com.ptit.spotify.adapters.ArtistAdapter;
+import com.ptit.spotify.adapters.ArtistInfoAdapter;
 import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
-import com.ptit.spotify.models.data.ArtistCaptionData;
-import com.ptit.spotify.models.data.ArtistDescriptionData;
-import com.ptit.spotify.models.data.ArtistHeaderData;
-import com.ptit.spotify.models.data.ArtistSongData;
+import com.ptit.spotify.dto.data.ArtistCaptionData;
+import com.ptit.spotify.dto.data.ArtistDescriptionData;
+import com.ptit.spotify.dto.data.ArtistHeaderData;
+import com.ptit.spotify.dto.data.ArtistSongData;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArtistFragment extends Fragment implements ArtistAdapter.OnItemClickedListener {
+public class ArtistFragment extends Fragment implements ArtistInfoAdapter.OnItemClickedListener {
 
     @Nullable
     @Override
@@ -34,8 +34,8 @@ public class ArtistFragment extends Fragment implements ArtistAdapter.OnItemClic
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new VerticalViewItemDecoration(spacing));
-        ArtistAdapter artistAdapter = new ArtistAdapter(artistItems, this);
-        recyclerView.setAdapter(artistAdapter);
+        ArtistInfoAdapter artistInfoAdapter = new ArtistInfoAdapter(artistItems, this);
+        recyclerView.setAdapter(artistInfoAdapter);
         return view;
     }
 

@@ -8,9 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ptit.spotify.R;
-import com.ptit.spotify.models.data.AlbumSettingsHeaderData;
-import com.ptit.spotify.models.data.AlbumSettingsOptionNavigationData;
-import com.ptit.spotify.models.data.AlbumSettingsOptionToggleData;
+import com.ptit.spotify.dto.data.AlbumSettingsHeaderData;
+import com.ptit.spotify.dto.data.AlbumSettingsOptionNavigationData;
+import com.ptit.spotify.dto.data.AlbumSettingsOptionToggleData;
 import com.ptit.spotify.utils.TypeDestination;
 import com.ptit.spotify.viewholders.AlbumSettingsHeaderViewHolder;
 import com.ptit.spotify.viewholders.AlbumSettingsOptionViewHolder;
@@ -102,7 +102,7 @@ public class AlbumSettingsAdapter extends RecyclerView.Adapter {
 
     private void setViewHolder(AlbumSettingsOptionViewHolder optionViewHolder, AlbumSettingsOptionToggleData toggleData) {
         String drawableNameOn = toggleData.getImageResourceOption() + "_filled";
-        String drawableNameOff = toggleData.getImageResourceOption() + "_outline";
+        String drawableNameOff = toggleData.getImageResourceOption() + "_outlined";
         int greenText = optionViewHolder.itemView.getContext().getColor(R.color.bright_lime_green);
         int whiteText = optionViewHolder.itemView.getContext().getColor(R.color.white);
         String textOptionOn = toggleData.getTextOptionOn();

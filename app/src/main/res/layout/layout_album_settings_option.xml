@@ -9,6 +9,7 @@
         android:id="@+id/imageViewAlbumSettingsOption"
         android:layout_width="@dimen/album_settings_option_image"
         android:layout_height="@dimen/album_settings_option_image"
+        android:layout_gravity="center"
         android:layout_marginEnd="@dimen/spacing_12" />
 
     <TextView
@@ -16,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="end"
-        android:fontFamily="@font/circular_book"
+        android:fontFamily="@font/circular_bold"
         android:maxLines="2"
         android:text="Like"
         android:textColor="@color/white"

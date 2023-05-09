@@ -4,17 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ptit.spotify.R;
 import com.ptit.spotify.adapters.AlbumSettingsAdapter;
-import com.ptit.spotify.fragments.ArtistFragment;
 import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
-import com.ptit.spotify.models.data.AlbumSettingsHeaderData;
-import com.ptit.spotify.models.data.AlbumSettingsOptionNavigationData;
-import com.ptit.spotify.models.data.AlbumSettingsOptionToggleData;
+import com.ptit.spotify.dto.data.AlbumSettingsHeaderData;
+import com.ptit.spotify.dto.data.AlbumSettingsOptionNavigationData;
+import com.ptit.spotify.dto.data.AlbumSettingsOptionToggleData;
 import com.ptit.spotify.utils.TypeDestination;
 
 import java.util.ArrayList;
@@ -43,8 +41,8 @@ public class AlbumSettingsActivity extends AppCompatActivity implements AlbumSet
                 "Saying Things",
                 "Emanuel Fremont"
         ));
-        albumSettingsItems.add(new AlbumSettingsOptionToggleData("ic_like", "Like", "Liked", true));
-        albumSettingsItems.add(new AlbumSettingsOptionToggleData("ic_like", "Like all songs", "Liked all songs", true));
+        albumSettingsItems.add(new AlbumSettingsOptionToggleData("ic_like", "Liked", "Like", true));
+        albumSettingsItems.add(new AlbumSettingsOptionToggleData("ic_like", "Liked all songs", "Like all songs", true));
         albumSettingsItems.add(new AlbumSettingsOptionNavigationData("ic_view_artist", "View Artist", TypeDestination.ARTIST));
     }
 
