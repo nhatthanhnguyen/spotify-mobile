@@ -9,11 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ptit.spotify.R;
 
-public class SectionViewHolder extends RecyclerView.ViewHolder {
+public class HomeSectionViewHolder extends RecyclerView.ViewHolder {
     public TextView textViewSectionTitle;
     public RecyclerView recyclerViewSection;
 
-    public SectionViewHolder(@NonNull View itemView) {
+    public HomeSectionViewHolder(@NonNull View itemView) {
         super(itemView);
         textViewSectionTitle = itemView.findViewById(R.id.textViewSectionTitle);
         recyclerViewSection = itemView.findViewById(R.id.recyclerViewSection);

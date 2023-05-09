@@ -10,12 +10,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ptit.spotify.R;
 
-public class CardViewHolder extends RecyclerView.ViewHolder {
+public class HomeCardViewHolder extends RecyclerView.ViewHolder {
     public LinearLayout linearLayoutCard;
     public ImageView imageView;
     public TextView textViewTitle, textViewDescription;
 
-    public CardViewHolder(@NonNull View itemView) {
+    public HomeCardViewHolder(@NonNull View itemView) {
         super(itemView);
         linearLayoutCard = itemView.findViewById(R.id.linearLayoutCard);
         imageView = itemView.findViewById(R.id.imageView);

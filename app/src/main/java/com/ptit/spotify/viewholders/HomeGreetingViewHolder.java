@@ -9,10 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ptit.spotify.R;
 
-public class GreetingViewHolder extends RecyclerView.ViewHolder {
+public class HomeGreetingViewHolder extends RecyclerView.ViewHolder {
     public TextView textViewGreeting;
     public ImageButton buttonSettings;
-    public GreetingViewHolder(@NonNull View itemView) {
+    public HomeGreetingViewHolder(@NonNull View itemView) {
         super(itemView);
         textViewGreeting = itemView.findViewById(R.id.textViewGreeting);
         buttonSettings = itemView.findViewById(R.id.buttonSettings);

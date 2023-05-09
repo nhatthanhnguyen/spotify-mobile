@@ -17,9 +17,9 @@ import com.ptit.spotify.models.data.SectionData;
 import com.ptit.spotify.models.data.SectionMoreLikeData;
 import com.ptit.spotify.utils.CircleTransform;
 import com.ptit.spotify.utils.Constants;
-import com.ptit.spotify.viewholders.GreetingViewHolder;
-import com.ptit.spotify.viewholders.SectionMoreLikeViewHolder;
-import com.ptit.spotify.viewholders.SectionViewHolder;
+import com.ptit.spotify.viewholders.HomeGreetingViewHolder;
+import com.ptit.spotify.viewholders.HomeSectionMoreLikeViewHolder;
+import com.ptit.spotify.viewholders.HomeSectionViewHolder;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -59,13 +59,13 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         switch (viewType) {
             case GREETING_DATA:
                 View viewHello = inflater.inflate(R.layout.layout_home_greeting, parent, false);
-                return new GreetingViewHolder(viewHello);
+                return new HomeGreetingViewHolder(viewHello);
             case SECTION_DATA:
                 View viewSection = inflater.inflate(R.layout.layout_home_section, parent, false);
-                return new SectionViewHolder(viewSection);
+                return new HomeSectionViewHolder(viewSection);
             case SECTION_MORE_LIKE_DATA:
                 View viewSectionMoreLike = inflater.inflate(R.layout.layout_home_section_more_like, parent, false);
-                return new SectionMoreLikeViewHolder(viewSectionMoreLike);
+                return new HomeSectionMoreLikeViewHolder(viewSectionMoreLike);
             default:
                 return null;
         }
@@ -74,50 +74,50 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         int horizontalSpacing = holder.itemView.getContext().getResources().getDimensionPixelSize(R.dimen.spacing_16);
-        if (holder instanceof GreetingViewHolder) {
-            GreetingViewHolder greetingViewHolder = (GreetingViewHolder) holder;
+        if (holder instanceof HomeGreetingViewHolder) {
+            HomeGreetingViewHolder homeGreetingViewHolder = (HomeGreetingViewHolder) holder;
             GreetingData greetingDataItem = (GreetingData) homeDataList.get(position);
-            greetingViewHolder.textViewGreeting.setText(greetingDataItem.getGreetingStr());
-            greetingViewHolder.buttonSettings.setOnClickListener(view -> {
+            homeGreetingViewHolder.textViewGreeting.setText(greetingDataItem.getGreetingStr());
+            homeGreetingViewHolder.buttonSettings.setOnClickListener(view -> {
                 Context context = view.getContext();
                 Intent intent = new Intent(context, SettingsActivity.class);
                 context.startActivity(intent);
             });
         }
 
-        if (holder instanceof SectionViewHolder) {
-            SectionViewHolder sectionViewHolder = (SectionViewHolder) holder;
+        if (holder instanceof HomeSectionViewHolder) {
+            HomeSectionViewHolder homeSectionViewHolder = (HomeSectionViewHolder) holder;
             SectionData sectionDataItem = (SectionData) homeDataList.get(position);
-            sectionViewHolder.textViewSectionTitle.setText(sectionDataItem.getTitle());
+            homeSectionViewHolder.textViewSectionTitle.setText(sectionDataItem.getTitle());
 
             CardAdapter cardAdapter = new CardAdapter(sectionDataItem.getCards(), itemClickedListener);
-            sectionViewHolder.recyclerViewSection.setAdapter(cardAdapter);
-            sectionViewHolder.recyclerViewSection.addItemDecoration(new HorizontalViewItemDecoration(horizontalSpacing));
+            homeSectionViewHolder.recyclerViewSection.setAdapter(cardAdapter);
+            homeSectionViewHolder.recyclerViewSection.addItemDecoration(new HorizontalViewItemDecoration(horizontalSpacing));
         }
 
-        if (holder instanceof SectionMoreLikeViewHolder) {
-            SectionMoreLikeViewHolder sectionMoreLikeViewHolder = (SectionMoreLikeViewHolder) holder;
+        if (holder instanceof HomeSectionMoreLikeViewHolder) {
+            HomeSectionMoreLikeViewHolder homeSectionMoreLikeViewHolder = (HomeSectionMoreLikeViewHolder) holder;
             SectionMoreLikeData sectionMoreLikeData = (SectionMoreLikeData) homeDataList.get(position);
-            sectionMoreLikeViewHolder.textViewTitle.setText(sectionMoreLikeData.getTitle());
+            homeSectionMoreLikeViewHolder.textViewTitle.setText(sectionMoreLikeData.getTitle());
             if (sectionMoreLikeData.getType().equals(Constants.ALBUM)) {
-                sectionMoreLikeViewHolder.linearLayoutTitle.setOnClickListener(view -> {
+                homeSectionMoreLikeViewHolder.linearLayoutTitle.setOnClickListener(view -> {
                     itemClickedListener.onItemClickedListener(Constants.ALBUM);
                 });
             }
             if (sectionMoreLikeData.getType().equals(Constants.ARTIST)) {
-                sectionMoreLikeViewHolder.linearLayoutTitle.setOnClickListener(view -> {
+                homeSectionMoreLikeViewHolder.linearLayoutTitle.setOnClickListener(view -> {
                     itemClickedListener.onItemClickedListener(Constants.ARTIST);
                 });
             }
             if (sectionMoreLikeData.getType().equals(Constants.ARTIST)) {
-                Picasso.get().load(sectionMoreLikeData.getImageUrl()).transform(new CircleTransform()).into(sectionMoreLikeViewHolder.imageView);
+                Picasso.get().load(sectionMoreLikeData.getImageUrl()).transform(new CircleTransform()).into(homeSectionMoreLikeViewHolder.imageView);
             } else {
-                Picasso.get().load(sectionMoreLikeData.getImageUrl()).into(sectionMoreLikeViewHolder.imageView);
+                Picasso.get().load(sectionMoreLikeData.getImageUrl()).into(homeSectionMoreLikeViewHolder.imageView);
             }
 
             CardAdapter cardAdapter = new CardAdapter(sectionMoreLikeData.getCards(), itemClickedListener);
-            sectionMoreLikeViewHolder.recyclerViewSection.setAdapter(cardAdapter);
-            sectionMoreLikeViewHolder.recyclerViewSection.addItemDecoration(new HorizontalViewItemDecoration(horizontalSpacing));
+            homeSectionMoreLikeViewHolder.recyclerViewSection.setAdapter(cardAdapter);
+            homeSectionMoreLikeViewHolder.recyclerViewSection.addItemDecoration(new HorizontalViewItemDecoration(horizontalSpacing));
         }
     }
 

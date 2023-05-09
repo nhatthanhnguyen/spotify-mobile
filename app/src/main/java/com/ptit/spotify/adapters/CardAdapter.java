@@ -16,12 +16,12 @@ import com.ptit.spotify.models.data.CardData;
 import com.ptit.spotify.utils.CircleTransform;
 import com.ptit.spotify.utils.Constants;
 import com.ptit.spotify.utils.Type;
-import com.ptit.spotify.viewholders.CardViewHolder;
+import com.ptit.spotify.viewholders.HomeCardViewHolder;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class CardAdapter extends RecyclerView.Adapter<CardViewHolder> {
+public class CardAdapter extends RecyclerView.Adapter<HomeCardViewHolder> {
     private List<CardData> cardDataItems;
     private HomeAdapter.OnItemClickedListener itemClickedListener;
 
@@ -41,13 +41,13 @@ public class CardAdapter extends RecyclerView.Adapter<CardViewHolder> {
 
     @NonNull
     @Override
-    public CardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public HomeCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_home_card, parent, false);
-        return new CardViewHolder(view);
+        return new HomeCardViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull HomeCardViewHolder holder, int position) {
         CardData cardDataItem = cardDataItems.get(position);
         Resources resources = holder.itemView.getResources();
         int smallWidth = resources.getDimensionPixelSize(R.dimen.card_width_small);
