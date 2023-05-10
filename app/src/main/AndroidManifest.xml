@@ -17,9 +17,6 @@
             android:name=".activities.AlbumSettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.SettingsActivity"
-            android:exported="false" />
-        <activity
             android:name=".activities.ContentActivity"
             android:exported="false" />
         <activity

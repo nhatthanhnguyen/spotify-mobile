@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingHorizontal="@dimen/spacing_16"
+    android:paddingTop="@dimen/spacing_16">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/imageViewAccount"
+        android:layout_width="@dimen/account_image"
+        android:layout_height="@dimen/account_image"
+        android:src="@drawable/ic_account" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/spacing_12"
+        android:layout_weight="1"
+        android:gravity="start|center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textViewAccountName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@font/circular_bold"
+            android:maxLines="1"
+            android:text="NhatThanh"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_24" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/circular_book"
+            android:text="View Profile"
+            android:textColor="@color/gray" />
+    </LinearLayout>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_chevron_right" />
+</LinearLayout>

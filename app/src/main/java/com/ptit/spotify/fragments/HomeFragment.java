@@ -133,4 +133,13 @@ public class HomeFragment extends Fragment implements HomeInfoAdapter.OnItemClic
             transaction.commit();
         }
     }
+
+    @Override
+    public void onItemClickedUserSettingsListener() {
+        UserSettingsFragment fragment = new UserSettingsFragment();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
 }

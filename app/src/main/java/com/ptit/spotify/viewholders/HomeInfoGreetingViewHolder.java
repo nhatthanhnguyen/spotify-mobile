@@ -11,10 +11,15 @@ import com.ptit.spotify.R;
 
 public class HomeInfoGreetingViewHolder extends RecyclerView.ViewHolder {
     public TextView textViewGreeting;
-    public ImageButton buttonSettings;
+    public ImageButton buttonUserSettings;
+    public ImageButton buttonRecentlyPlayed;
+//    public ImageButton buttonNotification;
+
     public HomeInfoGreetingViewHolder(@NonNull View itemView) {
         super(itemView);
         textViewGreeting = itemView.findViewById(R.id.textViewGreeting);
-        buttonSettings = itemView.findViewById(R.id.buttonSettings);
+        buttonUserSettings = itemView.findViewById(R.id.buttonUserSettings);
+        buttonRecentlyPlayed = itemView.findViewById(R.id.buttonRecentlyPlayed);
+//        buttonNotification = itemView.findViewById(R.id.buttonNotification);
     }
 }

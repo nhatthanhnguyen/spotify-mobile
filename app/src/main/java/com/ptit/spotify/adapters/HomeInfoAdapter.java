@@ -1,20 +1,18 @@
 package com.ptit.spotify.adapters;
 
-import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ptit.spotify.R;
-import com.ptit.spotify.activities.SettingsActivity;
-import com.ptit.spotify.itemdecorations.HorizontalViewItemDecoration;
 import com.ptit.spotify.dto.data.HomeCardData;
 import com.ptit.spotify.dto.data.HomeGreetingData;
 import com.ptit.spotify.dto.data.HomeSectionData;
+import com.ptit.spotify.itemdecorations.HorizontalViewItemDecoration;
 import com.ptit.spotify.utils.CircleTransform;
 import com.ptit.spotify.utils.Constants;
 import com.ptit.spotify.utils.TypeHomeItem;
@@ -47,7 +45,7 @@ public class HomeInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
             return TypeHomeItem.SECTION.ordinal();
         }
-        return TypeHomeItem.UNKNOWN.ordinal();
+        return -1;
     }
 
     @NonNull
@@ -76,14 +74,20 @@ public class HomeInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         int horizontalSpacing = holder.itemView.getContext().getResources().getDimensionPixelSize(R.dimen.spacing_16);
         if (holder instanceof HomeInfoGreetingViewHolder) {
-            HomeInfoGreetingViewHolder homeInfoGreetingViewHolder = (HomeInfoGreetingViewHolder) holder;
+            HomeInfoGreetingViewHolder greetingViewHolder = (HomeInfoGreetingViewHolder) holder;
             HomeGreetingData homeGreetingDataItem = (HomeGreetingData) homeDataList.get(position);
-            homeInfoGreetingViewHolder.textViewGreeting.setText(homeGreetingDataItem.getGreetingStr());
-            homeInfoGreetingViewHolder.buttonSettings.setOnClickListener(view -> {
-                Context context = view.getContext();
-                Intent intent = new Intent(context, SettingsActivity.class);
-                context.startActivity(intent);
+            greetingViewHolder.textViewGreeting.setText(homeGreetingDataItem.getGreetingStr());
+            greetingViewHolder.buttonUserSettings.setOnClickListener(view -> {
+                itemClickedListener.onItemClickedUserSettingsListener();
             });
+
+            greetingViewHolder.buttonRecentlyPlayed.setOnClickListener(view -> {
+                Toast.makeText(holder.itemView.getContext(), "You press the button recently played", Toast.LENGTH_SHORT).show();
+            });
+
+//            greetingViewHolder.buttonNotification.setOnClickListener(view -> {
+//                Toast.makeText(holder.itemView.getContext(), "You press the button notification", Toast.LENGTH_SHORT).show();
+//            });
         }
 
         if (holder instanceof HomeInfoSectionViewHolder) {
@@ -131,5 +135,7 @@ public class HomeInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public interface OnItemClickedListener {
         void onItemClickedListener(String type);
+
+        void onItemClickedUserSettingsListener();
     }
 }

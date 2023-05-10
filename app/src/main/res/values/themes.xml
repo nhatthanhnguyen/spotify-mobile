@@ -2,6 +2,7 @@
     <!-- Base application theme. -->
     <style name="SpotifyDarkTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowBackground">@color/dark_black</item>
+        <item name="android:textColor">@color/white</item>
         <item name="colorSurface">@android:color/transparent</item>
         <item name="colorOnSurface">@android:color/transparent</item>
         <item name="colorPrimary">@color/bright_lime_green</item>

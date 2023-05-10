@@ -27,15 +27,17 @@
         android:layout_gravity="center_vertical"
         android:gravity="end|center_vertical">
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="@dimen/spacing_20"
-            android:background="@android:color/transparent"
-            android:contentDescription="Notification"
-            app:srcCompat="@drawable/ic_notification" />
+<!--        <ImageButton-->
+<!--            android:id="@+id/buttonNotification"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_marginEnd="@dimen/spacing_20"-->
+<!--            android:background="@android:color/transparent"-->
+<!--            android:contentDescription="Notification"-->
+<!--            app:srcCompat="@drawable/ic_notification" />-->
 
         <ImageButton
+            android:id="@+id/buttonRecentlyPlayed"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginEnd="@dimen/spacing_20"
@@ -44,7 +46,7 @@
             app:srcCompat="@drawable/ic_recently_played" />
 
         <ImageButton
-            android:id="@+id/buttonSettings"
+            android:id="@+id/buttonUserSettings"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
