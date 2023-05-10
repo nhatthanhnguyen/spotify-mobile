@@ -9,11 +9,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ptit.spotify.R;
 import com.ptit.spotify.adapters.AlbumSettingsAdapter;
-import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
 import com.ptit.spotify.dto.data.AlbumSettingsHeaderData;
 import com.ptit.spotify.dto.data.AlbumSettingsOptionNavigationData;
 import com.ptit.spotify.dto.data.AlbumSettingsOptionToggleData;
+import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
 import com.ptit.spotify.utils.TypeDestination;
+import com.ptit.spotify.utils.TypeEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,8 +49,9 @@ public class AlbumSettingsActivity extends AppCompatActivity implements AlbumSet
 
     @Override
     public void onItemClickedNavigationOptionListener(TypeDestination type) {
-        Intent intent = new Intent(this, ContentActivity.class);
-        startActivity(intent);
+        Intent intent = new Intent();
+        intent.putExtra("nav", TypeEntity.ARTIST.toString());
+        setResult(RESULT_OK, intent);
         finish();
     }
 }

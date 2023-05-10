@@ -1,5 +1,6 @@
 package com.ptit.spotify.adapters;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
@@ -7,11 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.palette.graphics.Palette;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ptit.spotify.R;
+import com.ptit.spotify.activities.AlbumSettingsActivity;
 import com.ptit.spotify.dto.data.AlbumHeaderData;
 import com.ptit.spotify.dto.data.AlbumSongData;
 import com.ptit.spotify.utils.TypeAlbumItem;
@@ -23,12 +26,14 @@ import com.squareup.picasso.Target;
 import java.util.List;
 
 public class AlbumInfoAdapter extends RecyclerView.Adapter {
+    private final ActivityResultLauncher<Intent> activityResultLauncher;
     private List<Object> albumData;
     private OnItemClickedListener itemClickedListener;
 
-    public AlbumInfoAdapter(List<Object> albumData, OnItemClickedListener itemClickedListener) {
+    public AlbumInfoAdapter(List<Object> albumData, OnItemClickedListener itemClickedListener, ActivityResultLauncher<Intent> activityResultLauncher) {
         this.albumData = albumData;
         this.itemClickedListener = itemClickedListener;
+        this.activityResultLauncher = activityResultLauncher;
     }
 
     @NonNull
@@ -59,7 +64,8 @@ public class AlbumInfoAdapter extends RecyclerView.Adapter {
             headerViewHolder.textViewAlbumDateReleased.setText(headerData.getAlbumDateReleased());
             headerViewHolder.textViewAlbumName.setText(headerData.getAlbumName());
             headerViewHolder.buttonMoreSettingAlbum.setOnClickListener(view -> {
-                itemClickedListener.onItemClickedToActivityListener();
+                Intent intent = new Intent(headerViewHolder.itemView.getContext(), AlbumSettingsActivity.class);
+                activityResultLauncher.launch(intent);
             });
             headerViewHolder.textViewArtistName.setText(headerData.getArtistName());
             setViewHolderForToggleButton(headerViewHolder, headerData);
@@ -131,8 +137,6 @@ public class AlbumInfoAdapter extends RecyclerView.Adapter {
 
     public interface OnItemClickedListener {
         void onItemClickedToFragmentListener();
-
-        void onItemClickedToActivityListener();
     }
 
     private void setViewHolderForToggleButton(AlbumInfoHeaderViewHolder headerViewHolder, AlbumHeaderData data) {

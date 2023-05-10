@@ -10,6 +10,7 @@ import com.ptit.spotify.R;
 
 public class StartActivity extends AppCompatActivity {
     private Button btnRegister, btnSignIn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,8 +26,9 @@ public class StartActivity extends AppCompatActivity {
 
     private void setAction() {
         btnSignIn.setOnClickListener(view -> {
-            Intent intent = new Intent(this, SignInActivity.class);
+            Intent intent = new Intent(this, ContentActivity.class);
             startActivity(intent);
+            finish();
         });
         btnRegister.setOnClickListener(view -> {
             Intent intent = new Intent(this, RegisterActivity.class);
