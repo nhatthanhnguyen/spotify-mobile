@@ -20,9 +20,11 @@ import java.util.List;
 
 public class UserSettingsAdapter extends RecyclerView.Adapter {
     private List<Object> userSettingsItems;
+    private OnItemClickedListener onItemClickedListener;
 
-    public UserSettingsAdapter(List<Object> userSettingsItems) {
+    public UserSettingsAdapter(List<Object> userSettingsItems, OnItemClickedListener onItemClickedListener) {
         this.userSettingsItems = userSettingsItems;
+        this.onItemClickedListener = onItemClickedListener;
     }
 
     @Override
@@ -87,11 +89,28 @@ public class UserSettingsAdapter extends RecyclerView.Adapter {
             UserSettingsOptionData data = (UserSettingsOptionData) userSettingsItems.get(position);
             optionViewHolder.textViewTitle.setText(data.getTitle());
             optionViewHolder.textViewDescription.setText(data.getDescription());
+            if (data.getType().equals(TypeUserSettingsItem.SIGN_OUT)) {
+                optionViewHolder.itemView.setOnClickListener(v -> {
+                    onItemClickedListener.onSignOutClickedListener();
+                });
+            }
+
+            if (data.getType().equals(TypeUserSettingsItem.EMAIL)) {
+                optionViewHolder.itemView.setOnClickListener(v -> {
+                    onItemClickedListener.onEmailClickedListener();
+                });
+            }
         }
     }
 
     @Override
     public int getItemCount() {
         return userSettingsItems.size();
+    }
+
+    public interface OnItemClickedListener {
+        void onSignOutClickedListener();
+
+        void onEmailClickedListener();
     }
 }

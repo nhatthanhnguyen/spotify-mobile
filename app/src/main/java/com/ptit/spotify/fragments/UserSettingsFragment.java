@@ -1,5 +1,6 @@
 package com.ptit.spotify.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,10 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ptit.spotify.R;
+import com.ptit.spotify.activities.StartActivity;
 import com.ptit.spotify.adapters.UserSettingsAdapter;
 import com.ptit.spotify.dto.data.UserSettingsHeaderData;
 import com.ptit.spotify.dto.data.UserSettingsOptionData;
@@ -20,7 +23,7 @@ import com.ptit.spotify.utils.TypeUserSettingsItem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserSettingsFragment extends Fragment {
+public class UserSettingsFragment extends Fragment implements UserSettingsAdapter.OnItemClickedListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -72,7 +75,7 @@ public class UserSettingsFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new VerticalViewItemDecoration(spacing));
-        UserSettingsAdapter adapter = new UserSettingsAdapter(userSettingsItems);
+        UserSettingsAdapter adapter = new UserSettingsAdapter(userSettingsItems, this);
         recyclerView.setAdapter(adapter);
 
         ImageButton buttonBack = view.findViewById(R.id.buttonBack);
@@ -88,5 +91,20 @@ public class UserSettingsFragment extends Fragment {
         userSettingsItems.add(new UserSettingsOptionData("Email", "nhatthanhlep2001@gmail.com", TypeUserSettingsItem.EMAIL));
         userSettingsItems.add("Other");
         userSettingsItems.add(new UserSettingsOptionData("Sign out", "You are sign in under the name NhatThanh", TypeUserSettingsItem.SIGN_OUT));
+    }
+
+    @Override
+    public void onSignOutClickedListener() {
+        getActivity().finish();
+        startActivity(new Intent(getActivity(), StartActivity.class));
+    }
+
+    @Override
+    public void onEmailClickedListener() {
+        ChangeEmailFragment fragment = new ChangeEmailFragment();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

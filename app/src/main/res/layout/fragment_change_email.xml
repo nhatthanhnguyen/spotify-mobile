@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".fragments.ChangeEmailFragment">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spacing_48"
+        android:background="@color/basic_black">
+
+        <ImageButton
+            android:id="@+id/buttonBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|start"
+            android:layout_marginStart="@dimen/spacing_16"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_arrow_back" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:fontFamily="@font/circular_bold"
+            android:gravity="center"
+            android:text="Settings"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_20" />
+
+        <TextView
+            android:id="@+id/buttonSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center"
+            android:layout_marginEnd="@dimen/spacing_16"
+            android:fontFamily="@font/circular_book"
+            android:text="Save"
+            android:textAllCaps="false"
+            android:textColor="@color/gray" />
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_20"
+        android:fontFamily="@font/circular_bold"
+        android:maxLines="2"
+        android:paddingHorizontal="@dimen/spacing_16"
+        android:text="Email address"
+        android:textSize="@dimen/text_size_20" />
+
+    <EditText
+        android:id="@+id/editTextNewEmailAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/spacing_16"
+        android:layout_marginTop="@dimen/spacing_8"
+        android:background="@color/basic_black"
+        android:fontFamily="@font/circular_bold"
+        android:hint="john.doe@gmail.com"
+        android:inputType="textEmailAddress"
+        android:padding="@dimen/spacing_16"
+        android:textColorHint="@color/gray"
+        android:textSize="@dimen/text_size_18" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_20"
+        android:fontFamily="@font/circular_bold"
+        android:maxLines="2"
+        android:paddingHorizontal="@dimen/spacing_16"
+        android:text="Confirm password"
+        android:textSize="@dimen/text_size_20" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_8"
+        android:paddingHorizontal="@dimen/spacing_16">
+
+        <EditText
+            android:id="@+id/editTextConfirmPassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/basic_black"
+            android:fontFamily="@font/circular_bold"
+            android:inputType="textPassword"
+            android:padding="@dimen/spacing_16"
+            android:textSize="@dimen/text_size_18" />
+
+        <ImageButton
+            android:id="@+id/buttonVisibility"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/basic_black"
+            android:paddingHorizontal="@dimen/spacing_16"
+            android:src="@drawable/ic_visibility" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textViewError"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/spacing_16"
+        android:layout_marginTop="@dimen/spacing_20"
+        android:fontFamily="@font/circular_book"
+        android:textColor="@android:color/holo_red_dark" />
+
+</LinearLayout>
