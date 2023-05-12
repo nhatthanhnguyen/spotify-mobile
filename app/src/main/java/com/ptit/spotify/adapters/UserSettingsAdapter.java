@@ -76,6 +76,9 @@ public class UserSettingsAdapter extends RecyclerView.Adapter {
                 Picasso.get().load(data.getAccountImageUrl()).into(headerViewHolder.imageViewAccount);
             }
             headerViewHolder.textViewAccountName.setText(data.getAccountName());
+            headerViewHolder.itemView.setOnClickListener(v -> {
+                onItemClickedListener.onUserProfileClickedListener();
+            });
         }
 
         if (holder instanceof UserSettingsCaptionViewHolder) {
@@ -109,8 +112,10 @@ public class UserSettingsAdapter extends RecyclerView.Adapter {
     }
 
     public interface OnItemClickedListener {
-        void onSignOutClickedListener();
+        void onUserProfileClickedListener();
 
         void onEmailClickedListener();
+
+        void onSignOutClickedListener();
     }
 }

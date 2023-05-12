@@ -100,6 +100,15 @@ public class UserSettingsFragment extends Fragment implements UserSettingsAdapte
     }
 
     @Override
+    public void onUserProfileClickedListener() {
+        UserInfoFragment fragment = new UserInfoFragment();
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    @Override
     public void onEmailClickedListener() {
         ChangeEmailFragment fragment = new ChangeEmailFragment();
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();

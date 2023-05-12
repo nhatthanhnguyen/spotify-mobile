@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/linearLayoutHeader"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <ImageButton
@@ -28,7 +29,8 @@
             android:id="@+id/imageViewUser"
             android:layout_width="@dimen/user_info_image"
             android:layout_height="@dimen/user_info_image"
-            android:layout_marginBottom="@dimen/spacing_16" />
+            android:layout_marginBottom="@dimen/spacing_16"
+            android:src="@drawable/ic_account" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -46,6 +48,7 @@
                 android:textSize="@dimen/text_size_24" />
 
             <LinearLayout
+                android:id="@+id/linearLayoutFollowing"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_16">
@@ -77,6 +80,7 @@
             android:textAllCaps="false"
             android:textColor="@color/white"
             app:cornerRadius="500dp"
+            app:rippleColor="@android:color/transparent"
             app:strokeColor="@color/gray"
             app:strokeWidth="1dp" />
     </GridLayout>

@@ -10,6 +10,7 @@
     <dimen name="song_image">48dp</dimen>
     <dimen name="account_image">60dp</dimen>
     <dimen name="user_info_image">123dp</dimen>
+    <dimen name="user_info_playlist_image">50dp</dimen>
 
     <dimen name="spacing_4">4dp</dimen>
     <dimen name="spacing_8">8dp</dimen>

@@ -4,20 +4,27 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ptit.spotify.R;
+import com.ptit.spotify.adapters.UserInfoAdapter;
+import com.ptit.spotify.dto.data.UserInfoHeaderData;
+import com.ptit.spotify.dto.data.UserInfoPlaylistData;
 import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link UserInfoFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class UserInfoFragment extends Fragment {
+public class UserInfoFragment extends Fragment implements UserInfoAdapter.OnItemClickedListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -68,6 +75,39 @@ public class UserInfoFragment extends Fragment {
         int spacing = getContext().getResources().getDimensionPixelSize(R.dimen.spacing_16);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new VerticalViewItemDecoration(spacing));
+        List<Object> userInfoItems = new ArrayList<>();
+        addItems(userInfoItems);
+        UserInfoAdapter adapter = new UserInfoAdapter(userInfoItems, this);
+        recyclerView.setAdapter(adapter);
         return view;
+    }
+
+    private void addItems(List<Object> userInfoItems) {
+        userInfoItems.add(new UserInfoHeaderData(null, "NhatThanh", 0));
+        userInfoItems.add("Playlists");
+        userInfoItems.add(new UserInfoPlaylistData("https://i.scdn.co/image/ab67616d00001e02136a8ed571891d091ed4715b", "Best playlist ever"));
+    }
+
+    @Override
+    public void onButtonBackClickedListener() {
+        getParentFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void onEditProfileClickedListener() {
+        // TODO: edit profile
+        Toast.makeText(getActivity(), "You clicked edit profile", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onFollowingClickedListener() {
+        // TODO: following
+        Toast.makeText(getActivity(), "You clicked following", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onPlaylistClickedListener() {
+        // TODO: playlist
+        Toast.makeText(getActivity(), "You clicked playlist", Toast.LENGTH_SHORT).show();
     }
 }
