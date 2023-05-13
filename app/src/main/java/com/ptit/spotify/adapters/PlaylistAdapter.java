@@ -77,6 +77,17 @@ public class PlaylistAdapter extends RecyclerView.Adapter {
             viewHolder.textViewUserCreated.setText(data.getUserCreatedName());
             viewHolder.textViewNumberOfLikes.setText(data.getNumberOfLikes() + " likes");
             viewHolder.textViewTotalLength.setText("12h 48m");
+            viewHolder.buttonDownloadPlaylist.setOnClickListener(v -> {
+
+            });
+
+            viewHolder.buttonLikePlaylist.setOnClickListener(v -> {
+
+            });
+
+            viewHolder.buttonMoreSettingPlaylist.setOnClickListener(v -> {
+                onItemClickedListener.onMoreSettingPlaylistClickedListener();
+            });
             Picasso.get().load(data.getPlaylistImageUrl()).into(new Target() {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -116,6 +127,22 @@ public class PlaylistAdapter extends RecyclerView.Adapter {
             PlaylistSongData data = (PlaylistSongData) playlistItems.get(position);
             viewHolder.textViewSongName.setText(data.getSongName());
             viewHolder.textViewArtistName.setText(data.getArtistName());
+            if (!data.isLiked()) {
+                viewHolder.buttonLikeSong.setVisibility(View.GONE);
+            }
+            if (!data.isDownloaded()) {
+                viewHolder.imageViewSongDownloaded.setVisibility(View.GONE);
+            }
+
+            viewHolder.buttonLikeSong.setOnClickListener(v -> {
+                if (data.isLiked()) {
+                    data.setLiked(false);
+                    viewHolder.buttonLikeSong.setVisibility(View.GONE);
+                } else {
+                    data.setLiked(true);
+                    viewHolder.buttonLikeSong.setVisibility(View.VISIBLE);
+                }
+            });
             Picasso.get().load(data.getSongImageUrl()).into(viewHolder.imageViewSong);
         }
     }
@@ -129,5 +156,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter {
         void onBackButtonClickedListener();
 
         void onSearchClickedListener();
+
+        void onMoreSettingPlaylistClickedListener();
     }
 }

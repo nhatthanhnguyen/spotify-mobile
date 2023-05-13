@@ -11,4 +11,6 @@ public class PlaylistSongData {
     private String songImageUrl;
     private String songName;
     private String artistName;
+    private boolean liked;
+    private boolean downloaded;
 }

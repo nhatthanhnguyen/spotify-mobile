@@ -82,7 +82,7 @@ public class PlaylistFragment extends Fragment implements PlaylistAdapter.OnItem
     }
 
     private void addItems(List<Object> playlistItems) {
-        playlistItems.add(new PlaylistHeaderData("https://i.scdn.co/image/ab67706f000000025551996f500ba876bda73fa5",
+        playlistItems.add(new PlaylistHeaderData("https://i.scdn.co/image/ab67706f00000002ca5a7517156021292e5663a6",
                 "Peaceful piano to help you slow down, breathe, and relax.",
                 "https://i.scdn.co/image/ab67757000003b8255c25988a6ac314394d3fbf5",
                 "Spotify",
@@ -90,7 +90,19 @@ public class PlaylistFragment extends Fragment implements PlaylistAdapter.OnItem
                 10000));
         playlistItems.add(new PlaylistSongData("https://i.scdn.co/image/ab67616d0000485128ccaf8cb23d857cb9361ec4",
                 "Tjärnheden",
-                "Farsjön"));
+                "Farsjön",
+                false,
+                false));
+        playlistItems.add(new PlaylistSongData("https://i.scdn.co/image/ab67616d00004851ba1332de8185cce3a9490e74",
+                "Quand vous souriez",
+                "Libor Kolman",
+                false,
+                false));
+        playlistItems.add(new PlaylistSongData("https://i.scdn.co/image/ab67616d0000485147b70771cb7375cd30ceec54",
+                "Allena",
+                "M. Ljungström",
+                true,
+                true));
     }
 
     @Override
@@ -101,5 +113,10 @@ public class PlaylistFragment extends Fragment implements PlaylistAdapter.OnItem
     @Override
     public void onSearchClickedListener() {
         // TODO: search
+    }
+
+    @Override
+    public void onMoreSettingPlaylistClickedListener() {
+        // TODO: more setting playlist
     }
 }
