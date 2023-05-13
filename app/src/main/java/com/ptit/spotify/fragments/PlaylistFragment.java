@@ -87,7 +87,9 @@ public class PlaylistFragment extends Fragment implements PlaylistAdapter.OnItem
                 "https://i.scdn.co/image/ab67757000003b8255c25988a6ac314394d3fbf5",
                 "Spotify",
                 7035021,
-                10000));
+                10000,
+                true,
+                false));
         playlistItems.add(new PlaylistSongData("https://i.scdn.co/image/ab67616d0000485128ccaf8cb23d857cb9361ec4",
                 "Tjärnheden",
                 "Farsjön",

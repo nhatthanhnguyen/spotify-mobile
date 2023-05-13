@@ -12,4 +12,9 @@
         <item name="colorSecondary">@color/basic_black</item>
         <item name="colorSecondaryVariant">@color/dark_black</item>
     </style>
+  <!-- Base application theme. -->
+    <style name="Base.SpotifyDarkTheme" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    </style>
 </resources>

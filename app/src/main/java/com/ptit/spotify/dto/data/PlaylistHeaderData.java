@@ -14,4 +14,6 @@ public class PlaylistHeaderData {
     private String userCreatedName;
     private long numberOfLikes;
     private long totalLength;
+    private boolean liked;
+    private boolean downloaded;
 }

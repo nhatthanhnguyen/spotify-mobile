@@ -77,12 +77,21 @@ public class PlaylistAdapter extends RecyclerView.Adapter {
             viewHolder.textViewUserCreated.setText(data.getUserCreatedName());
             viewHolder.textViewNumberOfLikes.setText(data.getNumberOfLikes() + " likes");
             viewHolder.textViewTotalLength.setText("12h 48m");
-            viewHolder.buttonDownloadPlaylist.setOnClickListener(v -> {
+            viewHolder.buttonLikePlaylist.setImageResource(R.drawable.ic_like_outlined);
+            if (data.isLiked())
+                viewHolder.buttonLikePlaylist.setImageResource(R.drawable.ic_like_filled);
 
+            viewHolder.buttonDownloadPlaylist.setOnClickListener(v -> {
             });
 
             viewHolder.buttonLikePlaylist.setOnClickListener(v -> {
-
+                if (data.isLiked()) {
+                    data.setLiked(false);
+                    viewHolder.buttonLikePlaylist.setImageResource(R.drawable.ic_like_outlined);
+                } else {
+                    data.setLiked(true);
+                    viewHolder.buttonLikePlaylist.setImageResource(R.drawable.ic_like_filled);
+                }
             });
 
             viewHolder.buttonMoreSettingPlaylist.setOnClickListener(v -> {
