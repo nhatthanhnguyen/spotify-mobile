@@ -116,6 +116,12 @@ public class HomeInfoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     itemClickedListener.onItemClickedListener(Constants.ARTIST);
                 });
             }
+            if (headerData.getType().equals(Constants.PLAYLIST)) {
+                sectionViewHolder.linearLayoutTitle.setOnClickListener(v -> {
+                    itemClickedListener.onItemClickedListener(Constants.PLAYLIST);
+                });
+            }
+
             if (headerData.getType().equals(Constants.ARTIST)) {
                 Picasso.get().load(headerData.getImageUrl()).transform(new CircleTransform()).into(sectionViewHolder.imageView);
             } else {

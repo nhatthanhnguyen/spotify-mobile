@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayoutHeader"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_16"
+        android:background="@android:color/transparent"
+        android:paddingHorizontal="@dimen/spacing_16">
+
+        <ImageButton
+            android:id="@+id/buttonBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_arrow_back" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_16"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:paddingHorizontal="@dimen/spacing_16">
+
+        <LinearLayout
+            android:id="@+id/linearLayoutSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/spotify_background_rounded">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="@dimen/spacing_8"
+                android:src="@drawable/ic_search_small" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/circular_book"
+                android:hint="Find in playlist"
+                android:paddingVertical="@dimen/spacing_12"
+                android:textColorHint="@color/gray" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imageViewPlaylist"
+        android:layout_width="@dimen/playlist_image"
+        android:layout_height="@dimen/playlist_image"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/spacing_16"
+        android:background="@android:color/transparent"
+        android:src="@drawable/spotify_icon_rgb_green" />
+
+    <TextView
+        android:id="@+id/textViewPlaylistDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_16"
+        android:background="@android:color/transparent"
+        android:fontFamily="@font/circular_book"
+        android:maxLines="2"
+        android:paddingHorizontal="@dimen/spacing_16"
+        android:text="Peaceful piano to help you slow down, breathe, and relax"
+        android:textColor="@color/gray" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_16"
+        android:background="@android:color/transparent"
+        android:gravity="start|center"
+        android:paddingHorizontal="@dimen/spacing_16">
+
+        <ImageView
+            android:id="@+id/imageViewUserCreated"
+            android:layout_width="@dimen/playlist_user_created_image"
+            android:layout_height="@dimen/playlist_user_created_image"
+            android:src="@drawable/spotify_icon_rgb_green" />
+
+        <TextView
+            android:id="@+id/textViewUserCreated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_8"
+            android:fontFamily="@font/circular_book"
+            android:text="Spotify" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_16"
+        android:background="@android:color/transparent"
+        android:paddingHorizontal="@dimen/spacing_16">
+
+        <TextView
+            android:id="@+id/textViewNumberOfLikes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/circular_book"
+            android:text="7.034.964 likes"
+            android:textColor="@color/gray" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/spacing_8"
+            android:fontFamily="@font/circular_book"
+            android:text="@string/dot"
+            android:textColor="@color/gray" />
+
+        <TextView
+            android:id="@+id/textViewTotalLength"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/circular_book"
+            android:text="12h 26m"
+            android:textColor="@color/gray" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_16"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/spacing_16">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageButton
+                android:id="@+id/buttonLikePlaylist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_like_outlined" />
+
+            <ImageButton
+                android:id="@+id/buttonDownloadPlaylist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_16"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_download_outlined" />
+
+            <ImageButton
+                android:id="@+id/buttonMoreSettingPlaylist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_16"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_more" />
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/buttonPlayPlaylist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_play_green_large" />
+    </LinearLayout>
+</LinearLayout>

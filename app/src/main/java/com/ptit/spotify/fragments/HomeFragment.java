@@ -132,6 +132,14 @@ public class HomeFragment extends Fragment implements HomeInfoAdapter.OnItemClic
             transaction.addToBackStack(null);
             transaction.commit();
         }
+
+        if (type.equals(Constants.PLAYLIST)) {
+            PlaylistFragment playlistFragment = new PlaylistFragment();
+            FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, playlistFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
     }
 
     @Override

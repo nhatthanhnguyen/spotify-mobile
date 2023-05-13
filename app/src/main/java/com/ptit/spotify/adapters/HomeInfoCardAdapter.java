@@ -62,6 +62,19 @@ public class HomeInfoCardAdapter extends RecyclerView.Adapter<HomeInfoCardViewHo
                 itemClickedListener.onItemClickedListener(Constants.ALBUM);
             });
         }
+
+        if (homeCardDataItem.getType().equals(Constants.ARTIST)) {
+            holder.itemView.setOnClickListener(v -> {
+                itemClickedListener.onItemClickedListener(Constants.ARTIST);
+            });
+        }
+
+        if (homeCardDataItem.getType().equals(Constants.PLAYLIST)) {
+            holder.itemView.setOnClickListener(v -> {
+                itemClickedListener.onItemClickedListener(Constants.PLAYLIST);
+            });
+        }
+
         holder.textViewTitle.setText(homeCardDataItem.getTitle());
         holder.textViewTitle.setGravity(type.equals(Constants.ARTIST) ? Gravity.CENTER : Gravity.START);
         holder.textViewTitle.setVisibility(type.equals(Constants.ARTIST) ? TextView.VISIBLE : homeCardDataItem.isHiddenTitle() ? TextView.GONE : TextView.VISIBLE);
