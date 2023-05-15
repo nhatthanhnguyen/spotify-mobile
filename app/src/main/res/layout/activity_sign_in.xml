@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_32"
+        android:layout_marginTop="@dimen/spacing_16"
         android:orientation="horizontal"
         android:paddingHorizontal="@dimen/spacing_24">
 
@@ -58,7 +58,7 @@
                 android:background="@drawable/spotify_input"
                 android:fontFamily="@font/circular_book"
                 android:hint="Your Email"
-                :backgroundTint="null"
+                android:paddingVertical="@dimen/spacing_8"
                 android:textColor="@color/dark_black"
                 android:textColorHint="@color/gray"
                 android:textSize="@dimen/text_size_14" />
@@ -70,6 +70,7 @@
                 android:fontFamily="@font/circular_book"
                 android:hint="Your password"
                 android:inputType="textPassword"
+                android:paddingVertical="@dimen/spacing_8"
                 android:textColor="@color/dark_black"
                 android:textColorHint="@color/gray"
                 android:textSize="@dimen/text_size_14" />
@@ -85,7 +86,7 @@
                 android:id="@+id/buttonSignIn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/spotify_button"
+                android:backgroundTint="@color/bright_lime_green"
                 android:fontFamily="@font/circular_bold"
                 android:text="Sign in"
                 android:textAllCaps="false"

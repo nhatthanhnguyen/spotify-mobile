@@ -1,15 +1,19 @@
 package com.ptit.spotify.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ptit.spotify.R;
+import com.ptit.spotify.activities.PlaylistSettingsActivity;
 import com.ptit.spotify.adapters.PlaylistAdapter;
 import com.ptit.spotify.dto.data.PlaylistHeaderData;
 import com.ptit.spotify.dto.data.PlaylistSongData;
@@ -24,7 +28,6 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class PlaylistFragment extends Fragment implements PlaylistAdapter.OnItemClickedListener {
-
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -66,9 +69,13 @@ public class PlaylistFragment extends Fragment implements PlaylistAdapter.OnItem
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_playlist, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         int spacing = getContext().getResources().getDimensionPixelSize(R.dimen.spacing_16);
@@ -108,6 +115,12 @@ public class PlaylistFragment extends Fragment implements PlaylistAdapter.OnItem
     }
 
     @Override
+    public void onMoreSettingsClickedListener() {
+        Intent intent = new Intent(getActivity(), PlaylistSettingsActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
     public void onBackButtonClickedListener() {
         getParentFragmentManager().popBackStack();
     }
@@ -115,10 +128,5 @@ public class PlaylistFragment extends Fragment implements PlaylistAdapter.OnItem
     @Override
     public void onSearchClickedListener() {
         // TODO: search
-    }
-
-    @Override
-    public void onMoreSettingPlaylistClickedListener() {
-        // TODO: more setting playlist
     }
 }

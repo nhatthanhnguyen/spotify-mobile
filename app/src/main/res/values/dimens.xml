@@ -14,6 +14,8 @@
     <dimen name="playlist_image">200dp</dimen>
     <dimen name="playlist_user_created_image">20dp</dimen>
     <dimen name="playlist_song_image">48dp</dimen>
+    <dimen name="playlist_settings_image">169dp</dimen>
+    <dimen name="playlist_settings_option_image">20dp</dimen>
 
     <dimen name="spacing_4">4dp</dimen>
     <dimen name="spacing_8">8dp</dimen>

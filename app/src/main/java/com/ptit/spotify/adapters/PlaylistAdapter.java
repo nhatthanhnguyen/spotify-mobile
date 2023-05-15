@@ -95,7 +95,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter {
             });
 
             viewHolder.buttonMoreSettingPlaylist.setOnClickListener(v -> {
-                onItemClickedListener.onMoreSettingPlaylistClickedListener();
+                onItemClickedListener.onMoreSettingsClickedListener();
             });
             Picasso.get().load(data.getPlaylistImageUrl()).into(new Target() {
                 @Override
@@ -162,10 +162,10 @@ public class PlaylistAdapter extends RecyclerView.Adapter {
     }
 
     public interface OnItemClickedListener {
+        void onMoreSettingsClickedListener();
+
         void onBackButtonClickedListener();
 
         void onSearchClickedListener();
-
-        void onMoreSettingPlaylistClickedListener();
     }
 }
