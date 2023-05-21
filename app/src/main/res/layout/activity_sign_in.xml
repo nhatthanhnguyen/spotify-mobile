@@ -52,6 +52,7 @@
             android:paddingHorizontal="@dimen/spacing_24">
 
             <EditText
+                android:id="@+id/edit_login_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_16"
@@ -63,6 +64,7 @@
                 android:textSize="@dimen/text_size_14" />
 
             <EditText
+                android:id="@+id/edit_login_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/spotify_input"

@@ -52,6 +52,7 @@
             android:paddingHorizontal="@dimen/spacing_24">
 
             <EditText
+                android:id="@+id/edit_register_mail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/spotify_input"
@@ -69,6 +70,7 @@
             android:paddingHorizontal="@dimen/spacing_24">
 
             <EditText
+                android:id="@+id/edit_register_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/spotify_input"
@@ -87,6 +89,7 @@
             android:paddingHorizontal="@dimen/spacing_24">
 
             <EditText
+                android:id="@+id/edit_register_confirm_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/spotify_input"
@@ -105,6 +108,7 @@
             android:paddingHorizontal="@dimen/spacing_24">
 
             <Button
+                android:id="@+id/btn_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/spotify_button"

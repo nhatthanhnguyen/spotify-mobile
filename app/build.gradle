@@ -29,7 +29,9 @@ android {
 }
 
 dependencies {
-
+    implementation 'com.android.volley:volley:1.2.1'
+    implementation group: 'com.squareup.retrofit2', name: 'retrofit', version: '2.9.0'
+    implementation group: 'com.loopj.android', name: 'android-async-http', version: '1.4.4'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'

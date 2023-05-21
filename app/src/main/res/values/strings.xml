@@ -14,7 +14,9 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
-
+    <string name="error_field_required">This field is required</string>
+    <string name="error_password_not_match">Password not match</string>
+    <string name="error_email_wrong_format">Email wrong format</string>
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
         volutpat, dolor id interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus
