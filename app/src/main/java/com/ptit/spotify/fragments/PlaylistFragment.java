@@ -1,10 +1,10 @@
 package com.ptit.spotify.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,11 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ptit.spotify.R;
-import com.ptit.spotify.activities.PlaylistSettingsActivity;
-import com.ptit.spotify.adapters.PlaylistAdapter;
+import com.ptit.spotify.adapters.playlist.PlaylistAdapter;
 import com.ptit.spotify.dto.data.PlaylistHeaderData;
 import com.ptit.spotify.dto.data.PlaylistSongData;
 import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
+import com.ptit.spotify.utils.OnItemPlaylistClickedListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +27,7 @@ import java.util.List;
  * Use the {@link PlaylistFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PlaylistFragment extends Fragment implements PlaylistAdapter.OnItemClickedListener {
+public class PlaylistFragment extends Fragment implements OnItemPlaylistClickedListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -76,7 +76,7 @@ public class PlaylistFragment extends Fragment implements PlaylistAdapter.OnItem
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_playlist, container, false);
+        View view = inflater.inflate(R.layout.fragment_content, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         int spacing = getContext().getResources().getDimensionPixelSize(R.dimen.spacing_16);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -116,8 +116,7 @@ public class PlaylistFragment extends Fragment implements PlaylistAdapter.OnItem
 
     @Override
     public void onMoreSettingsClickedListener() {
-        Intent intent = new Intent(getActivity(), PlaylistSettingsActivity.class);
-        startActivity(intent);
+        Toast.makeText(getContext(), "More settings clicked listener", Toast.LENGTH_SHORT).show();
     }
 
     @Override

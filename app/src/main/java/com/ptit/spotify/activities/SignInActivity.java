@@ -75,8 +75,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 //    }
 
     private void init() {
-        editUserName = (EditText) findViewById(R.id.edit_login_username);
-        editPassword = (EditText) findViewById(R.id.edit_login_password);
+        editUserName = findViewById(R.id.edit_login_username);
+        editPassword = findViewById(R.id.edit_login_password);
         findViewById(R.id.buttonSignIn).setOnClickListener(this);
     }
     @SuppressLint("NonConstantResourceId")
@@ -95,20 +95,12 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         String userName = editUserName.getText().toString().trim();
         String password = editPassword.getText().toString().trim();
         if (validateInput(userName, password)) {
-            loginProcess(userName, password, new VolleyCallback() {
-                @Override
-                public void handleCallback() {
-                    Toast.makeText(SignInActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(context, MainActivity.class);
-                    startActivity(intent);
-                    session.setLogin(true);
-                }
-            }, new VolleyCallback() {
-                @Override
-                public void handleCallback() {
-                    Toast.makeText(SignInActivity.this, "Login Fail", Toast.LENGTH_SHORT).show();
-                }
-            });
+            loginProcess(userName, password, () -> {
+                Toast.makeText(SignInActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, MainActivity.class);
+                startActivity(intent);
+                session.setLogin(true);
+            }, () -> Toast.makeText(SignInActivity.this, "Login Fail", Toast.LENGTH_SHORT).show());
         }
     }
 
@@ -148,12 +140,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                     Log.i("LOG_RESPONSE", String.valueOf(response));
                     success.handleCallback();
                 }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e("LOG_RESPONSE", error.toString());
-                    err.handleCallback();
-                }
+            }, error -> {
+                Log.e("LOG_RESPONSE", error.toString());
+                err.handleCallback();
             }) {
                 @Override
                 public String getBodyContentType() {

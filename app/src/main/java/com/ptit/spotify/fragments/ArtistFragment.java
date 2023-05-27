@@ -12,30 +12,31 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ptit.spotify.R;
-import com.ptit.spotify.adapters.ArtistInfoAdapter;
+import com.ptit.spotify.adapters.artist.ArtistAdapter;
 import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
 import com.ptit.spotify.dto.data.ArtistCaptionData;
 import com.ptit.spotify.dto.data.ArtistDescriptionData;
 import com.ptit.spotify.dto.data.ArtistHeaderData;
 import com.ptit.spotify.dto.data.ArtistSongData;
+import com.ptit.spotify.utils.OnItemArtistClickedListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArtistFragment extends Fragment implements ArtistInfoAdapter.OnItemClickedListener {
+public class ArtistFragment extends Fragment implements OnItemArtistClickedListener {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_artist, container, false);
+        View view = inflater.inflate(R.layout.fragment_content, container, false);
         int spacing = getContext().getResources().getDimensionPixelSize(R.dimen.spacing_16);
         List<Object> artistItems = new ArrayList<>();
         addData(artistItems);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new VerticalViewItemDecoration(spacing));
-        ArtistInfoAdapter artistInfoAdapter = new ArtistInfoAdapter(artistItems, this);
-        recyclerView.setAdapter(artistInfoAdapter);
+        ArtistAdapter artistAdapter = new ArtistAdapter(artistItems, this);
+        recyclerView.setAdapter(artistAdapter);
         return view;
     }
 
@@ -49,7 +50,7 @@ public class ArtistFragment extends Fragment implements ArtistInfoAdapter.OnItem
     }
 
     @Override
-    public void onBackButtonListener() {
+    public void onBackButtonClickedListener() {
         getParentFragmentManager().popBackStack();
     }
 }

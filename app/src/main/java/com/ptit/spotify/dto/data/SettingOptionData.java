@@ -7,12 +7,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class HomeCardData {
-    private String id;
-    private String imageUrl;
-    private String title;
+@AllArgsConstructor
+public class SettingOptionData {
+    private int iconId;
     private String description;
-    private ItemType type;
+    private ItemType itemType;
 }

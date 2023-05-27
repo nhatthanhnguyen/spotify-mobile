@@ -1,12 +1,10 @@
 package com.ptit.spotify.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -14,38 +12,33 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ptit.spotify.R;
-import com.ptit.spotify.activities.ContentActivity;
-import com.ptit.spotify.adapters.AlbumInfoAdapter;
+import com.ptit.spotify.adapters.album.AlbumAdapter;
 import com.ptit.spotify.dto.data.AlbumHeaderData;
 import com.ptit.spotify.dto.data.AlbumSongData;
 import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
+import com.ptit.spotify.utils.OnItemAlbumClickedListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AlbumFragment extends Fragment implements AlbumInfoAdapter.OnItemClickedListener {
-    private ActivityResultLauncher<Intent> activityResultLauncher;
-
+public class AlbumFragment extends Fragment implements OnItemAlbumClickedListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        if (getActivity() instanceof ContentActivity) {
-            activityResultLauncher = ((ContentActivity) getActivity()).getActivityResultLauncher();
-        }
         int spacing = getContext().getResources().getDimensionPixelSize(R.dimen.spacing_16);
         List<Object> albumItems = new ArrayList<>();
         addData(albumItems);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new VerticalViewItemDecoration(spacing));
-        AlbumInfoAdapter albumInfoAdapter = new AlbumInfoAdapter(albumItems, this, activityResultLauncher);
-        recyclerView.setAdapter(albumInfoAdapter);
+        AlbumAdapter albumAdapter = new AlbumAdapter(albumItems, this);
+        recyclerView.setAdapter(albumAdapter);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_album, container, false);
+        return inflater.inflate(R.layout.fragment_content, container, false);
     }
 
     private void addData(List<Object> albumItems) {

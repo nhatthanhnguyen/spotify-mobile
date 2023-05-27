@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class HomeCardData {
-    private String id;
-    private String imageUrl;
+public class UserSettingOptionData {
     private String title;
     private String description;
     private ItemType type;
