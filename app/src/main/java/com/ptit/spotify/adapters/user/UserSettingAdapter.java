@@ -25,7 +25,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class UserSettingAdapter extends RecyclerView.Adapter {
+public class  UserSettingAdapter extends RecyclerView.Adapter {
     private List<Object> userSettingsItems;
     private OnItemUserSettingClickedListener onItemUserSettingClickedListener;
 
