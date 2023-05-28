@@ -1,5 +1,6 @@
 package com.ptit.spotify.fragments;
 
+import static com.ptit.spotify.utils.ItemType.ADD_ARTIST;
 import static com.ptit.spotify.utils.ItemType.ALBUM;
 import static com.ptit.spotify.utils.ItemType.ALL_RESULT;
 import static com.ptit.spotify.utils.ItemType.ARTIST;
@@ -17,9 +18,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ptit.spotify.R;
+import com.ptit.spotify.adapters.library.LibraryAdapter;
 import com.ptit.spotify.adapters.search.ButtonFilterAdapter;
-import com.ptit.spotify.adapters.search.SearchResultAdapter;
 import com.ptit.spotify.dto.data.ButtonFilterData;
+import com.ptit.spotify.dto.data.LibraryItemData;
 import com.ptit.spotify.dto.data.SearchItemResultData;
 import com.ptit.spotify.itemdecorations.HorizontalViewItemDecoration;
 import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
@@ -36,13 +38,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class LibraryFragment extends Fragment implements
         OnItemSearchResultClickedListener,
         OnItemButtonFilterClickedListener {
-    private List<SearchItemResultData> resultItems;
-    private List<SearchItemResultData> resultItemsAll;
+    private List<LibraryItemData> resultItems;
+    private List<LibraryItemData> resultItemsAll;
     private List<ButtonFilterData> filterItems;
     private RecyclerView recyclerViewFilter;
     private RecyclerView recyclerViewResult;
     private ButtonFilterAdapter filterAdapter;
-    private SearchResultAdapter resultAdapter;
+    private LibraryAdapter resultAdapter;
 
     public LibraryFragment() {
 
@@ -70,15 +72,16 @@ public class LibraryFragment extends Fragment implements
         filterItems.add(new ButtonFilterData(ARTIST, false));
         filterItems.add(new ButtonFilterData(ALBUM, false));
         filterAdapter = new ButtonFilterAdapter(filterItems, this);
-        resultAdapter = new SearchResultAdapter(resultItems, false, this);
+        resultAdapter = new LibraryAdapter(resultItems, false, this);
         recyclerViewFilter.setAdapter(filterAdapter);
         recyclerViewResult.setAdapter(resultAdapter);
         return view;
     }
 
     void addData() {
+        // TODO: LẤY NHỮNG PLAYLIST, ALBUM, NGHỆ SĨ ĐÃ THÍCH, ADD_ARTIST GIỮ NGUYÊN
         resultItems = new ArrayList<>();
-        resultItems.add(new SearchItemResultData(
+        resultItems.add(new LibraryItemData(
                 "",
                 "https://i.scdn.co/image/ab67706f00000002ca5a7517156021292e5663a6",
                 "Peaceful Piano",
@@ -87,7 +90,7 @@ public class LibraryFragment extends Fragment implements
                 null,
                 PLAYLIST)
         );
-        resultItems.add(new SearchItemResultData(
+        resultItems.add(new LibraryItemData(
                 "",
                 "https://i.scdn.co/image/ab67616d00001e02b94f78cf2a6ac9c700ee2812",
                 "Emanuel Fremont",
@@ -96,7 +99,7 @@ public class LibraryFragment extends Fragment implements
                 null,
                 ARTIST
         ));
-        resultItems.add(new SearchItemResultData(
+        resultItems.add(new LibraryItemData(
                 "",
                 "https://i.scdn.co/image/ab67616d0000b273b94f78cf2a6ac9c700ee2812",
                 "Saying Things",
@@ -105,6 +108,15 @@ public class LibraryFragment extends Fragment implements
                 null,
                 ALBUM
         ));
+        resultItems.add(new LibraryItemData(
+                "",
+                null,
+                "Add artist",
+                null,
+                null,
+                null,
+                ADD_ARTIST
+        ));
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -112,13 +124,13 @@ public class LibraryFragment extends Fragment implements
     public void updateButtonFilter(int position) {
         if (position != 0) {
             ItemType type = filterItems.get(position).getType();
-            List<SearchItemResultData> filteredItems = resultItemsAll.stream()
+            List<LibraryItemData> filteredItems = resultItemsAll.stream()
                     .filter(item -> item.getType() == type)
                     .collect(Collectors.toList());
-            resultAdapter = new SearchResultAdapter(filteredItems, true, this);
+            resultAdapter = new LibraryAdapter(filteredItems, true, this);
             recyclerViewResult.setAdapter(resultAdapter);
         } else {
-            resultAdapter = new SearchResultAdapter(resultItemsAll, false, this);
+            resultAdapter = new LibraryAdapter(resultItemsAll, false, this);
             recyclerViewResult.setAdapter(resultAdapter);
         }
         filterItems = filterItems.stream()
@@ -133,6 +145,10 @@ public class LibraryFragment extends Fragment implements
 
     @Override
     public void onItemClickedListener(SearchItemResultData data) {
+    }
+
+    @Override
+    public void onItemClickedListener(LibraryItemData data) {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         if (data.getType() == ARTIST) {
             ArtistFragment fragment = new ArtistFragment();
@@ -155,5 +171,14 @@ public class LibraryFragment extends Fragment implements
             transaction.commit();
             return;
         }
+    }
+
+    @Override
+    public void onAddArtistClickedListener() {
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        ArtistAddFragment fragment = new ArtistAddFragment();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

@@ -85,7 +85,9 @@ public class UserFragment extends Fragment implements OnItemUserClickedListener 
     }
 
     private void addItems(List<Object> userInfoItems) {
+        // TODO: LẤY THÔNG TIN CỦA USER ĐÃ ĐĂNG NHẬP
         userInfoItems.add(new UserInfoHeaderData(null, "NhatThanh", 0));
+        // TODO: LẤY NHỮNG PLAYLIST CỦA USER ĐÃ TẠO
         userInfoItems.add("Playlists");
         userInfoItems.add(new UserInfoPlaylistData("https://i.scdn.co/image/ab67616d00001e02136a8ed571891d091ed4715b", "Best playlist ever"));
     }

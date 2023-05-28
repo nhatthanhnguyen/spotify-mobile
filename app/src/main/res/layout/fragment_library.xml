@@ -57,5 +57,6 @@
         android:id="@+id/recyclerViewResult"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="@dimen/spacing_16" />
+        android:layout_marginHorizontal="@dimen/spacing_16"
+        android:overScrollMode="never" />
 </LinearLayout>

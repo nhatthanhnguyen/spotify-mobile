@@ -48,6 +48,7 @@ public class HomeFragment extends Fragment implements OnItemHomeClickedListener 
 
     void addData(List<Object> dataItems) {
         dataItems.add(new HomeGreetingData());
+        // TODO: LẤY NHỮNG ALBUM VÀ PLAYLIST ĐƯỢC CHƠI GẦN NHẤT
         dataItems.add(new HomeSectionData("Recently played", Arrays.asList(
                 new HomeCardData("1", "https://i.scdn.co/image/ab67706f00000002ca5a7517156021292e5663a6",
                         "Peaceful Piano",
@@ -82,6 +83,7 @@ public class HomeFragment extends Fragment implements OnItemHomeClickedListener 
                         "Artist",
                         ARTIST)
         )));
+        // TODO: LẤY NHỮNG TOÀN BỘ ALBUM
         dataItems.add(new HomeSectionData(new HomeCardData("2",
                 "https://i.scdn.co/image/ab67706f000000025551996f500ba876bda73fa5",
                 "Deep Focus",
@@ -100,6 +102,7 @@ public class HomeFragment extends Fragment implements OnItemHomeClickedListener 
                         "Dedicated to all the programmers out there.",
                         PLAYLIST)
         )));
+        // TODO: LẤY TOÀN BỘ PLAYLIST
         dataItems.add(new HomeSectionData(new HomeCardData("7",
                 "https://i.scdn.co/image/ab6761610000517404dcd0ba0f67dd1a7bbf1c54",
                 "Sun Of They",
@@ -118,6 +121,8 @@ public class HomeFragment extends Fragment implements OnItemHomeClickedListener 
                         "Focus with soft study music in the background.",
                         PLAYLIST)
         )));
+
+        // TODO: LẤY TOÀN BỘ NGHỆ SĨ
     }
 
     @Override

@@ -30,6 +30,7 @@ import com.ptit.spotify.R;
 import com.ptit.spotify.adapters.search.ButtonFilterAdapter;
 import com.ptit.spotify.adapters.search.SearchResultAdapter;
 import com.ptit.spotify.dto.data.ButtonFilterData;
+import com.ptit.spotify.dto.data.LibraryItemData;
 import com.ptit.spotify.dto.data.SearchItemResultData;
 import com.ptit.spotify.dto.data.SettingOptionData;
 import com.ptit.spotify.dto.data.SongSettingHeaderData;
@@ -185,6 +186,7 @@ public class SearchResultFragment extends Fragment implements
     }
 
     void addData() {
+        // TODO: LẤY TOÀN BỘ KẾT QUẢ TÌM KIẾM ĐƯỢC: SONG, PLAYLIST, ALBUM, ARTIST
         resultItems = new ArrayList<>();
         resultItems.add(new SearchItemResultData(
                 "",
@@ -284,6 +286,16 @@ public class SearchResultFragment extends Fragment implements
             transaction.addToBackStack(null);
             transaction.commit();
         }
+    }
+
+    @Override
+    public void onItemClickedListener(LibraryItemData data) {
+
+    }
+
+    @Override
+    public void onAddArtistClickedListener() {
+
     }
 
     @SuppressLint("NotifyDataSetChanged")

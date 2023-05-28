@@ -95,6 +95,7 @@ public class PlaylistSearchFragment extends Fragment implements OnItemPlaylistSe
     }
 
     private void getPlaylistSongs(List<PlaylistSongData> items) {
+        // TODO: LẤY TOÀN BỘ BÀI HÁT CỦA PLAYLIST
         items.add(new PlaylistSongData("https://i.scdn.co/image/ab67616d0000485128ccaf8cb23d857cb9361ec4",
                 "Tjärnheden",
                 "Farsjön",

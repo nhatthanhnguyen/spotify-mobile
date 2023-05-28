@@ -89,6 +89,7 @@ public class UserSettingFragment extends Fragment implements OnItemUserSettingCl
     }
 
     private void addItems(List<Object> userSettingsItems) {
+        // TODO: LẤY THÔNG TIN USER ĐANG ĐĂNG NHẬP
         userSettingsItems.add(new UserSettingHeaderData(null, "NhatThanh"));
         userSettingsItems.add("Account");
         userSettingsItems.add(new UserSettingOptionData(

@@ -51,6 +51,7 @@ public class AlbumFragment extends Fragment implements OnItemAlbumClickedListene
     }
 
     private void addData(List<Object> albumItems) {
+        // TODO: LẤY INFO ALBUM
         albumItems.add(new AlbumHeaderData(
                 "https://i.scdn.co/image/ab67616d0000b273b94f78cf2a6ac9c700ee2812",
                 "Saying Things",
@@ -61,6 +62,7 @@ public class AlbumFragment extends Fragment implements OnItemAlbumClickedListene
                 false,
                 false)
         );
+        // TODO: LẤY SONG CỦA ALBUM
         albumItems.add(new AlbumSongData(
                 "song12",
                 "Saying Things",

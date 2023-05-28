@@ -99,6 +99,7 @@ public class PlaylistFragment extends Fragment implements OnItemPlaylistClickedL
     }
 
     private void addItems(List<Object> playlistItems) {
+        // TODO: LẤY THÔNG TIN CỦA PLAYLIST
         playlistItems.add(new PlaylistHeaderData(
                 "Peaceful Piano",
                 "https://i.scdn.co/image/ab67706f00000002ca5a7517156021292e5663a6",
@@ -109,6 +110,7 @@ public class PlaylistFragment extends Fragment implements OnItemPlaylistClickedL
                 10000,
                 true,
                 false));
+        // TODO: LẤY TOÀN BỘ BÀI HÁT CỦA PLAYLIST
         playlistItems.add(new PlaylistSongData("https://i.scdn.co/image/ab67616d0000485128ccaf8cb23d857cb9361ec4",
                 "Tjärnheden",
                 "Farsjön",
