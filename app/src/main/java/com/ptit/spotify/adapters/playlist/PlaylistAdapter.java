@@ -87,9 +87,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter {
             if (data.isLiked())
                 viewHolder.buttonLikePlaylist.setImageResource(R.drawable.ic_like_filled);
 
-            viewHolder.buttonDownloadPlaylist.setOnClickListener(v -> {
-            });
-
             viewHolder.buttonLikePlaylist.setOnClickListener(v -> {
                 if (data.isLiked()) {
                     data.setLiked(false);

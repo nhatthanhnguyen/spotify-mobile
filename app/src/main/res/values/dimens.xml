@@ -19,6 +19,9 @@
     <dimen name="mini_player_height">68dp</dimen>
     <dimen name="mini_player_image">37dp</dimen>
     <dimen name="setting_image">57dp</dimen>
+    <dimen name="edit_text_playlist_search_width">180dp</dimen>
+    <dimen name="search_item_image">48dp</dimen>
+    <dimen name="library_avatar_image">35dp</dimen>
 
     <dimen name="spacing_4">4dp</dimen>
     <dimen name="spacing_8">8dp</dimen>

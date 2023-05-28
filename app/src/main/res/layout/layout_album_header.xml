@@ -84,8 +84,9 @@
                 android:id="@+id/textViewAlbumDateReleased"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_4"
                 android:fontFamily="@font/circular_bold"
-                android:text=" 2022"
+                android:text="2022"
                 android:textColor="@color/gray"
                 android:textSize="@dimen/text_size_12" />
 
@@ -143,6 +144,5 @@
                     app:srcCompat="@drawable/ic_play_green_large" />
             </LinearLayout>
         </LinearLayout>
-
     </LinearLayout>
 </LinearLayout>

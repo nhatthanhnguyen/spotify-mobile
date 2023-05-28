@@ -1,6 +1,8 @@
 package com.ptit.spotify.utils;
 
 public enum ItemType {
+    ALL_RESULT,
+    TOP_RESULT,
     ALBUM,
     ALBUM_HEADER,
     ALBUM_SONG,
