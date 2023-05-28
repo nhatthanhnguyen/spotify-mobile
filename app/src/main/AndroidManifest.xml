@@ -15,9 +15,6 @@
         android:theme="@style/SpotifyDarkTheme"
         tools:targetApi="31">
         <activity
-            android:name=".activities.PlaylistSettingActivity"
-            android:exported="false" />
-        <activity
             android:name=".activities.ContentActivity"
             android:exported="false" />
         <activity

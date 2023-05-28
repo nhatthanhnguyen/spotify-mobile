@@ -10,7 +10,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.palette.graphics.Palette;
@@ -20,8 +19,8 @@ import com.ptit.spotify.R;
 import com.ptit.spotify.dto.data.AlbumHeaderData;
 import com.ptit.spotify.dto.data.AlbumSongData;
 import com.ptit.spotify.utils.OnItemAlbumClickedListener;
-import com.ptit.spotify.viewholders.album.AlbumInfoHeaderViewHolder;
-import com.ptit.spotify.viewholders.album.AlbumInfoSongViewHolder;
+import com.ptit.spotify.viewholders.album.AlbumHeaderViewHolder;
+import com.ptit.spotify.viewholders.album.AlbumSongViewHolder;
 import com.ptit.spotify.viewholders.blank.BlankViewHolder;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -44,12 +43,12 @@ public class AlbumAdapter extends RecyclerView.Adapter {
         View view;
         if (viewType == ALBUM_HEADER.ordinal()) {
             view = inflater.inflate(R.layout.layout_album_header, parent, false);
-            return new AlbumInfoHeaderViewHolder(view);
+            return new AlbumHeaderViewHolder(view);
         }
 
         if (viewType == ALBUM_SONG.ordinal()) {
             view = inflater.inflate(R.layout.layout_album_song, parent, false);
-            return new AlbumInfoSongViewHolder(view);
+            return new AlbumSongViewHolder(view);
         }
 
         view = inflater.inflate(R.layout.layout_blank_item, parent, false);
@@ -58,25 +57,25 @@ public class AlbumAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof AlbumInfoHeaderViewHolder) {
-            AlbumInfoHeaderViewHolder viewHolder = (AlbumInfoHeaderViewHolder) holder;
+        if (holder instanceof AlbumHeaderViewHolder) {
+            AlbumHeaderViewHolder viewHolder = (AlbumHeaderViewHolder) holder;
             AlbumHeaderData data = (AlbumHeaderData) albumData.get(position);
-            viewHolder.buttonBack.setOnClickListener(view -> {
-                onItemAlbumClickedListener.onItemClickedToFragmentListener();
+            viewHolder.buttonBack.setOnClickListener(v -> {
+                onItemAlbumClickedListener.onBackButtonClickedListener();
             });
             viewHolder.textViewAlbumDateReleased.setText(data.getAlbumDateReleased());
             viewHolder.textViewAlbumName.setText(data.getAlbumName());
-            viewHolder.buttonMoreSettingAlbum.setOnClickListener(view -> {
-                Toast.makeText(holder.itemView.getContext(), "More setting album", Toast.LENGTH_SHORT).show();
+            viewHolder.buttonMoreSettingAlbum.setOnClickListener(v -> {
+                onItemAlbumClickedListener.onAlbumSettingClickedListener(data);
             });
             viewHolder.textViewArtistName.setText(data.getArtistName());
             setViewHolderForToggleButton(viewHolder, data);
-            viewHolder.buttonLikeAlbum.setOnClickListener(view -> {
+            viewHolder.buttonLikeAlbum.setOnClickListener(v -> {
                 data.setLiked(!data.isLiked());
                 setViewHolderForToggleButton(viewHolder, data);
             });
 
-            viewHolder.buttonPlayAlbum.setOnClickListener(view -> {
+            viewHolder.buttonPlayAlbum.setOnClickListener(v -> {
                 data.setPlaying(!data.isPlaying());
                 setViewHolderForToggleButton(viewHolder, data);
             });
@@ -112,8 +111,8 @@ public class AlbumAdapter extends RecyclerView.Adapter {
             Picasso.get().load(data.getImageArtistUrl()).into(viewHolder.imageViewArtist);
         }
 
-        if (holder instanceof AlbumInfoSongViewHolder) {
-            AlbumInfoSongViewHolder songViewHolder = (AlbumInfoSongViewHolder) holder;
+        if (holder instanceof AlbumSongViewHolder) {
+            AlbumSongViewHolder songViewHolder = (AlbumSongViewHolder) holder;
             AlbumSongData songData = (AlbumSongData) albumData.get(position);
             songViewHolder.textViewSongName.setText(songData.getName());
             songViewHolder.textViewArtistName.setText(songData.getArtistName());
@@ -137,7 +136,7 @@ public class AlbumAdapter extends RecyclerView.Adapter {
         return albumData.size();
     }
 
-    private void setViewHolderForToggleButton(AlbumInfoHeaderViewHolder headerViewHolder, AlbumHeaderData data) {
+    private void setViewHolderForToggleButton(AlbumHeaderViewHolder headerViewHolder, AlbumHeaderData data) {
         String defPackageStr = headerViewHolder.itemView.getContext().getPackageName();
         int drawableLikedId = getDrawableId(headerViewHolder, "ic_like_filled", defPackageStr);
         int drawableNotLikeId = getDrawableId(headerViewHolder, "ic_like_outlined", defPackageStr);

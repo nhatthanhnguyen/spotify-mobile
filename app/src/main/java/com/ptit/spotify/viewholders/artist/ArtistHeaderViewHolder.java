@@ -30,7 +30,7 @@ public class ArtistHeaderViewHolder extends RecyclerView.ViewHolder {
         textViewArtistName = itemView.findViewById(R.id.textViewArtistName);
         textViewNumberOfLikes = itemView.findViewById(R.id.textViewNumberOfLikes);
         buttonFollow = itemView.findViewById(R.id.buttonFollow);
-        buttonSettingsArtist = itemView.findViewById(R.id.buttonSettingsArtist);
+        buttonSettingsArtist = itemView.findViewById(R.id.buttonMoreSetting);
         buttonPlayArtist = itemView.findViewById(R.id.buttonPlayArtist);
     }
 }

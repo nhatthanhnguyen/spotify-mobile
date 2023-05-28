@@ -7,11 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PlaylistSongData {
-    private String songImageUrl;
+public class SongSettingHeaderData {
+    private String imageSongUrl;
     private String songName;
     private String artistName;
     private String albumName;
-    private boolean liked;
-    private boolean downloaded;
 }

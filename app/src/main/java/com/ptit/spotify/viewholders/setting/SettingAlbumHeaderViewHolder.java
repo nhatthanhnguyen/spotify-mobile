@@ -1,4 +1,4 @@
-package com.ptit.spotify.viewholders.album;
+package com.ptit.spotify.viewholders.setting;
 
 import android.view.View;
 import android.widget.ImageView;
@@ -9,13 +9,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ptit.spotify.R;
 
-public class AlbumSettingHeaderViewHolder extends RecyclerView.ViewHolder {
-    public ImageView imageViewAlbumImage;
+public class SettingAlbumHeaderViewHolder extends RecyclerView.ViewHolder {
+    public ImageView imageViewAlbum;
     public TextView textViewAlbumName;
     public TextView textViewArtistName;
-    public AlbumSettingHeaderViewHolder(@NonNull View itemView) {
+
+    public SettingAlbumHeaderViewHolder(@NonNull View itemView) {
         super(itemView);
-        imageViewAlbumImage = itemView.findViewById(R.id.imageViewAlbumImage);
+        imageViewAlbum = itemView.findViewById(R.id.imageViewAlbum);
         textViewAlbumName = itemView.findViewById(R.id.textViewAlbumName);
         textViewArtistName = itemView.findViewById(R.id.textViewArtistName);
     }

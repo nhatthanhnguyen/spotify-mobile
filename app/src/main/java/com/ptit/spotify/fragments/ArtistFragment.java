@@ -1,9 +1,12 @@
 package com.ptit.spotify.fragments;
 
+import static com.ptit.spotify.utils.ItemType.SETTING_LIKE;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,12 +16,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ptit.spotify.R;
 import com.ptit.spotify.adapters.artist.ArtistAdapter;
-import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
 import com.ptit.spotify.dto.data.ArtistCaptionData;
 import com.ptit.spotify.dto.data.ArtistDescriptionData;
 import com.ptit.spotify.dto.data.ArtistHeaderData;
+import com.ptit.spotify.dto.data.ArtistSettingHeaderData;
 import com.ptit.spotify.dto.data.ArtistSongData;
+import com.ptit.spotify.dto.data.SettingOptionData;
+import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
 import com.ptit.spotify.utils.OnItemArtistClickedListener;
+import com.ptit.spotify.utils.OnItemSettingClickedListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,5 +58,19 @@ public class ArtistFragment extends Fragment implements OnItemArtistClickedListe
     @Override
     public void onBackButtonClickedListener() {
         getParentFragmentManager().popBackStack();
+    }
+
+    @Override
+    public void onArtistSettingClickedListener(ArtistHeaderData data) {
+        List<Object> items = new ArrayList<>();
+        items.add(new ArtistSettingHeaderData(data.getArtistImageUrl(), data.getArtistName()));
+        items.add(new SettingOptionData(R.drawable.ic_artist_follow, "Follow", SETTING_LIKE));
+        SettingFragment settingFragment = new SettingFragment(items, new OnItemSettingClickedListener() {
+            @Override
+            public void onSettingItemClickedListener(Object data) {
+                Toast.makeText(getContext(), data.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        settingFragment.show(getParentFragmentManager(), settingFragment.getTag());
     }
 }

@@ -101,7 +101,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter {
             });
 
             viewHolder.buttonMoreSettingPlaylist.setOnClickListener(v -> {
-                onItemPlaylistClickedListener.onMoreSettingsClickedListener();
+                onItemPlaylistClickedListener.onPlaylistSettingClickedListener(data);
             });
             Picasso.get().load(data.getPlaylistImageUrl()).into(new Target() {
                 @Override
@@ -110,13 +110,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter {
                         if (palette != null) {
                             Palette.Swatch dominantSwatch = palette.getDominantSwatch();
                             if (dominantSwatch != null) {
-                                GradientDrawable gradientDrawable = new GradientDrawable(
-                                        GradientDrawable.Orientation.TOP_BOTTOM,
-                                        new int[]{
-                                                dominantSwatch.getRgb(),
-                                                viewHolder.itemView.getContext().getColor(R.color.dark_black)
-                                        }
-                                );
+                                GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, new int[]{dominantSwatch.getRgb(), viewHolder.itemView.getContext().getColor(R.color.dark_black)});
                                 viewHolder.imageViewPlaylist.setImageBitmap(bitmap);
                                 viewHolder.linearLayoutHeader.setBackground(gradientDrawable);
                             }
@@ -148,6 +142,9 @@ public class PlaylistAdapter extends RecyclerView.Adapter {
             if (!data.isDownloaded()) {
                 viewHolder.imageViewSongDownloaded.setVisibility(View.GONE);
             }
+            viewHolder.buttonMoreSettingSong.setOnClickListener(v -> {
+                onItemPlaylistClickedListener.onSongSettingClickedListener(data);
+            });
 
             viewHolder.buttonLikeSong.setOnClickListener(v -> {
                 if (data.isLiked()) {

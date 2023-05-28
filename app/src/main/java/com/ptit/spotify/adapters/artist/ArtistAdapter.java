@@ -89,14 +89,17 @@ public class ArtistAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ArtistHeaderViewHolder) {
-            ArtistHeaderData headerData = (ArtistHeaderData) artistItems.get(position);
-            ArtistHeaderViewHolder headerViewHolder = (ArtistHeaderViewHolder) holder;
-            headerViewHolder.textViewArtistName.setText(headerData.getArtistName());
-            headerViewHolder.buttonBack.setOnClickListener(view -> {
+            ArtistHeaderData data = (ArtistHeaderData) artistItems.get(position);
+            ArtistHeaderViewHolder viewHolder = (ArtistHeaderViewHolder) holder;
+            viewHolder.textViewArtistName.setText(data.getArtistName());
+            viewHolder.buttonBack.setOnClickListener(view -> {
                 onItemArtistClickedListener.onBackButtonClickedListener();
             });
-            headerViewHolder.textViewNumberOfLikes.setText(headerData.getNumberOfLikes() + " users liked");
-            Picasso.get().load(headerData.getArtistImageUrl()).into(new Target() {
+            viewHolder.buttonSettingsArtist.setOnClickListener(v -> {
+                onItemArtistClickedListener.onArtistSettingClickedListener(data);
+            });
+            viewHolder.textViewNumberOfLikes.setText(data.getNumberOfLikes() + " users liked");
+            Picasso.get().load(data.getArtistImageUrl()).into(new Target() {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                     Palette.from(bitmap).generate(palette -> {
@@ -107,11 +110,11 @@ public class ArtistAdapter extends RecyclerView.Adapter {
                                         GradientDrawable.Orientation.TOP_BOTTOM,
                                         new int[]{
                                                 dominantSwatch.getRgb(),
-                                                headerViewHolder.itemView.getContext().getColor(R.color.dark_black)
+                                                viewHolder.itemView.getContext().getColor(R.color.dark_black)
                                         }
                                 );
-                                headerViewHolder.imageViewArtist.setImageBitmap(bitmap);
-                                headerViewHolder.linearLayoutHeader.setBackground(gradientDrawable);
+                                viewHolder.imageViewArtist.setImageBitmap(bitmap);
+                                viewHolder.linearLayoutHeader.setBackground(gradientDrawable);
                             }
                         }
                     });
@@ -127,17 +130,17 @@ public class ArtistAdapter extends RecyclerView.Adapter {
 
                 }
             });
-            if (headerData.isFollow()) {
-                headerViewHolder.buttonFollow.setText("Followed");
+            if (data.isFollow()) {
+                viewHolder.buttonFollow.setText("Followed");
             } else {
-                headerViewHolder.buttonFollow.setText("Follow");
+                viewHolder.buttonFollow.setText("Follow");
             }
-            headerViewHolder.buttonFollow.setOnClickListener(view -> {
-                headerData.setFollow(!headerData.isFollow());
-                if (headerData.isFollow()) {
-                    headerViewHolder.buttonFollow.setText("Followed");
+            viewHolder.buttonFollow.setOnClickListener(view -> {
+                data.setFollow(!data.isFollow());
+                if (data.isFollow()) {
+                    viewHolder.buttonFollow.setText("Followed");
                 } else {
-                    headerViewHolder.buttonFollow.setText("Follow");
+                    viewHolder.buttonFollow.setText("Follow");
                 }
             });
         }

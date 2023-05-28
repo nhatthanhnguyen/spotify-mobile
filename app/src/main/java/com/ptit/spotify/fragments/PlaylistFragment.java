@@ -1,5 +1,10 @@
 package com.ptit.spotify.fragments;
 
+import static com.ptit.spotify.utils.ItemType.SETTING_DESTINATION_ADD_TO_PLAYLIST;
+import static com.ptit.spotify.utils.ItemType.SETTING_DESTINATION_ALBUM;
+import static com.ptit.spotify.utils.ItemType.SETTING_DESTINATION_ARTIST;
+import static com.ptit.spotify.utils.ItemType.SETTING_LIKE;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +20,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ptit.spotify.R;
 import com.ptit.spotify.adapters.playlist.PlaylistAdapter;
 import com.ptit.spotify.dto.data.PlaylistHeaderData;
+import com.ptit.spotify.dto.data.PlaylistSettingHeaderData;
 import com.ptit.spotify.dto.data.PlaylistSongData;
+import com.ptit.spotify.dto.data.SettingOptionData;
+import com.ptit.spotify.dto.data.SongSettingHeaderData;
 import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
 import com.ptit.spotify.utils.OnItemPlaylistClickedListener;
+import com.ptit.spotify.utils.OnItemSettingClickedListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +98,9 @@ public class PlaylistFragment extends Fragment implements OnItemPlaylistClickedL
     }
 
     private void addItems(List<Object> playlistItems) {
-        playlistItems.add(new PlaylistHeaderData("https://i.scdn.co/image/ab67706f00000002ca5a7517156021292e5663a6",
+        playlistItems.add(new PlaylistHeaderData(
+                "Peaceful Piano",
+                "https://i.scdn.co/image/ab67706f00000002ca5a7517156021292e5663a6",
                 "Peaceful piano to help you slow down, breathe, and relax.",
                 "https://i.scdn.co/image/ab67757000003b8255c25988a6ac314394d3fbf5",
                 "Spotify",
@@ -100,23 +111,43 @@ public class PlaylistFragment extends Fragment implements OnItemPlaylistClickedL
         playlistItems.add(new PlaylistSongData("https://i.scdn.co/image/ab67616d0000485128ccaf8cb23d857cb9361ec4",
                 "Tjärnheden",
                 "Farsjön",
+                "Fjäderlätt",
                 false,
                 false));
         playlistItems.add(new PlaylistSongData("https://i.scdn.co/image/ab67616d00004851ba1332de8185cce3a9490e74",
                 "Quand vous souriez",
                 "Libor Kolman",
+                "Quand vous souriez",
                 false,
                 false));
         playlistItems.add(new PlaylistSongData("https://i.scdn.co/image/ab67616d0000485147b70771cb7375cd30ceec54",
                 "Allena",
                 "M. Ljungström",
+                "Nostalgia",
                 true,
                 true));
     }
 
     @Override
-    public void onMoreSettingsClickedListener() {
-        Toast.makeText(getContext(), "More settings clicked listener", Toast.LENGTH_SHORT).show();
+    public void onPlaylistSettingClickedListener(PlaylistHeaderData data) {
+        List<Object> items = new ArrayList<>();
+        items.add(new PlaylistSettingHeaderData(data.getPlaylistImageUrl(), data.getPlaylistName(),
+                data.getUserCreatedName()));
+        items.add(new SettingOptionData(
+                R.drawable.ic_like_outlined,
+                "Like",
+                SETTING_LIKE));
+        items.add(new SettingOptionData(
+                R.drawable.ic_add_to_playlist,
+                "Add to another playlist",
+                SETTING_DESTINATION_ADD_TO_PLAYLIST));
+        SettingFragment settingFragment = new SettingFragment(items, new OnItemSettingClickedListener() {
+            @Override
+            public void onSettingItemClickedListener(Object data) {
+                Toast.makeText(getContext(), data.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        settingFragment.show(getParentFragmentManager(), settingFragment.getTag());
     }
 
     @Override
@@ -127,5 +158,42 @@ public class PlaylistFragment extends Fragment implements OnItemPlaylistClickedL
     @Override
     public void onSearchClickedListener() {
         // TODO: search
+    }
+
+    @Override
+    public void onSongSettingClickedListener(PlaylistSongData data) {
+        List<Object> items = new ArrayList<>();
+        items.add(new SongSettingHeaderData(
+                data.getSongImageUrl(),
+                data.getSongName(),
+                data.getArtistName(),
+                data.getAlbumName()));
+        items.add(new SettingOptionData(
+                R.drawable.ic_like_outlined,
+                "Like",
+                SETTING_LIKE
+        ));
+        items.add(new SettingOptionData(
+                R.drawable.ic_add_to_playlist,
+                "Add to playlist",
+                SETTING_DESTINATION_ADD_TO_PLAYLIST
+        ));
+        items.add(new SettingOptionData(
+                R.drawable.ic_view_album,
+                "View album",
+                SETTING_DESTINATION_ALBUM
+        ));
+        items.add(new SettingOptionData(
+                R.drawable.ic_view_artist,
+                "View artist",
+                SETTING_DESTINATION_ARTIST
+        ));
+        SettingFragment settingFragment = new SettingFragment(items, new OnItemSettingClickedListener() {
+            @Override
+            public void onSettingItemClickedListener(Object data) {
+                Toast.makeText(getContext(), data.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        settingFragment.show(getParentFragmentManager(), settingFragment.getTag());
     }
 }

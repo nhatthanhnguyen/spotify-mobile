@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ptit.spotify.R;
 
-public class AlbumInfoHeaderViewHolder extends RecyclerView.ViewHolder {
+public class AlbumHeaderViewHolder extends RecyclerView.ViewHolder {
     public LinearLayout linearLayoutHeader;
     public ImageButton buttonBack;
     public ImageView imageViewAlbum;
@@ -24,7 +24,7 @@ public class AlbumInfoHeaderViewHolder extends RecyclerView.ViewHolder {
     public ImageButton buttonDownloadAlbum;
     public ImageButton buttonMoreSettingAlbum;
 
-    public AlbumInfoHeaderViewHolder(@NonNull View itemView) {
+    public AlbumHeaderViewHolder(@NonNull View itemView) {
         super(itemView);
         linearLayoutHeader = itemView.findViewById(R.id.linearLayoutHeader);
         buttonBack = itemView.findViewById(R.id.buttonBack);
