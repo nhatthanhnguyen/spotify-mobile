@@ -110,7 +110,7 @@ public class PlaylistSearchFragment extends Fragment implements OnItemPlaylistSe
     }
 
     private void getPlaylistSongs(List<PlaylistSongData> playlistSongDataList, String id) {
-        // TODO: LẤY TOÀN BỘ BÀI HÁT CỦA PLAYLIST
+        // TODO DONE: LẤY TOÀN BỘ BÀI HÁT CỦA PLAYLIST
         JSONObject jsonBody = new JSONObject();
         final String mRequestBody = jsonBody.toString();
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Constants.getSongByPlaylistIdEndpoint(id), new JSONObject(), new Response.Listener<JSONObject>() {

@@ -1,6 +1,7 @@
 package com.ptit.spotify.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,15 +12,28 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.gson.Gson;
 import com.ptit.spotify.R;
 import com.ptit.spotify.adapters.user.UserAdapter;
+import com.ptit.spotify.dto.data.PlaylistHeaderData;
 import com.ptit.spotify.dto.data.UserInfoHeaderData;
 import com.ptit.spotify.dto.data.UserInfoPlaylistData;
+import com.ptit.spotify.dto.model.PlayList;
 import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
+import com.ptit.spotify.utils.Constants;
+import com.ptit.spotify.utils.HttpUtils;
 import com.ptit.spotify.utils.OnItemUserClickedListener;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.SneakyThrows;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,19 +91,42 @@ public class UserFragment extends Fragment implements OnItemUserClickedListener 
         int spacing = getContext().getResources().getDimensionPixelSize(R.dimen.spacing_16);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new VerticalViewItemDecoration(spacing));
+        String userId = "";
         List<Object> userInfoItems = new ArrayList<>();
-        addItems(userInfoItems);
+        addItems(userInfoItems, userId);
         UserAdapter adapter = new UserAdapter(userInfoItems, this);
         recyclerView.setAdapter(adapter);
         return view;
     }
 
-    private void addItems(List<Object> userInfoItems) {
-        // TODO: LẤY THÔNG TIN CỦA USER ĐÃ ĐĂNG NHẬP
-        userInfoItems.add(new UserInfoHeaderData(null, "NhatThanh", 0));
-        // TODO: LẤY NHỮNG PLAYLIST CỦA USER ĐÃ TẠO
+    private void addItems(List<Object> userInfoItems, String username) {
+        // TODO DONE: LẤY THÔNG TIN CỦA USER ĐÃ ĐĂNG NHẬP
+        userInfoItems.add(new UserInfoHeaderData(null, username, 0));
+        // TODO DONE: LẤY NHỮNG PLAYLIST CỦA USER ĐÃ TẠO
         userInfoItems.add("Playlists");
-        userInfoItems.add(new UserInfoPlaylistData("https://i.scdn.co/image/ab67616d00001e02136a8ed571891d091ed4715b", "Best playlist ever"));
+        JsonObjectRequest jsonObjectPlaylistRequest = new JsonObjectRequest(Constants.getPlaylistByUserIdEndpoint(UserSettingFragment.map1.get(username)), new JSONObject(), new Response.Listener<JSONObject>() {
+            @SneakyThrows
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.i("LOG_RESPONSE", String.valueOf(response));
+                Gson gson = new Gson();
+                JSONArray items = response.optJSONArray("playlists");
+                if(items != null) {
+                    for(int i = 0; i < items.length(); i++) {
+                        PlayList at = gson.fromJson(items.get(i).toString(), PlayList.class);
+                        UserInfoPlaylistData data = new UserInfoPlaylistData(at.getCoverImg(), at.getName());
+                        userInfoItems.add(data);
+
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("LOG_RESPONSE", error.toString());
+            }
+        });
+        HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectPlaylistRequest);
     }
 
     @Override

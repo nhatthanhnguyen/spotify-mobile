@@ -51,7 +51,7 @@ public class AlbumFragment extends Fragment implements OnItemAlbumClickedListene
         super.onViewCreated(view, savedInstanceState);
         int spacing = getContext().getResources().getDimensionPixelSize(R.dimen.spacing_16);
         List<AlbumHeaderData> albumItems = new ArrayList<>();
-        List<Song> songs = new ArrayList<>();
+        List<AlbumSongData> songs = new ArrayList<>();
         //TODO: truyền vào albumsid
         String albumId = "";
         addData(albumItems, songs, albumId);
@@ -68,8 +68,8 @@ public class AlbumFragment extends Fragment implements OnItemAlbumClickedListene
         return inflater.inflate(R.layout.fragment_content, container, false);
     }
 
-    private void addData(List<AlbumHeaderData> album, List<Song> songInAlbums, String albumId) {
-        // TODO: LẤY INFO ALBUM
+    private void addData(List<AlbumHeaderData> album, List<AlbumSongData> songInAlbums, String albumId) {
+        // TODO DONE: LẤY INFO ALBUM
         JSONObject jsonBody = new JSONObject();
         final String mRequestBody = jsonBody.toString();
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Constants.getAlbumsByIdEndpoint(albumId), new JSONObject(), new Response.Listener<JSONObject>() {
@@ -82,7 +82,6 @@ public class AlbumFragment extends Fragment implements OnItemAlbumClickedListene
                 if(items != null) {
                     for(int i = 0; i < items.length(); i++) {
                         Album ab = gson.fromJson(items.get(i).toString(), Album.class);
-                        Artist artist;
                         final String[] artistName = {""};
                         final String[] artistImg = {""};
                         JsonObjectRequest jsonObjectArtistRequest = new JsonObjectRequest(Constants.getArtistByIdEndpoint(String.valueOf(ab.getArtistID())), new JSONObject(), new Response.Listener<JSONObject>() {
@@ -124,8 +123,46 @@ public class AlbumFragment extends Fragment implements OnItemAlbumClickedListene
 //                false,
 //                false)
 //        );
+        // TODO DONE: LẤY SONG CỦA ALBUM
+        JsonObjectRequest jsonObjectSongRequest = new JsonObjectRequest(Constants.getSongByAlbumIdEndpoint(albumId), new JSONObject(), new Response.Listener<JSONObject>() {
+            @SneakyThrows
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.i("LOG_RESPONSE", String.valueOf(response));
+                Gson gson = new Gson();
+                JSONArray items = response.optJSONArray("songs");
+                if(items != null) {
+                    for(int i = 0; i < items.length(); i++) {
+                        Song song = gson.fromJson(items.get(i).toString(), Song.class);
+                        final String[] artistName = {""};
+                        JsonObjectRequest jsonObjectArtistRequest = new JsonObjectRequest(Constants.getArtistByIdEndpoint(String.valueOf(song.getArtistID())), new JSONObject(), new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Log.i("LOG_RESPONSE", String.valueOf(response));
+                                Gson gson = new Gson();
+                                Artist at = gson.fromJson(response.toString(), Artist.class);
+                                artistName[0] = at.getName();
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.e("LOG_RESPONSE", error.toString());
+                            }
+                        });
+                        HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectArtistRequest);
 
-//        // TODO: LẤY SONG CỦA ALBUM
+                        AlbumSongData data = new AlbumSongData(String.valueOf(song.getSongID()), song.getName(), song.getUrl(), artistName[0]);
+                        songInAlbums.add(data);
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("LOG_RESPONSE", error.toString());
+            }
+        });
+        HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectSongRequest);
 //        albumItems.add(new AlbumSongData(
 //                "song12",
 //                "Saying Things",

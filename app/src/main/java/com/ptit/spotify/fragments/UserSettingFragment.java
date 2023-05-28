@@ -24,7 +24,9 @@ import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
 import com.ptit.spotify.utils.OnItemUserSettingClickedListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserSettingFragment extends Fragment implements OnItemUserSettingClickedListener {
 
@@ -32,6 +34,18 @@ public class UserSettingFragment extends Fragment implements OnItemUserSettingCl
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    public static Map<String, String> map = new HashMap<>() {{
+        put("truong", "truong@gmail.com");
+        put("thanh", "thanh@gmail.com");
+        put("nhon", "nhon@gmail.com");
+        put("truongjr", "nguyentruongjr@gmail.com");
+    }};
+    public static Map<String, String> map1 = new HashMap<>() {{
+        put("truong", "1");
+        put("thanh", "2");
+        put("nhon", "3");
+        put("truongjr", "4");
+    }};
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -74,7 +88,8 @@ public class UserSettingFragment extends Fragment implements OnItemUserSettingCl
         View view = inflater.inflate(R.layout.fragment_user_setting, container, false);
         int spacing = getContext().getResources().getDimensionPixelSize(R.dimen.spacing_24);
         List<Object> userSettingsItems = new ArrayList<>();
-        addItems(userSettingsItems);
+        String username = "";
+        addItems(userSettingsItems, username);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new VerticalViewItemDecoration(spacing));
@@ -88,19 +103,19 @@ public class UserSettingFragment extends Fragment implements OnItemUserSettingCl
         return view;
     }
 
-    private void addItems(List<Object> userSettingsItems) {
-        // TODO: LẤY THÔNG TIN USER ĐANG ĐĂNG NHẬP
+    private void addItems(List<Object> userSettingsItems, String username) {
+        // TODO DONE: LẤY THÔNG TIN USER ĐANG ĐĂNG NHẬP
         userSettingsItems.add(new UserSettingHeaderData(null, "NhatThanh"));
         userSettingsItems.add("Account");
         userSettingsItems.add(new UserSettingOptionData(
                 "Email",
-                "nhatthanhlep2001@gmail.com",
+                map.get(username),
                 USER_SETTING_EMAIL
         ));
         userSettingsItems.add("Other");
         userSettingsItems.add(new UserSettingOptionData(
                 "Sign out",
-                "You are sign in under the name NhatThanh",
+                "You are sign in under the name " + username,
                 USER_SETTING_LOG_OUT
         ));
     }

@@ -5,6 +5,7 @@ import static com.ptit.spotify.utils.ItemType.ARTIST;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +17,29 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.gson.Gson;
 import com.ptit.spotify.R;
 import com.ptit.spotify.adapters.add.ItemAddAdapter;
 import com.ptit.spotify.dto.data.AddItemData;
+import com.ptit.spotify.dto.data.AlbumHeaderData;
+import com.ptit.spotify.dto.model.Album;
+import com.ptit.spotify.dto.model.Artist;
 import com.ptit.spotify.itemdecorations.HorizontalViewItemDecoration;
 import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
+import com.ptit.spotify.utils.Constants;
+import com.ptit.spotify.utils.HttpUtils;
 import com.ptit.spotify.utils.OnItemSearchAddClickedListener;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.SneakyThrows;
 
 public class ArtistAddFragment extends Fragment implements OnItemSearchAddClickedListener {
     private List<AddItemData> resultItems;
@@ -98,53 +113,85 @@ public class ArtistAddFragment extends Fragment implements OnItemSearchAddClicke
     }
 
     void addData() {
-        // TODO: LẤY TOÀN BỘ NGHỆ SĨ
-        resultItems = new ArrayList<>();
-        resultItems.add(new AddItemData(
-                "",
-                "https://i.scdn.co/image/ab67616d00001e02b94f78cf2a6ac9c700ee2812",
-                "Emanuel Fremont",
-                null,
-                null,
-                null,
-                ARTIST
-        ));
-        resultItems.add(new AddItemData(
-                "",
-                "https://i.scdn.co/image/ab67616d00001e02b94f78cf2a6ac9c700ee2812",
-                "Emanuel Fremont",
-                null,
-                null,
-                null,
-                ARTIST
-        ));
-        resultItems.add(new AddItemData(
-                "",
-                "https://i.scdn.co/image/ab67616d00001e02b94f78cf2a6ac9c700ee2812",
-                "Emanuel Fremont",
-                null,
-                null,
-                null,
-                ARTIST
-        ));
-        resultItems.add(new AddItemData(
-                "",
-                "https://i.scdn.co/image/ab67616d00001e02b94f78cf2a6ac9c700ee2812",
-                "Emanuel Fremont",
-                null,
-                null,
-                null,
-                ARTIST
-        ));
-        resultItems.add(new AddItemData(
-                "",
-                "https://i.scdn.co/image/ab67616d00001e02b94f78cf2a6ac9c700ee2812",
-                "Emanuel Fremont",
-                null,
-                null,
-                null,
-                ARTIST
-        ));
+        // TODO DONE: LẤY TOÀN BỘ NGHỆ SĨ
+        JSONObject jsonBody = new JSONObject();
+        final String mRequestBody = jsonBody.toString();
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Constants.getAllArtistEndpoint(), new JSONObject(), new Response.Listener<JSONObject>() {
+            @SneakyThrows
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.i("LOG_RESPONSE", String.valueOf(response));
+                Gson gson = new Gson();
+                JSONArray items = response.optJSONArray("artists");
+                if(items != null) {
+                    for(int i = 0; i < items.length(); i++) {
+                        Artist at = gson.fromJson(items.get(i).toString(), Artist.class);
+                        AddItemData data = new AddItemData(
+                                String.valueOf(at.getArtistID()),
+                                at.getCoverImg(),
+                                at.getName(),
+                                at.getDescription(),
+                                at.getName(),
+                                null,
+                                ARTIST
+                        );
+                        resultItems.add(data);
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("LOG_RESPONSE", error.toString());
+            }
+        });
+        HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectRequest);
+//        resultItems = new ArrayList<>();
+//        resultItems.add(new AddItemData(
+//                "",
+//                "https://i.scdn.co/image/ab67616d00001e02b94f78cf2a6ac9c700ee2812",
+//                "Emanuel Fremont",
+//                null,
+//                null,
+//                null,
+//                ARTIST
+//        ));
+//        resultItems.add(new AddItemData(
+//                "",
+//                "https://i.scdn.co/image/ab67616d00001e02b94f78cf2a6ac9c700ee2812",
+//                "Emanuel Fremont",
+//                null,
+//                null,
+//                null,
+//                ARTIST
+//        ));
+//        resultItems.add(new AddItemData(
+//                "",
+//                "https://i.scdn.co/image/ab67616d00001e02b94f78cf2a6ac9c700ee2812",
+//                "Emanuel Fremont",
+//                null,
+//                null,
+//                null,
+//                ARTIST
+//        ));
+//        resultItems.add(new AddItemData(
+//                "",
+//                "https://i.scdn.co/image/ab67616d00001e02b94f78cf2a6ac9c700ee2812",
+//                "Emanuel Fremont",
+//                null,
+//                null,
+//                null,
+//                ARTIST
+//        ));
+//        resultItems.add(new AddItemData(
+//                "",
+//                "https://i.scdn.co/image/ab67616d00001e02b94f78cf2a6ac9c700ee2812",
+//                "Emanuel Fremont",
+//                null,
+//                null,
+//                null,
+//                ARTIST
+//        ));
     }
 
     @Override

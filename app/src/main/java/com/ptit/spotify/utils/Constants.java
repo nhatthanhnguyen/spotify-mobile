@@ -40,6 +40,9 @@ public class Constants {
     public static String getPlaylistByIdEndpoint(String id) {
         return ApiURL + PlaylistURL + "id/" + id;
     }
+    public static String getPlaylistByUserIdEndpoint(String id) {
+        return ApiURL + PlaylistURL + "user/" + id;
+    }
     public static String getPlaylistAllSongEndpoint() {
         return ApiURL + PlaylistURL;
     }
@@ -106,7 +109,22 @@ public class Constants {
     public static String getUpdateArtistEndpoint() {
         return ApiURL + ArtistURL + "/update";
     }
+    public static String getAllArtistEndpoint() {
+        return ApiURL + ArtistURL;
+    }
+    public static String getHistorySongEndpoint(String userId) {
+        return ApiURL + SongURL + "/history" + userId;
+    }
     public static String getFindSongEndpoint() {
         return ApiFindSongURL;
+    }
+    public static String getPlaylistInteractionEndpoint(String userId) {
+        return ApiURL +  PlaylistURL + "/interactions/" +userId;
+    }
+    public static String getAlbumInteractionEndpoint(String userId) {
+        return ApiURL +  AlbumsURL + "/interactions/" +userId;
+    }
+    public static String getArtistInteractionEndpoint(String userId) {
+        return ApiURL +  ArtistURL + "/interactions/" +userId;
     }
 }
