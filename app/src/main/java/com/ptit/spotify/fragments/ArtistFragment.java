@@ -47,6 +47,7 @@ public class ArtistFragment extends Fragment implements OnItemArtistClickedListe
     }
 
     private void addData(List<Object> albumItems) {
+        // LẤY THÔNG TIN CỦA NGHỆ SĨ VÀ BÀI HÁT CỦA NGHỆ SĨ ĐÓ
         albumItems.add(new ArtistHeaderData("Emanuel Fremont", "https://i.scdn.co/image/ab6761610000e5eb4de66b2170a9e8049a828d5f", 1_139_683, false));
         albumItems.add(new ArtistCaptionData("Popular"));
         albumItems.add(new ArtistSongData("1", "Saying Things", "https://i.scdn.co/image/ab67616d00001e02b94f78cf2a6ac9c700ee2812", "30780389"));

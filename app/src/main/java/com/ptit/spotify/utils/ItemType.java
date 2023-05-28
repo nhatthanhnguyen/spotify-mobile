@@ -36,4 +36,6 @@ public enum ItemType {
     USER_SETTING_CAPTION,
     USER_SETTING_EMAIL,
     USER_SETTING_LOG_OUT,
+    ADD_ARTIST,
+    ADD_PLAYLIST,
 }
