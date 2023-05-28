@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ptit.spotify.R;
 import com.ptit.spotify.dto.data.PlaylistSongData;
+import com.ptit.spotify.dto.model.Song;
 import com.ptit.spotify.utils.OnItemPlaylistSearchClickedListener;
 import com.ptit.spotify.viewholders.playlist.PlaylistSongViewHolder;
 import com.squareup.picasso.Picasso;

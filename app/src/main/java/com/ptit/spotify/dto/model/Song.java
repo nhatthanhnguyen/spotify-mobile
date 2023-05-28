@@ -1,7 +1,5 @@
 package com.ptit.spotify.dto.model;
 
-import java.util.List;
-
 public class Song {
     private int songID;
     private String name;

@@ -103,6 +103,7 @@ public class HomeFragment extends Fragment implements OnItemHomeClickedListener 
                         PLAYLIST)
         )));
         // TODO: LẤY TOÀN BỘ PLAYLIST
+
         dataItems.add(new HomeSectionData(new HomeCardData("7",
                 "https://i.scdn.co/image/ab6761610000517404dcd0ba0f67dd1a7bbf1c54",
                 "Sun Of They",

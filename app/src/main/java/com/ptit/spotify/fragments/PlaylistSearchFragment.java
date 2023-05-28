@@ -6,6 +6,7 @@ import static com.ptit.spotify.utils.ItemType.SETTING_DESTINATION_ARTIST;
 import static com.ptit.spotify.utils.ItemType.SETTING_LIKE;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,17 +17,29 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.gson.Gson;
 import com.ptit.spotify.R;
 import com.ptit.spotify.adapters.playlist.PlaylistSearchAdapter;
 import com.ptit.spotify.dto.data.PlaylistSongData;
 import com.ptit.spotify.dto.data.SettingOptionData;
 import com.ptit.spotify.dto.data.SongSettingHeaderData;
+import com.ptit.spotify.dto.model.Song;
 import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
+import com.ptit.spotify.utils.Constants;
+import com.ptit.spotify.utils.HttpUtils;
 import com.ptit.spotify.utils.OnItemPlaylistSearchClickedListener;
 import com.ptit.spotify.utils.OnItemSettingClickedListener;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.SneakyThrows;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -88,32 +101,107 @@ public class PlaylistSearchFragment extends Fragment implements OnItemPlaylistSe
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new VerticalViewItemDecoration(spacing));
         List<PlaylistSongData> items = new ArrayList<>();
-        getPlaylistSongs(items);
+        //TODO: truyền id cho playlist
+        String playlistId = "";
+        getPlaylistSongs(items, playlistId);
         PlaylistSearchAdapter playlistAdapter = new PlaylistSearchAdapter(items, this);
         recyclerView.setAdapter(playlistAdapter);
         return view;
     }
 
-    private void getPlaylistSongs(List<PlaylistSongData> items) {
+    private void getPlaylistSongs(List<PlaylistSongData> playlistSongDataList, String id) {
         // TODO: LẤY TOÀN BỘ BÀI HÁT CỦA PLAYLIST
-        items.add(new PlaylistSongData("https://i.scdn.co/image/ab67616d0000485128ccaf8cb23d857cb9361ec4",
-                "Tjärnheden",
-                "Farsjön",
-                "Fjäderlätt",
-                false,
-                false));
-        items.add(new PlaylistSongData("https://i.scdn.co/image/ab67616d00004851ba1332de8185cce3a9490e74",
-                "Quand vous souriez",
-                "Libor Kolman",
-                "Quand vous souriez",
-                false,
-                false));
-        items.add(new PlaylistSongData("https://i.scdn.co/image/ab67616d0000485147b70771cb7375cd30ceec54",
-                "Allena",
-                "M. Ljungström",
-                "Nostalgia",
-                true,
-                true));
+        JSONObject jsonBody = new JSONObject();
+        final String mRequestBody = jsonBody.toString();
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Constants.getSongByPlaylistIdEndpoint(id), new JSONObject(), new Response.Listener<JSONObject>() {
+            @SneakyThrows
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.i("LOG_RESPONSE", String.valueOf(response));
+                Gson gson = new Gson();
+                JSONArray items = response.optJSONArray("songs");
+                if(items != null) {
+                    for(int i = 0; i < items.length(); i++) {
+                        Song song = gson.fromJson(items.get(i).toString(), Song.class);
+                        boolean liked =  false;
+                        boolean downloaded =  false;
+                        final String[] albumName = {""};
+                        final String[] artistName = {""};
+                        JsonObjectRequest jsonObjectAlbumRequest = new JsonObjectRequest(Constants.getAlbumsByIdEndpoint(String.valueOf(song.getAlbumID())), new JSONObject(), new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Log.i("LOG_RESPONSE", String.valueOf(response));
+                                Gson gson = new Gson();
+                                albumName[0] = gson.fromJson(items.toString(), Song.class).getName();
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.e("LOG_RESPONSE", error.toString());
+                            }
+                        });
+                        HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectAlbumRequest);
+
+                        JsonObjectRequest jsonObjectArtistRequest = new JsonObjectRequest(Constants.getArtistByIdEndpoint(String.valueOf(song.getArtistID())), new JSONObject(), new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Log.i("LOG_RESPONSE", String.valueOf(response));
+                                Gson gson = new Gson();
+                                artistName[0] = gson.fromJson(items.toString(), Song.class).getName();
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.e("LOG_RESPONSE", error.toString());
+                            }
+                        });
+                        HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectArtistRequest);
+
+                        JsonObjectRequest jsonObjectLikeRequest = new JsonObjectRequest(Constants.getSongInteractionEndpoint(String.valueOf(song.getSongID())), new JSONObject(), new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Log.i("LOG_RESPONSE", String.valueOf(response));
+                                Gson gson = new Gson();
+                                artistName[0] = gson.fromJson(items.toString(), Song.class).getName();
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                Log.e("LOG_RESPONSE", error.toString());
+                            }
+                        });
+                        HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectLikeRequest);
+
+                        PlaylistSongData data = new PlaylistSongData(song.getUrl(), song.getName(), albumName[0], artistName[0], liked, downloaded);
+                        playlistSongDataList.add(data);
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("LOG_RESPONSE", error.toString());
+            }
+        });
+        HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectRequest);
+//        items.add(new PlaylistSongData("https://i.scdn.co/image/ab67616d0000485128ccaf8cb23d857cb9361ec4",
+//                "Tjärnheden",
+//                "Farsjön",
+//                "Fjäderlätt",
+//                false,
+//                false));
+//        items.add(new PlaylistSongData("https://i.scdn.co/image/ab67616d00004851ba1332de8185cce3a9490e74",
+//                "Quand vous souriez",
+//                "Libor Kolman",
+//                "Quand vous souriez",
+//                false,
+//                false));
+//        items.add(new PlaylistSongData("https://i.scdn.co/image/ab67616d0000485147b70771cb7375cd30ceec54",
+//                "Allena",
+//                "M. Ljungström",
+//                "Nostalgia",
+//                true,
+//                true));
     }
 
     @Override
