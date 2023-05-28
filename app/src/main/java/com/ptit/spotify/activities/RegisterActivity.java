@@ -76,28 +76,24 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
     }
     private void register() {
-        //TODO: in backend send register request using json body, now using form-data => isHandle = false
-        boolean isHandle = false;
         String email = editEmail.getText().toString().trim();
         String password = editPassword.getText().toString().trim();
         String confirmPassword = editConfirmPassword.getText().toString().trim();
         if (validateInput(email, password, confirmPassword)) {
-            if(isHandle) {
-                registerProcess(email, password, confirmPassword, new VolleyCallback() {
-                    @Override
-                    public void handleCallback() {
-                        Toast.makeText(context, "Register Success", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(context, StartActivity.class);
-                        startActivity(intent);
-                        session.setLogin(true);
-                    }
-                }, new VolleyCallback() {
-                    @Override
-                    public void handleCallback() {
-                        Toast.makeText(context, "Register Fail", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
+            registerProcess(email, password, confirmPassword, new VolleyCallback() {
+                @Override
+                public void handleCallback() {
+                    Toast.makeText(context, "Register Success", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, StartActivity.class);
+                    startActivity(intent);
+                    session.setLogin(true);
+                }
+            }, new VolleyCallback() {
+                @Override
+                public void handleCallback() {
+                    Toast.makeText(context, "Register Fail", Toast.LENGTH_SHORT).show();
+                }
+            });
 
             Toast.makeText(context, "Register Success", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(context, StartActivity.class);

@@ -1,5 +1,5 @@
 package com.ptit.spotify.dto.model;
-simport java.util.List;
+
 
 public class Album {
     private int albumID;

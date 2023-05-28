@@ -51,7 +51,7 @@ public class ButtonFilterAdapter extends RecyclerView.Adapter<ButtonFilterViewHo
                 holder.buttonFilter.setText("Artist");
                 break;
             case ALBUM:
-                holder.buttonFilter.setText("Album");
+                holder.buttonFilter.setText("Album.java");
                 break;
             case TOP_RESULT:
                 holder.buttonFilter.setText("Top result");
