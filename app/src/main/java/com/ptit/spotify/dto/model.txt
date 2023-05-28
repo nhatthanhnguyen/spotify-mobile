@@ -1,0 +1,689 @@
+package dto;
+
+import java.util.List;
+
+public class Song {
+    private int songID;
+    private String name;
+    private int albumID;
+    private int artistID;
+    private String lyrics;
+    private int length;
+    private String url;
+    private String youtubeLink;
+    private String songCloudId;
+
+    public int getSongID() {
+        return songID;
+    }
+
+    public void setSongID(int songID) {
+        this.songID = songID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getAlbumID() {
+        return albumID;
+    }
+
+    public void setAlbumID(int albumID) {
+        this.albumID = albumID;
+    }
+
+    public int getArtistID() {
+        return artistID;
+    }
+
+    public void setArtistID(int artistID) {
+        this.artistID = artistID;
+    }
+
+    public String getLyrics() {
+        return lyrics;
+    }
+
+    public void setLyrics(String lyrics) {
+        this.lyrics = lyrics;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getYoutubeLink() {
+        return youtubeLink;
+    }
+
+    public void setYoutubeLink(String youtubeLink) {
+        this.youtubeLink = youtubeLink;
+    }
+
+    public String getSongCloudId() {
+        return songCloudId;
+    }
+
+    public void setSongCloudId(String songCloudId) {
+        this.songCloudId = songCloudId;
+    }
+}
+
+public class SongResponse {
+    private List<Song> songs;
+    private StatusError statusError;
+
+    public List<Song> getSongs() {
+        return songs;
+    }
+
+    public void setSongs(List<Song> songs) {
+        this.songs = songs;
+    }
+
+    public StatusError getStatusError() {
+        return statusError;
+    }
+
+    public void setStatusError(StatusError statusError) {
+        this.statusError = statusError;
+    }
+}
+
+
+//////
+
+package dto;
+
+import java.util.List;
+
+public class PlayList {
+    private int playListID;
+    private String name;
+    private String coverImg;
+    private int userID;
+
+    public int getPlayListID() {
+        return playListID;
+    }
+
+    public void setPlayListID(int playListID) {
+        this.playListID = playListID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCoverImg() {
+        return coverImg;
+    }
+
+    public void setCoverImg(String coverImg) {
+        this.coverImg = coverImg;
+    }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+}
+
+public class PlayListResponse {
+    private List<PlayList> playLists;
+    private StatusError statusError;
+
+    public List<PlayList> getPlayLists() {
+        return playLists;
+    }
+
+    public void setPlayLists(List<PlayList> playLists) {
+        this.playLists = playLists;
+    }
+
+    public StatusError getStatusError() {
+        return statusError;
+    }
+
+    public void setStatusError(StatusError statusError) {
+        this.statusError = statusError;
+    }
+}
+
+
+/////
+
+
+package dto;
+
+import java.io.InputStream;
+
+public class UploadIn {
+    private InputStream file;
+
+    public InputStream getFile() {
+        return file;
+    }
+
+    public void setFile(InputStream file) {
+        this.file = file;
+    }
+}
+
+
+////
+
+package dto;
+
+import java.util.List;
+
+public class Interaction {
+    private int userID;
+    private int songID;
+    private int liked;
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
+    public int getSongID() {
+        return songID;
+    }
+
+    public void setSongID(int songID) {
+        this.songID = songID;
+    }
+
+    public int getLiked() {
+        return liked;
+    }
+
+    public void setLiked(int liked) {
+        this.liked = liked;
+    }
+}
+
+public class InteractionResponse {
+    private List<Interaction> interactions;
+    private StatusError statusError;
+
+    public List<Interaction> getInteractions() {
+        return interactions;
+    }
+
+    public void setInteractions(List<Interaction> interactions) {
+        this.interactions = interactions;
+    }
+
+    public StatusError getStatusError() {
+        return statusError;
+    }
+
+    public void setStatusError(StatusError statusError) {
+        this.statusError = statusError;
+    }
+}
+
+////
+
+package dto;
+
+public class ErrorResponse {
+    private String message;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+}
+
+public class StatusError {
+    private int returnCode;
+    private String returnMessage;
+    private int subReturnCode;
+    private String subReturnMessage;
+
+    public int getReturnCode() {
+        return returnCode;
+    }
+
+    public void setReturnCode(int returnCode) {
+        this.returnCode = returnCode;
+    }
+
+    public String getReturnMessage() {
+        return returnMessage;
+    }
+
+    public void setReturnMessage(String returnMessage) {
+        this.returnMessage = returnMessage;
+    }
+
+    public int getSubReturnCode() {
+        return subReturnCode;
+    }
+
+    public void setSubReturnCode(int subReturnCode) {
+        this.subReturnCode = subReturnCode;
+    }
+
+    public String getSubReturnMessage() {
+        return subReturnMessage;
+    }
+
+    public void setSubReturnMessage(String subReturnMessage) {
+        this.subReturnMessage = subReturnMessage;
+    }
+}
+
+
+///
+
+
+public class LoginRequest {
+    private String username;
+    private String password;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+}
+
+public class LoginResponseData {
+    private Account account;
+    private String accessToken;
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+}
+
+public class Account {
+    private int userId;
+    private String username;
+    private String email;
+    private String code;
+    private String role;
+    private String status;
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+}
+
+
+///
+
+
+import java.util.List;
+
+public class Artist {
+    private int artistID;
+    private String name;
+    private String description;
+    private String coverImg;
+
+    public int getArtistID() {
+        return artistID;
+    }
+
+    public void setArtistID(int artistID) {
+        this.artistID = artistID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getCoverImg() {
+        return coverImg;
+    }
+
+    public void setCoverImg(String coverImg) {
+        this.coverImg = coverImg;
+    }
+}
+
+public class ArtistResponse {
+    private List<Artist> artists;
+    private StatusError statusError;
+
+    public List<Artist> getArtists() {
+        return artists;
+    }
+
+    public void setArtists(List<Artist> artists) {
+        this.artists = artists;
+    }
+
+    public StatusError getStatusError() {
+        return statusError;
+    }
+
+    public void setStatusError(StatusError statusError) {
+        this.statusError = statusError;
+    }
+}
+
+
+////
+
+
+
+import java.util.List;
+
+public class Album {
+    private int albumID;
+    private String name;
+    private int artistID;
+    private String coverImg;
+
+    public int getAlbumID() {
+        return albumID;
+    }
+
+    public void setAlbumID(int albumID) {
+        this.albumID = albumID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getArtistID() {
+        return artistID;
+    }
+
+    public void setArtistID(int artistID) {
+        this.artistID = artistID;
+    }
+
+    public String getCoverImg() {
+        return coverImg;
+    }
+
+    public void setCoverImg(String coverImg) {
+        this.coverImg = coverImg;
+    }
+}
+
+public class AlbumResponse {
+    private List<Album> albums;
+    private StatusError statusError;
+
+    public List<Album> getAlbums() {
+        return albums;
+    }
+
+    public void setAlbums(List<Album> albums) {
+        this.albums = albums;
+    }
+
+    public StatusError getStatusError() {
+        return statusError;
+    }
+
+    public void setStatusError(StatusError statusError) {
+        this.statusError = statusError;
+    }
+}
+
+
+/////
+
+
+public class CreateAccountRequest {
+    private String username;
+    private String email;
+    private String password;
+    private String role;
+    private String status;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+}
+
+public class UpdateAccountRequest {
+    private String role;
+    private String status;
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+}
+
+public class AccountsResponse {
+    private List<Account> accounts;
+    private StatusError statusError;
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    public StatusError getStatusError() {
+        return statusError;
+    }
+
+    public void setStatusError(StatusError statusError) {
+        this.statusError = statusError;
+    }
+}
+
+public class AccountResponse {
+    private Account account;
+    private StatusError statusError;
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public StatusError getStatusError() {
+        return statusError;
+    }
+
+    public void setStatusError(StatusError statusError) {
+        this.statusError = statusError;
+    }
+}
+
+public class RegisterRequest {
+    private String username;
+    private String email;
+    private String password;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+}
