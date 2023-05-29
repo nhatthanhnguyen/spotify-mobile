@@ -80,25 +80,25 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         String password = editPassword.getText().toString().trim();
         String confirmPassword = editConfirmPassword.getText().toString().trim();
         if (validateInput(email, password, confirmPassword)) {
-            registerProcess(email, password, confirmPassword, new VolleyCallback() {
-                @Override
-                public void handleCallback() {
-                    Toast.makeText(context, "Register Success", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(context, StartActivity.class);
-                    startActivity(intent);
-                    session.setLogin(true);
-                }
-            }, new VolleyCallback() {
-                @Override
-                public void handleCallback() {
-                    Toast.makeText(context, "Register Fail", Toast.LENGTH_SHORT).show();
-                }
-            });
+//            registerProcess(email, password, confirmPassword, new VolleyCallback() {
+//                @Override
+//                public void handleCallback() {
+//                    Toast.makeText(context, "Register Success", Toast.LENGTH_SHORT).show();
+//                    Intent intent = new Intent(context, StartActivity.class);
+//                    startActivity(intent);
+//                    session.setLogin(true);
+//                }
+//            }, new VolleyCallback() {
+//                @Override
+//                public void handleCallback() {
+//                    Toast.makeText(context, "Register Fail", Toast.LENGTH_SHORT).show();
+//                }
+//            });
 
             Toast.makeText(context, "Register Success", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(context, StartActivity.class);
             startActivity(intent);
-            session.setLogin(true);
+            session.setLogin(false);
         }
     }
 
