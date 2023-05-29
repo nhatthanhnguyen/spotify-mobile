@@ -12,7 +12,7 @@ public class Constants {
     public static final String PlaylistURL = "/playlists";
     public static final String SongURL = "/songs";
     public static final String InteractionURL = "/interaction";
-    public static final String ArtistURL = "/artists";
+    public static final String ArtistURL = "/artist";
     public static final String AlbumsURL = "/albums";
 
     //Authen
@@ -110,7 +110,7 @@ public class Constants {
         return ApiURL + ArtistURL + "/update";
     }
     public static String getAllArtistEndpoint() {
-        return ApiURL + ArtistURL;
+        return ApiURL + ArtistURL + "s";
     }
     public static String getHistorySongEndpoint(String userId) {
         return ApiURL + SongURL + "/history" + userId;
