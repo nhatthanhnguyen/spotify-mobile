@@ -145,7 +145,7 @@ public class Constants {
     }
 
     public static String getAllArtistEndpoint() {
-        return ApiURL + ArtistURL;
+        return ApiURL + ArtistURL + "s";
     }
 
     public static String getHistorySongEndpoint(String userId) {
