@@ -1,42 +1,16 @@
 package com.ptit.spotify.dto.model;
 
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class PlayList {
-    private int playListID;
+    private int play_list_id;
     private String name;
-    private String coverImg;
-    private int userID;
-
-    public int getPlayListID() {
-        return playListID;
-    }
-
-    public void setPlayListID(int playListID) {
-        this.playListID = playListID;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getCoverImg() {
-        return coverImg;
-    }
-
-    public void setCoverImg(String coverImg) {
-        this.coverImg = coverImg;
-    }
-
-    public int getUserID() {
-        return userID;
-    }
-
-    public void setUserID(int userID) {
-        this.userID = userID;
-    }
+    private String cover_img;
+    private int user_id;
+    private String created_at;
 }

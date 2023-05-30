@@ -120,14 +120,14 @@ public class PlaylistSearchFragment extends Fragment implements OnItemPlaylistSe
                 Log.i("LOG_RESPONSE", String.valueOf(response));
                 Gson gson = new Gson();
                 JSONArray items = response.optJSONArray("songs");
-                if(items != null) {
-                    for(int i = 0; i < items.length(); i++) {
+                if (items != null) {
+                    for (int i = 0; i < items.length(); i++) {
                         Song song = gson.fromJson(items.get(i).toString(), Song.class);
-                        boolean liked =  false;
-                        boolean downloaded =  false;
+                        boolean liked = false;
+                        boolean downloaded = false;
                         final String[] albumName = {""};
                         final String[] artistName = {""};
-                        JsonObjectRequest jsonObjectAlbumRequest = new JsonObjectRequest(Constants.getAlbumsByIdEndpoint(String.valueOf(song.getAlbumID())), new JSONObject(), new Response.Listener<JSONObject>() {
+                        JsonObjectRequest jsonObjectAlbumRequest = new JsonObjectRequest(Constants.getAlbumsByIdEndpoint(String.valueOf(song.getAlbum_id())), new JSONObject(), new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
                                 Log.i("LOG_RESPONSE", String.valueOf(response));
@@ -142,7 +142,7 @@ public class PlaylistSearchFragment extends Fragment implements OnItemPlaylistSe
                         });
                         HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectAlbumRequest);
 
-                        JsonObjectRequest jsonObjectArtistRequest = new JsonObjectRequest(Constants.getArtistByIdEndpoint(String.valueOf(song.getArtistID())), new JSONObject(), new Response.Listener<JSONObject>() {
+                        JsonObjectRequest jsonObjectArtistRequest = new JsonObjectRequest(Constants.getArtistByIdEndpoint(String.valueOf(song.getArtist_id())), new JSONObject(), new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
                                 Log.i("LOG_RESPONSE", String.valueOf(response));
@@ -157,7 +157,7 @@ public class PlaylistSearchFragment extends Fragment implements OnItemPlaylistSe
                         });
                         HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectArtistRequest);
 
-                        JsonObjectRequest jsonObjectLikeRequest = new JsonObjectRequest(Constants.getSongInteractionEndpoint(String.valueOf(song.getSongID())), new JSONObject(), new Response.Listener<JSONObject>() {
+                        JsonObjectRequest jsonObjectLikeRequest = new JsonObjectRequest(Constants.getSongInteractionEndpoint(String.valueOf(song.getSong_id())), new JSONObject(), new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
                                 Log.i("LOG_RESPONSE", String.valueOf(response));
@@ -172,7 +172,16 @@ public class PlaylistSearchFragment extends Fragment implements OnItemPlaylistSe
                         });
                         HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectLikeRequest);
 
-                        PlaylistSongData data = new PlaylistSongData(song.getUrl(), song.getName(), albumName[0], artistName[0], liked, downloaded);
+                        PlaylistSongData data = new PlaylistSongData(
+                                song.getSong_id(),
+                                song.getUrl(),
+                                song.getName(),
+                                song.getArtist_id(),
+                                artistName[0],
+                                song.getAlbum_id(),
+                                artistName[0],
+                                song.getLength(),
+                                false);
                         playlistSongDataList.add(data);
                     }
                 }
@@ -213,7 +222,7 @@ public class PlaylistSearchFragment extends Fragment implements OnItemPlaylistSe
     public void onSongSettingClickedListener(PlaylistSongData data) {
         List<Object> items = new ArrayList<>();
         items.add(new SongSettingHeaderData(
-                data.getSongImageUrl(),
+                data.getSongUrl(),
                 data.getSongName(),
                 data.getArtistName(),
                 data.getAlbumName()));

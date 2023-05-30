@@ -16,5 +16,4 @@ public class PlaylistHeaderData {
     private long numberOfLikes;
     private long totalLength;
     private boolean liked;
-    private boolean downloaded;
 }

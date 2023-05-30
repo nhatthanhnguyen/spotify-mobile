@@ -14,6 +14,7 @@ public class SessionManager {
     int PRIVATE_MODE = 0;
     private static final String PREF_NAME = "AndroidLogin";
     private static final String KEY_IS_LOGGEDIN = "isLoggedIn";
+    private static final String USER_ID = "userId";
 
     public SessionManager(Context context) {
         this._context = context;
@@ -27,7 +28,17 @@ public class SessionManager {
         Log.d(TAG, "User login session modified!");
     }
 
-    public boolean isLoggedIn(){
+    public void setUserId(int userId) {
+        editor.putInt(USER_ID, userId);
+        editor.commit();
+        Log.d(TAG, "User Id session modified");
+    }
+
+    public int getUserId() {
+        return pref.getInt(USER_ID, -1);
+    }
+
+    public boolean isLoggedIn() {
         return pref.getBoolean(KEY_IS_LOGGEDIN, false);
     }
 }

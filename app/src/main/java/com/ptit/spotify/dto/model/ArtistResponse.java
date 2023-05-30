@@ -1,23 +1,15 @@
 package com.ptit.spotify.dto.model;
+
 import java.util.List;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ArtistResponse {
     private List<Artist> artists;
-    private StatusError statusError;
-
-    public List<Artist> getArtists() {
-        return artists;
-    }
-
-    public void setArtists(List<Artist> artists) {
-        this.artists = artists;
-    }
-
-    public StatusError getStatusError() {
-        return statusError;
-    }
-
-    public void setStatusError(StatusError statusError) {
-        this.statusError = statusError;
-    }
+    private StatusError status_error;
 }

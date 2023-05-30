@@ -10,5 +10,7 @@ public interface OnItemPlaylistClickedListener {
 
     void onSearchClickedListener();
 
+    void onSongClickedListener(PlaylistSongData data);
+
     void onSongSettingClickedListener(PlaylistSongData data);
 }

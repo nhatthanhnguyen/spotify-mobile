@@ -9,7 +9,8 @@
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="154dp"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:src="@drawable/spotify_icon_rgb_white" />
 
     <TextView
         android:id="@+id/textViewTitle"

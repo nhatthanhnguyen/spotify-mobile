@@ -48,7 +48,7 @@ public class HomeCardAdapter extends RecyclerView.Adapter<HomeCardViewHolder> {
         HomeCardData data = homeCardDataItems.get(position);
         final ItemType type = data.getType();
         holder.itemView.setOnClickListener(v -> {
-            onItemHomeClickedListener.onCardClickedListener(data.getType());
+            onItemHomeClickedListener.onCardClickedListener(data.getType(), Integer.parseInt(data.getId()));
         });
 
         holder.textViewTitle.setText(data.getTitle());
@@ -60,11 +60,10 @@ public class HomeCardAdapter extends RecyclerView.Adapter<HomeCardViewHolder> {
 
         ViewGroup.LayoutParams imageLayoutParams = holder.imageView.getLayoutParams();
         holder.imageView.setLayoutParams(imageLayoutParams);
-
         if (data.getType().equals(ARTIST)) {
-            Picasso.get().load(data.getImageUrl()).transform(new CircleTransform()).into(holder.imageView);
+            Picasso.get().load(data.getImageUrl()).error(R.drawable.ic_view_artist).transform(new CircleTransform()).into(holder.imageView);
         } else {
-            Picasso.get().load(data.getImageUrl()).into(holder.imageView);
+            Picasso.get().load(data.getImageUrl()).error(R.drawable.spotify_icon_rgb_white).into(holder.imageView);
         }
     }
 

@@ -1,41 +1,16 @@
 package com.ptit.spotify.dto.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Album {
-    private int albumID;
+    private int album_id;
     private String name;
-    private int artistID;
-    private String coverImg;
-
-    public int getAlbumID() {
-        return albumID;
-    }
-
-    public void setAlbumID(int albumID) {
-        this.albumID = albumID;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getArtistID() {
-        return artistID;
-    }
-
-    public void setArtistID(int artistID) {
-        this.artistID = artistID;
-    }
-
-    public String getCoverImg() {
-        return coverImg;
-    }
-
-    public void setCoverImg(String coverImg) {
-        this.coverImg = coverImg;
-    }
+    private int artist_id;
+    private String cover_img;
+    private String created_at;
 }

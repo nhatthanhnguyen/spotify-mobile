@@ -136,9 +136,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter {
             if (!data.isLiked()) {
                 viewHolder.buttonLikeSong.setVisibility(View.GONE);
             }
-            if (!data.isDownloaded()) {
-                viewHolder.imageViewSongDownloaded.setVisibility(View.GONE);
-            }
             viewHolder.buttonMoreSettingSong.setOnClickListener(v -> {
                 onItemPlaylistClickedListener.onSongSettingClickedListener(data);
             });
@@ -152,7 +149,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter {
                     viewHolder.buttonLikeSong.setVisibility(View.VISIBLE);
                 }
             });
-            Picasso.get().load(data.getSongImageUrl()).into(viewHolder.imageViewSong);
+            Picasso.get().load(data.getSongUrl()).into(viewHolder.imageViewSong);
         }
     }
 

@@ -18,9 +18,10 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.ptit.spotify.R;
 import com.ptit.spotify.adapters.album.AlbumAdapter;
@@ -33,33 +34,128 @@ import com.ptit.spotify.dto.model.Artist;
 import com.ptit.spotify.dto.model.Song;
 import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
 import com.ptit.spotify.utils.Constants;
-import com.ptit.spotify.utils.HttpUtils;
 import com.ptit.spotify.utils.OnItemAlbumClickedListener;
 import com.ptit.spotify.utils.OnItemSettingClickedListener;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.SneakyThrows;
-
 public class AlbumFragment extends Fragment implements OnItemAlbumClickedListener {
+    private static final String ALBUM_DATA = "Album";
+    private List<Object> albumItems;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        int spacing = getContext().getResources().getDimensionPixelSize(R.dimen.spacing_16);
-        List<AlbumHeaderData> albumItems = new ArrayList<>();
-        List<AlbumSongData> songs = new ArrayList<>();
-        //TODO: truyền vào albumsid
+        Bundle bundle = getArguments();
         String albumId = "";
-        addData(albumItems, songs, albumId);
+        if (bundle != null) {
+            albumId = String.valueOf(bundle.getInt(ALBUM_DATA, 0));
+        }
+        int spacing = getContext().getResources().getDimensionPixelSize(R.dimen.spacing_16);
+        albumItems = new ArrayList<>();
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new VerticalViewItemDecoration(spacing));
-        AlbumAdapter albumAdapter = new AlbumAdapter(albumItems, this);
-        recyclerView.setAdapter(albumAdapter);
+        //TODO: truyền vào albumsid
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+
+        // TODO DONE: LẤY INFO ALBUM
+        String finalAlbumId = albumId;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                Constants.getAlbumsByIdEndpoint(albumId),
+                null,
+                albumResponse -> {
+                    Log.i("LOG_RESPONSE", String.valueOf(albumResponse));
+                    Gson gson = new Gson();
+                    JSONArray items = albumResponse.optJSONArray("albums");
+                    if (items != null) {
+                        Album album = null;
+                        try {
+                            album = gson.fromJson(items.get(0).toString(), Album.class);
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                        Album finalAlbum = album;
+                        JsonObjectRequest jsonObjectArtistRequest = new JsonObjectRequest(
+                                Request.Method.GET,
+                                Constants.getArtistByIdEndpoint(String.valueOf(album.getArtist_id())),
+                                null,
+                                artistResponse -> {
+                                    Log.i("LOG_RESPONSE", String.valueOf(artistResponse));
+                                    Gson gson1 = new Gson();
+                                    JSONArray itemArtists = artistResponse.optJSONArray("artists");
+                                    if (itemArtists == null) {
+                                        return;
+                                    }
+                                    Artist artist = null;
+                                    try {
+                                        artist = gson1.fromJson(itemArtists.get(0).toString(), Artist.class);
+                                    } catch (JSONException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                    AlbumHeaderData headerData = new AlbumHeaderData(
+                                            finalAlbum.getCover_img(),
+                                            finalAlbum.getName(),
+                                            artist.getName(),
+                                            artist.getCoverImg(),
+                                            "20-12-2022");
+                                    albumItems.add(headerData);
+                                    JsonObjectRequest jsonObjectSongRequest = new JsonObjectRequest(
+                                            Request.Method.GET,
+                                            Constants.getSongByAlbumIdEndpoint(finalAlbumId),
+                                            null,
+                                            responseSong -> {
+                                                Log.i("LOG_RESPONSE", String.valueOf(responseSong));
+                                                Gson gson2 = new Gson();
+                                                JSONArray itemSongs = responseSong.optJSONArray("songs");
+                                                if (itemSongs == null) return;
+                                                for (int i = 0; i < itemSongs.length(); i++) {
+                                                    Song song = null;
+                                                    try {
+                                                        song = gson.fromJson(itemSongs.get(i).toString(), Song.class);
+                                                    } catch (JSONException e) {
+                                                        throw new RuntimeException(e);
+                                                    }
+                                                    Song finalSong = song;
+                                                    JsonObjectRequest jsonObjectRequestArtistSong = new JsonObjectRequest(
+                                                            Request.Method.GET,
+                                                            Constants.getArtistByIdEndpoint(String.valueOf(song.getArtist_id())),
+                                                            new JSONObject(),
+                                                            response -> {
+                                                                Log.i("LOG_RESPONSE", String.valueOf(response));
+                                                                Gson gson3 = new Gson();
+                                                                JSONArray itemArtistSongs = response.optJSONArray("artists");
+                                                                if (itemArtistSongs == null) return;
+                                                                Artist artistSong = null;
+                                                                try {
+                                                                    artistSong = gson3.fromJson(itemArtistSongs.get(0).toString(), Artist.class);
+                                                                } catch (JSONException e) {
+                                                                    throw new RuntimeException(e);
+                                                                }
+                                                                AlbumSongData albumSongData = new AlbumSongData(
+                                                                        String.valueOf(finalSong.getSong_id()),
+                                                                        finalSong.getName(),
+                                                                        "",
+                                                                        artistSong.getName());
+                                                                albumItems.add(albumSongData);
+                                                            }, error -> Log.e("LOG_RESPONSE", error.toString()));
+                                                    requestQueue.add(jsonObjectRequestArtistSong);
+                                                }
+                                                AlbumAdapter albumAdapter = new AlbumAdapter(albumItems, this);
+                                                recyclerView.setAdapter(albumAdapter);
+                                            }, error -> Log.e("LOG_RESPONSE", error.toString()));
+                                    requestQueue.add(jsonObjectSongRequest);
+                                }, error -> Log.e("LOG_RESPONSE", error.toString()));
+                        requestQueue.add(jsonObjectArtistRequest);
+                    }
+                }, error -> Log.e("LOG_RESPONSE", error.toString()));
+        requestQueue.add(jsonObjectRequest);
     }
 
     @Nullable
@@ -68,51 +164,7 @@ public class AlbumFragment extends Fragment implements OnItemAlbumClickedListene
         return inflater.inflate(R.layout.fragment_content, container, false);
     }
 
-    private void addData(List<AlbumHeaderData> album, List<AlbumSongData> songInAlbums, String albumId) {
-        // TODO DONE: LẤY INFO ALBUM
-        JSONObject jsonBody = new JSONObject();
-        final String mRequestBody = jsonBody.toString();
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Constants.getAlbumsByIdEndpoint(albumId), new JSONObject(), new Response.Listener<JSONObject>() {
-            @SneakyThrows
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.i("LOG_RESPONSE", String.valueOf(response));
-                Gson gson = new Gson();
-                JSONArray items = response.optJSONArray("albums");
-                if(items != null) {
-                    for(int i = 0; i < items.length(); i++) {
-                        Album ab = gson.fromJson(items.get(i).toString(), Album.class);
-                        final String[] artistName = {""};
-                        final String[] artistImg = {""};
-                        JsonObjectRequest jsonObjectArtistRequest = new JsonObjectRequest(Constants.getArtistByIdEndpoint(String.valueOf(ab.getArtistID())), new JSONObject(), new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                Log.i("LOG_RESPONSE", String.valueOf(response));
-                                Gson gson = new Gson();
-                                Artist at = gson.fromJson(response.toString(), Artist.class);
-                                artistName[0] = at.getName();
-                                artistImg[0] = at.getCoverImg();
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Log.e("LOG_RESPONSE", error.toString());
-                            }
-                        });
-                        HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectArtistRequest);
-
-                        AlbumHeaderData data = new AlbumHeaderData(ab.getCoverImg(), ab.getName(), artistName[0], artistImg[0], "20-12-2022");
-                        album.add(data);
-                    }
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("LOG_RESPONSE", error.toString());
-            }
-        });
-        HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectRequest);
+    private void addData(String albumId) {
 //        albumItems.add(new AlbumHeaderData(
 //                "https://i.scdn.co/image/ab67616d0000b273b94f78cf2a6ac9c700ee2812",
 //                "Saying Things",
@@ -124,45 +176,6 @@ public class AlbumFragment extends Fragment implements OnItemAlbumClickedListene
 //                false)
 //        );
         // TODO DONE: LẤY SONG CỦA ALBUM
-        JsonObjectRequest jsonObjectSongRequest = new JsonObjectRequest(Constants.getSongByAlbumIdEndpoint(albumId), new JSONObject(), new Response.Listener<JSONObject>() {
-            @SneakyThrows
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.i("LOG_RESPONSE", String.valueOf(response));
-                Gson gson = new Gson();
-                JSONArray items = response.optJSONArray("songs");
-                if(items != null) {
-                    for(int i = 0; i < items.length(); i++) {
-                        Song song = gson.fromJson(items.get(i).toString(), Song.class);
-                        final String[] artistName = {""};
-                        JsonObjectRequest jsonObjectArtistRequest = new JsonObjectRequest(Constants.getArtistByIdEndpoint(String.valueOf(song.getArtistID())), new JSONObject(), new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                Log.i("LOG_RESPONSE", String.valueOf(response));
-                                Gson gson = new Gson();
-                                Artist at = gson.fromJson(response.toString(), Artist.class);
-                                artistName[0] = at.getName();
-                            }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Log.e("LOG_RESPONSE", error.toString());
-                            }
-                        });
-                        HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectArtistRequest);
-
-                        AlbumSongData data = new AlbumSongData(String.valueOf(song.getSongID()), song.getName(), song.getUrl(), artistName[0]);
-                        songInAlbums.add(data);
-                    }
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("LOG_RESPONSE", error.toString());
-            }
-        });
-        HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectSongRequest);
 //        albumItems.add(new AlbumSongData(
 //                "song12",
 //                "Saying Things",

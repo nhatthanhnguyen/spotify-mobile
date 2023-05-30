@@ -7,11 +7,9 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ptit.spotify.R;
-import com.ptit.spotify.helper.SessionManager;
 
 public class StartActivity extends AppCompatActivity {
     private Button btnRegister, btnSignIn;
-    SessionManager session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,13 +17,6 @@ public class StartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_start);
         setControl();
         setAction();
-        session = new SessionManager(this);
-
-        if(session.isLoggedIn()) {
-            Intent intent = new Intent(StartActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
     }
 
     private void setControl() {
@@ -35,9 +26,8 @@ public class StartActivity extends AppCompatActivity {
 
     private void setAction() {
         btnSignIn.setOnClickListener(view -> {
-            Intent intent = new Intent(this, ContentActivity.class);
+            Intent intent = new Intent(this, SignInActivity.class);
             startActivity(intent);
-            finish();
         });
         btnRegister.setOnClickListener(view -> {
             Intent intent = new Intent(this, RegisterActivity.class);

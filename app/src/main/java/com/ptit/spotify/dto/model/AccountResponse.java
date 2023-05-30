@@ -1,22 +1,13 @@
 package com.ptit.spotify.dto.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AccountResponse {
     private Account account;
-    private StatusError statusError;
-
-    public Account getAccount() {
-        return account;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
-    }
-
-    public StatusError getStatusError() {
-        return statusError;
-    }
-
-    public void setStatusError(StatusError statusError) {
-        this.statusError = statusError;
-    }
+    private StatusError status_error;
 }

@@ -114,15 +114,6 @@
                     app:srcCompat="@drawable/ic_like_outlined" />
 
                 <ImageButton
-                    android:id="@+id/buttonDownloadAlbum"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginEnd="@dimen/spacing_32"
-                    android:background="@android:color/transparent"
-                    app:srcCompat="@drawable/ic_download_filled" />
-
-                <ImageButton
                     android:id="@+id/buttonMoreSettingAlbum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -18,7 +18,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
 import com.ptit.spotify.R;
 import com.ptit.spotify.adapters.user.UserAdapter;
-import com.ptit.spotify.dto.data.PlaylistHeaderData;
 import com.ptit.spotify.dto.data.UserInfoHeaderData;
 import com.ptit.spotify.dto.data.UserInfoPlaylistData;
 import com.ptit.spotify.dto.model.PlayList;
@@ -111,12 +110,11 @@ public class UserFragment extends Fragment implements OnItemUserClickedListener 
                 Log.i("LOG_RESPONSE", String.valueOf(response));
                 Gson gson = new Gson();
                 JSONArray items = response.optJSONArray("playlists");
-                if(items != null) {
-                    for(int i = 0; i < items.length(); i++) {
+                if (items != null) {
+                    for (int i = 0; i < items.length(); i++) {
                         PlayList at = gson.fromJson(items.get(i).toString(), PlayList.class);
-                        UserInfoPlaylistData data = new UserInfoPlaylistData(at.getCoverImg(), at.getName());
+                        UserInfoPlaylistData data = new UserInfoPlaylistData(at.getCover_img(), at.getName());
                         userInfoItems.add(data);
-
                     }
                 }
             }

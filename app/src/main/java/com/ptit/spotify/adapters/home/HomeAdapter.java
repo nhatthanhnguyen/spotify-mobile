@@ -111,7 +111,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             HomeCardData data = (HomeCardData) sectionData.getHeader();
             viewHolder.textViewTitle.setText(data.getTitle());
             viewHolder.linearLayoutTitle.setOnClickListener(v -> {
-                onItemHomeClickedListener.onCardClickedListener(data.getType());
+                onItemHomeClickedListener.onCardClickedListener(data.getType(), Integer.parseInt(data.getId()));
             });
             if (data.getType().equals(ARTIST)) {
                 Picasso.get().load(data.getImageUrl()).transform(new CircleTransform()).into(viewHolder.imageView);

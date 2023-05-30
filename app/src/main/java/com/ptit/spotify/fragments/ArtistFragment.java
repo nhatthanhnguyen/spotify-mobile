@@ -3,6 +3,7 @@ package com.ptit.spotify.fragments;
 import static com.ptit.spotify.utils.ItemType.SETTING_LIKE;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.ptit.spotify.R;
 import com.ptit.spotify.adapters.artist.ArtistAdapter;
 import com.ptit.spotify.dto.data.ArtistCaptionData;
@@ -22,27 +28,94 @@ import com.ptit.spotify.dto.data.ArtistHeaderData;
 import com.ptit.spotify.dto.data.ArtistSettingHeaderData;
 import com.ptit.spotify.dto.data.ArtistSongData;
 import com.ptit.spotify.dto.data.SettingOptionData;
+import com.ptit.spotify.dto.model.Artist;
+import com.ptit.spotify.dto.model.Song;
 import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
+import com.ptit.spotify.utils.Constants;
 import com.ptit.spotify.utils.OnItemArtistClickedListener;
 import com.ptit.spotify.utils.OnItemSettingClickedListener;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ArtistFragment extends Fragment implements OnItemArtistClickedListener {
+    private static final String ARTIST_DATA = "Artist";
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Bundle bundle = getArguments();
+        String artistId = "";
+        if (bundle != null) {
+            artistId = String.valueOf(bundle.getInt(ARTIST_DATA, 0));
+        }
         View view = inflater.inflate(R.layout.fragment_content, container, false);
         int spacing = getContext().getResources().getDimensionPixelSize(R.dimen.spacing_16);
         List<Object> artistItems = new ArrayList<>();
-        addData(artistItems);
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        String finalArtistId = artistId;
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new VerticalViewItemDecoration(spacing));
-        ArtistAdapter artistAdapter = new ArtistAdapter(artistItems, this);
-        recyclerView.setAdapter(artistAdapter);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                Constants.getArtistByIdEndpoint(artistId),
+                null,
+                artistResponse -> {
+                    Log.i("LOG_RESPONSE", String.valueOf(artistResponse));
+                    Gson gson = new Gson();
+                    JSONArray artists = artistResponse.optJSONArray("artists");
+                    if (artists == null) return;
+                    Artist artist = null;
+                    try {
+                        artist = gson.fromJson(artists.get(0).toString(), Artist.class);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    artistItems.add(new ArtistHeaderData(
+                            artist.getName(),
+                            artist.getCoverImg(),
+                            1000,
+                            false
+                    ));
+                    artistItems.add(new ArtistCaptionData("Popular"));
+                    Artist finalArtist = artist;
+                    JsonObjectRequest jsonObjectSongRequest = new JsonObjectRequest(
+                            Request.Method.GET,
+                            Constants.getSongByArtistIdEndpoint(finalArtistId),
+                            null,
+                            responseSong -> {
+                                Log.i("LOG_RESPONSE", String.valueOf(responseSong));
+                                Gson gson2 = new Gson();
+                                JSONArray itemSongs = responseSong.optJSONArray("songs");
+                                if (itemSongs == null) return;
+                                for (int i = 0; i < itemSongs.length(); i++) {
+                                    Song song = null;
+                                    try {
+                                        song = gson.fromJson(itemSongs.get(i).toString(), Song.class);
+                                    } catch (JSONException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                    artistItems.add(new ArtistSongData(
+                                            String.valueOf(i + 1),
+                                            song.getName(),
+                                            "",
+                                            String.valueOf(123)
+                                    ));
+                                }
+                                artistItems.add(new ArtistCaptionData("Description"));
+                                artistItems.add(new ArtistDescriptionData(1_139_683, finalArtist.getDescription(), finalArtist.getCoverImg()));
+                                ArtistAdapter artistAdapter = new ArtistAdapter(artistItems, this);
+                                recyclerView.setAdapter(artistAdapter);
+                            }, error -> Log.e("LOG_RESPONSE", error.toString()));
+                    requestQueue.add(jsonObjectSongRequest);
+                },
+                errorArtist -> Log.e("LOG_RESPONSE", errorArtist.toString())
+        );
+        requestQueue.add(jsonObjectRequest);
         return view;
     }
 

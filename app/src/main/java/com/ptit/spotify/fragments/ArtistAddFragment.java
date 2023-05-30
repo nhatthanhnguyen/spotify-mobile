@@ -24,8 +24,6 @@ import com.google.gson.Gson;
 import com.ptit.spotify.R;
 import com.ptit.spotify.adapters.add.ItemAddAdapter;
 import com.ptit.spotify.dto.data.AddItemData;
-import com.ptit.spotify.dto.data.AlbumHeaderData;
-import com.ptit.spotify.dto.model.Album;
 import com.ptit.spotify.dto.model.Artist;
 import com.ptit.spotify.itemdecorations.HorizontalViewItemDecoration;
 import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
@@ -123,11 +121,11 @@ public class ArtistAddFragment extends Fragment implements OnItemSearchAddClicke
                 Log.i("LOG_RESPONSE", String.valueOf(response));
                 Gson gson = new Gson();
                 JSONArray items = response.optJSONArray("artists");
-                if(items != null) {
-                    for(int i = 0; i < items.length(); i++) {
+                if (items != null) {
+                    for (int i = 0; i < items.length(); i++) {
                         Artist at = gson.fromJson(items.get(i).toString(), Artist.class);
                         AddItemData data = new AddItemData(
-                                String.valueOf(at.getArtistID()),
+                                String.valueOf(at.getArtist_id()),
                                 at.getCoverImg(),
                                 at.getName(),
                                 at.getDescription(),

@@ -12,14 +12,12 @@ import com.ptit.spotify.R;
 
 public class AlbumSongViewHolder extends RecyclerView.ViewHolder {
     public TextView textViewSongName;
-    public ImageView imageViewSongDownloaded;
     public TextView textViewArtistName;
     public ImageButton buttonMoreSettingSong;
 
     public AlbumSongViewHolder(@NonNull View itemView) {
         super(itemView);
         textViewSongName = itemView.findViewById(R.id.textViewSongName);
-        imageViewSongDownloaded = itemView.findViewById(R.id.imageViewSongDownloaded);
         textViewArtistName = itemView.findViewById(R.id.textViewArtistName);
         buttonMoreSettingSong = itemView.findViewById(R.id.buttonMoreSettingSong);
     }

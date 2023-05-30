@@ -20,6 +20,7 @@ import com.ptit.spotify.activities.StartActivity;
 import com.ptit.spotify.adapters.user.UserSettingAdapter;
 import com.ptit.spotify.dto.data.UserSettingHeaderData;
 import com.ptit.spotify.dto.data.UserSettingOptionData;
+import com.ptit.spotify.helper.SessionManager;
 import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
 import com.ptit.spotify.utils.OnItemUserSettingClickedListener;
 
@@ -34,6 +35,7 @@ public class UserSettingFragment extends Fragment implements OnItemUserSettingCl
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private SessionManager sessionManager;
     public static Map<String, String> map = new HashMap<>() {{
         put("truong", "truong@gmail.com");
         put("thanh", "thanh@gmail.com");
@@ -85,6 +87,7 @@ public class UserSettingFragment extends Fragment implements OnItemUserSettingCl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        sessionManager = new SessionManager(getContext());
         View view = inflater.inflate(R.layout.fragment_user_setting, container, false);
         int spacing = getContext().getResources().getDimensionPixelSize(R.dimen.spacing_24);
         List<Object> userSettingsItems = new ArrayList<>();
@@ -123,6 +126,8 @@ public class UserSettingFragment extends Fragment implements OnItemUserSettingCl
     @Override
     public void onSignOutClickedListener() {
         getActivity().finish();
+        sessionManager.setUserId(-1);
+        sessionManager.setLogin(false);
         startActivity(new Intent(getActivity(), StartActivity.class));
     }
 

@@ -21,7 +21,6 @@ public class AlbumHeaderViewHolder extends RecyclerView.ViewHolder {
     public TextView textViewAlbumDateReleased;
     public ImageButton buttonPlayAlbum;
     public ImageButton buttonLikeAlbum;
-    public ImageButton buttonDownloadAlbum;
     public ImageButton buttonMoreSettingAlbum;
 
     public AlbumHeaderViewHolder(@NonNull View itemView) {
@@ -35,7 +34,6 @@ public class AlbumHeaderViewHolder extends RecyclerView.ViewHolder {
         textViewAlbumDateReleased = itemView.findViewById(R.id.textViewAlbumDateReleased);
         buttonPlayAlbum = itemView.findViewById(R.id.buttonPlayAlbum);
         buttonLikeAlbum = itemView.findViewById(R.id.buttonLikeAlbum);
-        buttonDownloadAlbum = itemView.findViewById(R.id.buttonDownloadAlbum);
         buttonMoreSettingAlbum = itemView.findViewById(R.id.buttonMoreSettingAlbum);
     }
 }

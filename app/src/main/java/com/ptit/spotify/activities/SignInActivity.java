@@ -15,10 +15,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.gson.Gson;
 import com.ptit.spotify.R;
+import com.ptit.spotify.dto.model.Account;
 import com.ptit.spotify.helper.SessionManager;
 import com.ptit.spotify.utils.Constants;
 import com.ptit.spotify.utils.HttpUtils;
@@ -50,8 +50,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         context = this;
         session = new SessionManager(this);
 
-        if(session.isLoggedIn()) {
-            Intent intent = new Intent(context, MainActivity.class);
+        if (session.isLoggedIn()) {
+            Intent intent = new Intent(context, ContentActivity.class);
             startActivity(intent);
             finish();
         }
@@ -60,6 +60,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     private void setControl() {
         btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> {
+            finish();
+        });
         btnSignIn = findViewById(R.id.buttonSignIn);
     }
 
@@ -79,6 +82,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         editPassword = findViewById(R.id.edit_login_password);
         findViewById(R.id.buttonSignIn).setOnClickListener(this);
     }
+
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
@@ -91,6 +95,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 finish();
         }
     }
+
     private void login() {
         String userName = editUserName.getText().toString().trim();
         String password = editPassword.getText().toString().trim();
@@ -113,6 +118,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             editPassword.requestFocus();
         }
     }
+
     private boolean validateInput(String userName, String password) {
         if (TextUtils.isEmpty(password)) {
             editPassword.requestFocus();
@@ -134,12 +140,17 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             jsonBody.put("password", password);
             final String mRequestBody = jsonBody.toString();
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Constants.getLoginEndpoint(), new JSONObject(), new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    Log.i("LOG_RESPONSE", String.valueOf(response));
-                    success.handleCallback();
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Constants.getLoginEndpoint(),
+                    new JSONObject(), response -> {
+                try {
+                    Gson gson = new Gson();
+                    Account account = gson.fromJson(response.getString("account"), Account.class);
+                    session.setUserId(account.getUser_id());
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
                 }
+                Log.i("LOG_RESPONSE", String.valueOf(response));
+                success.handleCallback();
             }, error -> {
                 Log.e("LOG_RESPONSE", error.toString());
                 err.handleCallback();

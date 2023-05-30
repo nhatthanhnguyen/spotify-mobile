@@ -8,10 +8,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlaylistSongData {
-    private String songImageUrl;
+    private int songID;
+    private String songUrl;
     private String songName;
+    private int artistID;
     private String artistName;
+    private int albumID;
     private String albumName;
+    private int length;
     private boolean liked;
-    private boolean downloaded;
 }

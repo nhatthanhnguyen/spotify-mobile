@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ptit.spotify.R;
 import com.ptit.spotify.dto.data.PlaylistSongData;
-import com.ptit.spotify.dto.model.Song;
 import com.ptit.spotify.utils.OnItemPlaylistSearchClickedListener;
 import com.ptit.spotify.viewholders.playlist.PlaylistSongViewHolder;
 import com.squareup.picasso.Picasso;
@@ -44,9 +43,6 @@ public class PlaylistSearchAdapter extends RecyclerView.Adapter<PlaylistSongView
         if (!data.isLiked()) {
             holder.buttonLikeSong.setVisibility(View.GONE);
         }
-        if (!data.isDownloaded()) {
-            holder.imageViewSongDownloaded.setVisibility(View.GONE);
-        }
         holder.buttonMoreSettingSong.setOnClickListener(v -> {
             onItemPlaylistSearchClickedListener.onSongSettingClickedListener(data);
         });
@@ -60,7 +56,7 @@ public class PlaylistSearchAdapter extends RecyclerView.Adapter<PlaylistSongView
                 holder.buttonLikeSong.setVisibility(View.VISIBLE);
             }
         });
-        Picasso.get().load(data.getSongImageUrl()).into(holder.imageViewSong);
+        Picasso.get().load(data.getSongUrl()).into(holder.imageViewSong);
     }
 
     @Override

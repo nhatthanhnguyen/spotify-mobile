@@ -154,7 +154,8 @@ public class ArtistAdapter extends RecyclerView.Adapter {
         if (holder instanceof ArtistSongViewHolder) {
             ArtistSongData artistSongData = (ArtistSongData) artistItems.get(position);
             ArtistSongViewHolder songViewHolder = (ArtistSongViewHolder) holder;
-            Picasso.get().load(artistSongData.getSongImageUrl()).into(songViewHolder.imageViewSong);
+            if (!artistSongData.getSongImageUrl().isEmpty())
+                Picasso.get().load(artistSongData.getSongImageUrl()).into(songViewHolder.imageViewSong);
             songViewHolder.textViewSongName.setText(artistSongData.getSongName());
             songViewHolder.textViewNumberOfLikes.setText(artistSongData.getNumberOfLikes());
             songViewHolder.textViewOrderNumber.setText(artistSongData.getOrderNumber());
@@ -163,7 +164,8 @@ public class ArtistAdapter extends RecyclerView.Adapter {
         if (holder instanceof ArtistDescriptionViewHolder) {
             ArtistDescriptionData descriptionData = (ArtistDescriptionData) artistItems.get(position);
             ArtistDescriptionViewHolder descriptionViewHolder = (ArtistDescriptionViewHolder) holder;
-            Picasso.get().load(descriptionData.getArtistImageUrl()).into(descriptionViewHolder.imageViewArtist);
+            if (!descriptionData.getArtistImageUrl().isEmpty())
+                Picasso.get().load(descriptionData.getArtistImageUrl()).into(descriptionViewHolder.imageViewArtist);
             descriptionViewHolder.textViewDescription.setText(descriptionData.getDescription());
             descriptionViewHolder.textViewNumberOfLikes.setText(descriptionData.getNumberOfLikes() + " users liked");
         }

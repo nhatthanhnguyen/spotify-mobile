@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -40,6 +41,7 @@ import com.ptit.spotify.utils.OnItemButtonFilterClickedListener;
 import com.ptit.spotify.utils.OnItemSearchResultClickedListener;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -103,8 +105,8 @@ public class LibraryFragment extends Fragment implements
                 Log.i("LOG_RESPONSE", String.valueOf(response));
                 Gson gson = new Gson();
                 JSONArray items = response.optJSONArray("playlists");
-                if(items != null) {
-                    for(int i = 0; i < items.length(); i++) {
+                if (items != null) {
+                    for (int i = 0; i < items.length(); i++) {
                         Playlist at = gson.fromJson(items.get(i).toString(), Playlist.class);
                         LibraryItemData data = new LibraryItemData(
                                 String.valueOf(at.getId()),
@@ -127,35 +129,35 @@ public class LibraryFragment extends Fragment implements
         });
         HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectPlaylistRequest);
 
-        JsonObjectRequest jsonObjectAlbumRequest = new JsonObjectRequest(Constants.getAlbumInteractionEndpoint(userId), new JSONObject(), new Response.Listener<JSONObject>() {
-            @SneakyThrows
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.i("LOG_RESPONSE", String.valueOf(response));
-                Gson gson = new Gson();
-                JSONArray items = response.optJSONArray("albums");
-                if(items != null) {
-                    for(int i = 0; i < items.length(); i++) {
-                        Album at = gson.fromJson(items.get(i).toString(), Album.class);
-                        LibraryItemData data = new LibraryItemData(
-                                String.valueOf(at.getAlbumID()),
-                                at.getCoverImg(),
-                                at.getName(),
-                                "",
-                                at.getName(),
-                                at.getName(),
-                                ALBUM
-                        );
-                        resultItems.add(data);
+        JsonObjectRequest jsonObjectAlbumRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                Constants.getAlbumInteractionEndpoint(userId),
+                null,
+                response -> {
+                    Log.i("LOG_RESPONSE", String.valueOf(response));
+                    Gson gson = new Gson();
+                    JSONArray items = response.optJSONArray("albums");
+                    if (items != null) {
+                        for (int i = 0; i < items.length(); i++) {
+                            Album at = null;
+                            try {
+                                at = gson.fromJson(items.get(i).toString(), Album.class);
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                            LibraryItemData data = new LibraryItemData(
+                                    String.valueOf(at.getAlbum_id()),
+                                    at.getCover_img(),
+                                    at.getName(),
+                                    "",
+                                    at.getName(),
+                                    at.getName(),
+                                    ALBUM
+                            );
+                            resultItems.add(data);
+                        }
                     }
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("LOG_RESPONSE", error.toString());
-            }
-        });
+                }, error -> Log.e("LOG_RESPONSE", error.toString()));
         HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectAlbumRequest);
 
         JsonObjectRequest jsonObjectArtistRequest = new JsonObjectRequest(Constants.getArtistInteractionEndpoint(userId), new JSONObject(), new Response.Listener<JSONObject>() {
@@ -165,11 +167,11 @@ public class LibraryFragment extends Fragment implements
                 Log.i("LOG_RESPONSE", String.valueOf(response));
                 Gson gson = new Gson();
                 JSONArray items = response.optJSONArray("artists");
-                if(items != null) {
-                    for(int i = 0; i < items.length(); i++) {
+                if (items != null) {
+                    for (int i = 0; i < items.length(); i++) {
                         Artist at = gson.fromJson(items.get(i).toString(), Artist.class);
                         LibraryItemData data = new LibraryItemData(
-                                String.valueOf(at.getArtistID()),
+                                String.valueOf(at.getArtist_id()),
                                 at.getCoverImg(),
                                 at.getName(),
                                 "",
