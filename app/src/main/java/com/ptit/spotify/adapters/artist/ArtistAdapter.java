@@ -9,6 +9,7 @@ import static com.ptit.spotify.utils.ItemType.BLANK;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -154,6 +155,7 @@ public class ArtistAdapter extends RecyclerView.Adapter {
         if (holder instanceof ArtistSongViewHolder) {
             ArtistSongData artistSongData = (ArtistSongData) artistItems.get(position);
             ArtistSongViewHolder songViewHolder = (ArtistSongViewHolder) holder;
+            Log.d("SONG", artistSongData.getSongImageUrl());
             if (!artistSongData.getSongImageUrl().isEmpty())
                 Picasso.get().load(artistSongData.getSongImageUrl()).into(songViewHolder.imageViewSong);
             songViewHolder.textViewSongName.setText(artistSongData.getSongName());

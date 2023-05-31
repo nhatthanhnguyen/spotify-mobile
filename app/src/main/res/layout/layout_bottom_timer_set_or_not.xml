@@ -2,29 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    android:background="@android:color/transparent"
-    android:orientation="vertical">
+    android:background="@drawable/spotify_background_rounded"
+    android:orientation="vertical"
+    android:padding="@dimen/spacing_16">
 
     <LinearLayout
         android:id="@+id/min_5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/spacing_8"
-        android:background="@android:color/transparent"
         android:gravity="center">
 
         <ImageView
             android:layout_width="34dp"
             android:layout_height="34dp"
-            android:background="@android:color/transparent"
             android:src="@drawable/ic_alarm" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_8"
-            android:background="@android:color/transparent"
             android:text="5 minutes" />
     </LinearLayout>
 
@@ -33,20 +30,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/spacing_8"
-        android:background="@android:color/transparent"
         android:gravity="center">
 
         <ImageView
             android:layout_width="34dp"
             android:layout_height="34dp"
-            android:background="@android:color/transparent"
             android:src="@drawable/ic_alarm" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_8"
-            android:background="@android:color/transparent"
             android:text="10 minutes" />
     </LinearLayout>
 
@@ -55,20 +49,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/spacing_8"
-        android:background="@android:color/transparent"
         android:gravity="center">
 
         <ImageView
             android:layout_width="34dp"
             android:layout_height="34dp"
-            android:background="@android:color/transparent"
             android:src="@drawable/ic_alarm" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_8"
-            android:background="@android:color/transparent"
             android:text="15 minutes" />
     </LinearLayout>
 
@@ -76,20 +67,17 @@
         android:id="@+id/cancel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
         android:gravity="center">
 
         <ImageView
             android:layout_width="34dp"
             android:layout_height="34dp"
-            android:background="@android:color/transparent"
             android:src="@drawable/ic_alarm_cancel" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_8"
-            android:background="@android:color/transparent"
             android:text="Turn off the timer" />
     </LinearLayout>
 

@@ -108,12 +108,12 @@ public class Constants {
         return ApiURL + SongURL + "/remove_playlist";
     }
 
-    public static String getAddInteractionEndpoint(String userId, String songId) {
+    public static String postAddInteractionEndpoint(String userId, String songId) {
         return ApiURL + InteractionURL + "/add/" + userId + "/" + songId;
     }
 
-    public static String getDeleteInteractionEndpoint(String userId, String songId) {
-        return ApiURL + InteractionURL + "/add/" + userId + "/" + songId;
+    public static String postDeleteInteractionEndpoint(String userId, String songId) {
+        return ApiURL + InteractionURL + "/remove/" + userId + "/" + songId;
     }
 
     public static String getAddAlbumsEndpoint() {
@@ -145,7 +145,7 @@ public class Constants {
     }
 
     public static String getAllArtistEndpoint() {
-        return ApiURL + ArtistURL + "s";
+        return ApiURL + ArtistURL;
     }
 
     public static String getHistorySongEndpoint(String userId) {

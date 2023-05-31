@@ -34,12 +34,14 @@ import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
 import com.ptit.spotify.utils.Constants;
 import com.ptit.spotify.utils.OnItemArtistClickedListener;
 import com.ptit.spotify.utils.OnItemSettingClickedListener;
+import com.ptit.spotify.utils.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ArtistFragment extends Fragment implements OnItemArtistClickedListener {
     private static final String ARTIST_DATA = "Artist";
@@ -102,8 +104,8 @@ public class ArtistFragment extends Fragment implements OnItemArtistClickedListe
                                     artistItems.add(new ArtistSongData(
                                             String.valueOf(i + 1),
                                             song.getName(),
-                                            "",
-                                            String.valueOf(123)
+                                            song.getCover_img(),
+                                            String.valueOf(Utils.generateRandomNumberInRange(10000))
                                     ));
                                 }
                                 artistItems.add(new ArtistCaptionData("Description"));

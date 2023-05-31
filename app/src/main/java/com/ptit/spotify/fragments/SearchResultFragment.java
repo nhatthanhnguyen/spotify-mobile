@@ -130,6 +130,151 @@ public class SearchResultFragment extends Fragment implements
             resultItems = null;
             filterItems = null;
         });
+//        List<SearchItemResultData> data = new ArrayList<>();
+//        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+//        JsonObjectRequest jsonArtistRequest = new JsonObjectRequest(
+//                Request.Method.GET,
+//                Constants.getAllArtistEndpoint(),
+//                null,
+//                response -> {
+//                    Log.i("LOG_RESPONSE", response.toString());
+//                    Gson gson = new Gson();
+//                    JSONArray artists = response.optJSONArray("artists");
+//                    if (artists == null) return;
+//                    for (int i = 0; i < artists.length(); ++i) {
+//                        try {
+//                            Artist artist = gson.fromJson(artists.get(i).toString(), Artist.class);
+//                            data.add(new SearchItemResultData(
+//                                    String.valueOf(artist.getArtist_id()),
+//                                    artist.getCoverImg(),
+//                                    artist.getName(),
+//                                    null,
+//                                    null,
+//                                    null,
+//                                    ARTIST
+//                            ));
+//                        } catch (JSONException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                    }
+//                },
+//                error -> Log.e("LOG_RESPONSE", error.toString())
+//        );
+//        requestQueue.add(jsonArtistRequest);
+//        JsonObjectRequest jsonAlbumRequest = new JsonObjectRequest(
+//                Request.Method.GET,
+//                Constants.getAllAlbumsEndpoint(),
+//                null,
+//                response -> {
+//                    Gson gson = new Gson();
+//                    JSONArray albums = response.optJSONArray("albums");
+//                    if (albums == null) return;
+//                    for (int i = 0; i < albums.length(); ++i) {
+//                        Album album;
+//                        try {
+//                            album = gson.fromJson(albums.get(i).toString(), Album.class);
+//                        } catch (JSONException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                        JsonObjectRequest jsonAlbumArtistRequest = new JsonObjectRequest(
+//                                Request.Method.GET,
+//                                Constants.getArtistByIdEndpoint(String.valueOf(album.getArtist_id())),
+//                                null,
+//                                response1 -> {
+//                                    JSONArray albumArtists = response1.optJSONArray("artists");
+//                                    if (albumArtists == null) return;
+//                                    Artist albumArtist = null;
+//                                    try {
+//                                        albumArtist = gson.fromJson(albumArtists.get(0).toString(), Artist.class);
+//                                    } catch (JSONException e) {
+//                                        throw new RuntimeException(e);
+//                                    }
+//                                    data.add(new SearchItemResultData(
+//                                            String.valueOf(album.getAlbum_id()),
+//                                            album.getCover_img(),
+//                                            album.getName(),
+//                                            null,
+//                                            albumArtist.getName(),
+//                                            null,
+//                                            ALBUM
+//                                    ));
+//                                },
+//                                error -> Log.e("LOG_RESPONSE", error.toString())
+//                        );
+//                        requestQueue.add(jsonAlbumArtistRequest);
+//                    }
+//                },
+//                error -> Log.e("LOG_RESPONSE", error.toString())
+//        );
+//        requestQueue.add(jsonAlbumRequest);
+//        JsonObjectRequest jsonSongRequest = new JsonObjectRequest(
+//                Request.Method.GET,
+//                Constants.getAllSongEndpoint(),
+//                null,
+//                response -> {
+//                    Log.i("LOG_RESPONSE", response.toString());
+//                    Gson gson = new Gson();
+//                    JSONArray songs = response.optJSONArray("songs");
+//                    if (songs == null) return;
+//                    for (int i = 0; i < songs.length(); ++i) {
+//                        Song song = null;
+//                        try {
+//                            song = gson.fromJson(songs.get(i).toString(), Song.class);
+//                        } catch (JSONException e) {
+//                            throw new RuntimeException(e);
+//                        }
+//                        Song finalSong = song;
+//                        JsonObjectRequest jsonSongArtistRequest = new JsonObjectRequest(
+//                                Request.Method.GET,
+//                                Constants.getArtistByIdEndpoint(String.valueOf(song.getArtist_id())),
+//                                null,
+//                                response1 -> {
+//                                    Log.i("LOG_RESPONSE", response1.toString());
+//                                    JSONArray songArtists = response1.optJSONArray("artists");
+//                                    if (songArtists == null) return;
+//                                    Artist artist = null;
+//                                    try {
+//                                        artist = gson.fromJson(songArtists.get(0).toString(), Artist.class);
+//                                    } catch (JSONException e) {
+//                                        throw new RuntimeException(e);
+//                                    }
+//                                    Artist finalArtist = artist;
+//                                    JsonObjectRequest jsonSongAlbumRequest = new JsonObjectRequest(
+//                                            Request.Method.GET,
+//                                            Constants.getAlbumsByIdEndpoint(String.valueOf(finalSong.getAlbum_id())),
+//                                            null,
+//                                            response2 -> {
+//                                                Log.i("LOG_RESPONSE", response2.toString());
+//                                                JSONArray songAlbums = response2.optJSONArray("albums");
+//                                                if (songAlbums == null) return;
+//                                                Album album = null;
+//                                                try {
+//                                                    album = gson.fromJson(songAlbums.get(0).toString(), Album.class);
+//                                                } catch (JSONException e) {
+//                                                    throw new RuntimeException(e);
+//                                                }
+//                                                data.add(new SearchItemResultData(
+//                                                        String.valueOf(finalSong.getSong_id()),
+//                                                        finalSong.getCover_img(),
+//                                                        finalSong.getName(),
+//                                                        null,
+//                                                        finalArtist.getName(),
+//                                                        album.getName(),
+//                                                        SONG
+//                                                ));
+//                                            },
+//                                            error -> Log.e("LOG_RESPONSE", error.toString())
+//                                    );
+//                                    requestQueue.add(jsonSongAlbumRequest);
+//                                },
+//                                error -> Log.e("LOG_RESPONSE", error.toString())
+//                        );
+//                        requestQueue.add(jsonSongArtistRequest);
+//                    }
+//                },
+//                error -> Log.e("LOG_RESPONSE", error.toString())
+//        );
+//        requestQueue.add(jsonSongRequest);
         editTextSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

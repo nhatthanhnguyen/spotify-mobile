@@ -8,24 +8,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AlbumHeaderData {
+    private int id;
     private String imageUrl;
     private String albumName;
+    private int artistId;
     private String artistName;
     private String imageArtistUrl;
     private String albumDateReleased;
-
     private boolean isLiked;
-    private boolean isLastPlayed;
     private boolean isPlaying;
-
-    public AlbumHeaderData(String imageUrl, String albumName, String artistName, String imageArtistUrl, String albumDateReleased) {
-        this.imageUrl = imageUrl;
-        this.albumName = albumName;
-        this.artistName = artistName;
-        this.imageArtistUrl = imageArtistUrl;
-        this.albumDateReleased = albumDateReleased;
-        this.isLiked = false;
-        this.isLastPlayed = false;
-        this.isPlaying = false;
-    }
 }

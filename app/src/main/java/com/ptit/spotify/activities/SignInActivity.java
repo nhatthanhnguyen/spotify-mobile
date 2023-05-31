@@ -146,6 +146,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                     Gson gson = new Gson();
                     Account account = gson.fromJson(response.getString("account"), Account.class);
                     session.setUserId(account.getUser_id());
+                    session.setUsername(account.getUsername());
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
@@ -159,6 +160,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 public String getBodyContentType() {
                     return "application/json; charset=utf-8";
                 }
+
                 @Override
                 public byte[] getBody() {
                     return mRequestBody.getBytes(StandardCharsets.UTF_8);

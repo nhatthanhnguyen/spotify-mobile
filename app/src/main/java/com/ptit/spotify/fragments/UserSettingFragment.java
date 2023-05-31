@@ -128,6 +128,7 @@ public class UserSettingFragment extends Fragment implements OnItemUserSettingCl
         getActivity().finish();
         sessionManager.setUserId(-1);
         sessionManager.setLogin(false);
+        sessionManager.setUsername("");
         startActivity(new Intent(getActivity(), StartActivity.class));
     }
 

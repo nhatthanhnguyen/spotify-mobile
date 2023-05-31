@@ -1,9 +1,11 @@
 package com.ptit.spotify.player;
 
+import static com.ptit.spotify.application.SpotifyApplication.ACTION_LIKE;
 import static com.ptit.spotify.application.SpotifyApplication.ACTION_NEXT;
 import static com.ptit.spotify.application.SpotifyApplication.ACTION_PAUSE;
 import static com.ptit.spotify.application.SpotifyApplication.ACTION_PREV;
 import static com.ptit.spotify.application.SpotifyApplication.ACTION_RESUME;
+import static com.ptit.spotify.application.SpotifyApplication.ACTION_UNLIKE;
 import static com.ptit.spotify.application.SpotifyApplication.CHANNEL_ID;
 
 import android.app.PendingIntent;
@@ -26,42 +28,44 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.ptit.spotify.R;
 import com.ptit.spotify.activities.ContentActivity;
 import com.ptit.spotify.activities.PlayerActivity;
-import com.ptit.spotify.dto.model.Album;
 import com.ptit.spotify.dto.model.Artist;
 import com.ptit.spotify.dto.model.Song;
+import com.ptit.spotify.helper.SessionManager;
 import com.ptit.spotify.utils.Constants;
 import com.ptit.spotify.utils.HttpUtils;
+import com.ptit.spotify.utils.ItemType;
 import com.ptit.spotify.utils.Utils;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
+import org.json.JSONException;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import lombok.SneakyThrows;
 
 public class MusicPlayerService extends Service implements MediaPlayer.OnErrorListener,
         MediaPlayer.OnPreparedListener {
     private final IBinder binder = new MusicBinder();
     private Runnable runnable;
     public MediaPlayer mediaPlayer = null;
+    public boolean isLiked;
     public boolean isPlaying;
     public boolean isShuffle;
     public int repeatMode = 0;
     public Song currentSong;
-    public static List<Song> songs = new ArrayList<>();
-    public static boolean[] selected;
+    public ItemType type;
+    public int id;
+    public List<Song> songs = new ArrayList<>();
     public boolean min5 = false;
     public boolean min10 = false;
     public boolean min15 = false;
@@ -94,8 +98,20 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
         return binder;
     }
 
+    private static final long CUSTOM_ACTION_SEEK_TO = 1001;
+
+    private void customSeekTo(long position) {
+        mediaPlayer.seekTo((int) position);
+    }
+
     public void sendNotificationMedia(Song song) {
         MediaSessionCompat mediaSessionCompat = new MediaSessionCompat(this, "tag");
+
+        Intent unlikeIntent = (new Intent(getBaseContext(), MusicPlayerReceiver.class)).setAction(ACTION_LIKE);
+        PendingIntent unlikePendingIntent = PendingIntent.getBroadcast(getBaseContext(), 0, unlikeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Intent likeIntent = (new Intent(getBaseContext(), MusicPlayerReceiver.class)).setAction(ACTION_LIKE);
+        PendingIntent likePendingIntent = PendingIntent.getBroadcast(getBaseContext(), 0, likeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent prevIntent = (new Intent(getBaseContext(), MusicPlayerReceiver.class)).setAction(ACTION_PREV);
         PendingIntent prevPendingIntent = PendingIntent.getBroadcast(getBaseContext(), 0, prevIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -118,6 +134,8 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
                         .setContentTitle(song.getName())
                         .setLargeIcon(bitmap)
                         .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                        .addAction(isLiked ? R.drawable.ic_like_filled : R.drawable.ic_like_outlined, isLiked ? "Liked" : "Unlike",
+                                isLiked ? unlikePendingIntent : likePendingIntent)
                         .addAction(R.drawable.ic_skip_previous, "Previous", prevPendingIntent)
                         .addAction(isPlaying ? R.drawable.ic_pause : R.drawable.ic_play_arrow, isPlaying ? "Pause" : "Play",
                                 isPlaying ? pausePendingIntent : resumePendingIntent)
@@ -126,49 +144,21 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
                                 .setShowActionsInCompactView(0, 1, 2)
                                 .setMediaSession(mediaSessionCompat.getSessionToken())
                         );
-                JSONObject jsonBody = new JSONObject();
-                String mRequestBody = jsonBody.toString();
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Constants.getArtistByIdEndpoint(String.valueOf(song.getArtist_id())), new JSONObject(), new Response.Listener<JSONObject>() {
-                    @SneakyThrows
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.i("LOG_RESPONSE", String.valueOf(response));
-                        Gson gson = new Gson();
-                        JSONArray items = response.optJSONArray("artist");
-                        if (items != null) {
-                            for (int i = 0; i < items.length(); i++) {
-                                Album ab = gson.fromJson(items.get(i).toString(), Album.class);
-                                final String[] artistName = {""};
-                                final String[] artistImg = {""};
-                                JsonObjectRequest jsonObjectArtistRequest = new JsonObjectRequest(Constants.getArtistByIdEndpoint(String.valueOf(ab.getArtist_id())), new JSONObject(), new Response.Listener<JSONObject>() {
-                                    @Override
-                                    public void onResponse(JSONObject response) {
-                                        Log.i("LOG_RESPONSE", String.valueOf(response));
-                                        Gson gson = new Gson();
-                                        Artist at = gson.fromJson(response.toString(), Artist.class);
-                                        artistName[0] = at.getName();
-                                        artistImg[0] = at.getCoverImg();
-                                        notificationBuilder.setSubText(artistName[0]);
-                                        notificationBuilder.setContentText(artistName[0]);
-                                    }
-                                }, new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        Log.e("LOG_RESPONSE", error.toString());
-                                    }
-                                });
-                                HttpUtils.getInstance(getBaseContext()).getRequestQueue().add(jsonObjectArtistRequest);
-                            }
-                        }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("LOG_RESPONSE", error.toString());
-                    }
-                });
-                HttpUtils.getInstance(getBaseContext()).getRequestQueue().add(jsonObjectRequest);
-                startForeground(1, notificationBuilder.build());
+                RequestQueue requestQueue = Volley.newRequestQueue(getBaseContext());
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                        Request.Method.GET,
+                        Constants.getArtistByIdEndpoint(String.valueOf(song.getArtist_id())),
+                        null,
+                        response -> {
+                            Log.i("LOG_RESPONSE", String.valueOf(response));
+                            Gson gson = new Gson();
+                            JSONArray items = response.optJSONArray("artists");
+                            if (items == null) return;
+                            Artist artist = gson.fromJson(items.opt(0).toString(), Artist.class);
+                            notificationBuilder.setContentText(artist.getName());
+                            startForeground(1, notificationBuilder.build());
+                        }, error -> Log.e("LOG_RESPONSE", error.toString()));
+                requestQueue.add(jsonObjectRequest);
             }
 
             @Override
@@ -181,7 +171,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
 
             }
         };
-        Picasso.get().load(song.getUrl().replace("http", "https")).into(target);
+        Picasso.get().load(song.getCover_img()).into(target);
     }
 
     public void seekBarSetup() {
@@ -209,13 +199,19 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
             @Override
             public void onFinish() {
                 if (min5 || min10 || min15) {
-                    pauseSong();
+                    mediaPlayer.pause();
+                    isPlaying = false;
+                    ContentActivity.buttonPlayPause.setImageResource(R.drawable.ic_play_arrow);
+                    sendNotificationMedia(currentSong);
                     if (PlayerActivity.isBound) {
+                        PlayerActivity.buttonPlayPause.setImageResource(R.drawable.ic_play_circle);
                         PlayerActivity.buttonTimer.setImageResource(R.drawable.ic_alarm);
-                        min5 = false;
-                        min10 = false;
-                        min15 = false;
                     }
+                    min5 = false;
+                    min10 = false;
+                    min15 = false;
+                    Intent intent = new Intent(ACTION_PAUSE);
+                    getBaseContext().sendBroadcast(intent);
                 }
                 countDownTimer = null;
             }
@@ -223,12 +219,56 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
 
     }
 
-    private void pauseSong() {
+    public void likeSongReceiver() {
+        SessionManager session = new SessionManager(getBaseContext());
+        int userId = session.getUserId();
+        int songId = currentSong.getSong_id();
+        RequestQueue requestQueue = Volley.newRequestQueue(getBaseContext());
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                Constants.postAddInteractionEndpoint(String.valueOf(userId), String.valueOf(songId)),
+                null,
+                albumResponse -> {
+                    Log.i("LOG_RESPONSE", String.valueOf(albumResponse));
+                    isLiked = true;
+                    ContentActivity.buttonLike.setImageResource(R.drawable.ic_like_filled);
+                    sendNotificationMedia(currentSong);
+                    Intent intentLike = new Intent(ACTION_LIKE);
+                    getBaseContext().sendBroadcast(intentLike);
+                }, error -> Log.e("LOG_RESPONSE", error.toString())
+        );
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    public void unlikeSongReceiver() {
+        SessionManager session = new SessionManager(getBaseContext());
+        int userId = session.getUserId();
+        int songId = currentSong.getSong_id();
+        RequestQueue requestQueue = Volley.newRequestQueue(getBaseContext());
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                Constants.postDeleteInteractionEndpoint(String.valueOf(userId), String.valueOf(songId)),
+                null,
+                albumResponse -> {
+                    Log.i("LOG_RESPONSE", String.valueOf(albumResponse));
+                    isLiked = false;
+                    ContentActivity.buttonLike.setImageResource(R.drawable.ic_like_outlined);
+                    sendNotificationMedia(currentSong);
+                    Intent intentUnlike = new Intent(ACTION_UNLIKE);
+                    getBaseContext().sendBroadcast(intentUnlike);
+                }, error -> Log.e("LOG_RESPONSE", error.toString())
+        );
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    public void pauseSong() {
         mediaPlayer.pause();
         isPlaying = false;
         sendNotificationMedia(currentSong);
         ContentActivity.buttonPlayPause.setImageResource(R.drawable.ic_play_arrow);
-        PlayerActivity.buttonPlayPause.setImageResource(R.drawable.ic_play_circle);
+        if (PlayerActivity.isBound) {
+            PlayerActivity.buttonPlayPause.setImageResource(R.drawable.ic_play_circle);
+        }
     }
 
     @Override
@@ -237,12 +277,6 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
         if (mediaPlayer != null) {
             mediaPlayer.release();
             mediaPlayer = null;
-        }
-    }
-
-    public void toggleSelected(int id) {
-        for (int i = 0; i < songs.size(); ++i) {
-            selected[i] = !selected[i];
         }
     }
 
@@ -255,13 +289,16 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
         }
         if (repeatMode == 1) {
             if (i == songs.size() - 1) {
+                this.id = 0;
                 return songs.get(0);
             }
+            this.id++;
             return songs.get(i + 1);
         }
         if (i == songs.size() - 1) {
             return null;
         }
+        this.id++;
         return songs.get(i + 1);
     }
 
@@ -274,13 +311,16 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
         }
         if (repeatMode == 1) {
             if (i == 0) {
+                this.id = songs.size() - 1;
                 return songs.get(songs.size() - 1);
             }
+            this.id--;
             return songs.get(i - 1);
         }
         if (i == 0) {
             return null;
         }
+        this.id--;
         return songs.get(i - 1);
     }
 
@@ -302,110 +342,48 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
             ContentActivity.musicPlayerService.sendNotificationMedia(currentSong);
             return;
         }
-        try {
-            ContentActivity.linearLayoutMiniPlayer.setVisibility(View.VISIBLE);
-            ContentActivity.textViewSongName.setText(newSong.getSong_id());
-            JSONObject jsonBody = new JSONObject();
-            String mRequestBody = jsonBody.toString();
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Constants.getArtistByIdEndpoint(String.valueOf(newSong.getArtist_id())), new JSONObject(), new Response.Listener<JSONObject>() {
-                @SneakyThrows
-                @Override
-                public void onResponse(JSONObject response) {
+        this.mediaPlayer.reset();
+        ContentActivity.linearLayoutMiniPlayer.setVisibility(View.VISIBLE);
+        ContentActivity.textViewSongName.setText(newSong.getName());
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                Constants.getArtistByIdEndpoint(String.valueOf(newSong.getArtist_id())),
+                null,
+                response -> {
                     Log.i("LOG_RESPONSE", String.valueOf(response));
                     Gson gson = new Gson();
-                    JSONArray items = response.optJSONArray("artist");
-                    if (items != null) {
-                        for (int i = 0; i < items.length(); i++) {
-                            Album ab = gson.fromJson(items.get(i).toString(), Album.class);
-                            final String[] artistName = {""};
-                            final String[] artistImg = {""};
-                            JsonObjectRequest jsonObjectArtistRequest = new JsonObjectRequest(Constants.getArtistByIdEndpoint(String.valueOf(ab.getArtist_id())), new JSONObject(), new Response.Listener<JSONObject>() {
-                                @Override
-                                public void onResponse(JSONObject response) {
-                                    Log.i("LOG_RESPONSE", String.valueOf(response));
-                                    Gson gson = new Gson();
-                                    Artist at = gson.fromJson(response.toString(), Artist.class);
-                                    artistName[0] = at.getName();
-                                    artistImg[0] = at.getCoverImg();
-                                    ContentActivity.textViewArtistName.setText(artistName[0]);
-                                }
-                            }, new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    Log.e("LOG_RESPONSE", error.toString());
-                                }
-                            });
-                            HttpUtils.getInstance(getBaseContext()).getRequestQueue().add(jsonObjectArtistRequest);
-                        }
+                    JSONArray items = response.optJSONArray("artists");
+                    if (items == null) return;
+                    Artist artist;
+                    try {
+                        artist = gson.fromJson(items.get(0).toString(), Artist.class);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
                     }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e("LOG_RESPONSE", error.toString());
-                }
-            });
-            HttpUtils.getInstance(getBaseContext()).getRequestQueue().add(jsonObjectRequest);
-            ContentActivity.buttonPlayPause.setImageResource(R.drawable.ic_pause);
-            ContentActivity.appCompatSeekBar.setMax(newSong.getLength() * 1000);
-
-            ContentActivity.musicPlayerService.mediaPlayer.reset();
-            ContentActivity.musicPlayerService.mediaPlayer.setDataSource(newSong.getUrl());
-            ContentActivity.musicPlayerService.mediaPlayer.prepareAsync();
-            ContentActivity.musicPlayerService.isPlaying = true;
-            ContentActivity.musicPlayerService.sendNotificationMedia(newSong);
-            ContentActivity.musicPlayerService.currentSong = newSong;
-            if (PlayerActivity.isBound) {
-                PlayerActivity.textViewSongName.setText(newSong.getSong_id());
-                jsonBody = new JSONObject();
-                mRequestBody = jsonBody.toString();
-                jsonObjectRequest = new JsonObjectRequest(Constants.getArtistByIdEndpoint(String.valueOf(newSong.getArtist_id())), new JSONObject(), new Response.Listener<JSONObject>() {
-                    @SneakyThrows
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.i("LOG_RESPONSE", String.valueOf(response));
-                        Gson gson = new Gson();
-                        JSONArray items = response.optJSONArray("artist");
-                        if (items != null) {
-                            for (int i = 0; i < items.length(); i++) {
-                                Album ab = gson.fromJson(items.get(i).toString(), Album.class);
-                                final String[] artistName = {""};
-                                final String[] artistImg = {""};
-                                JsonObjectRequest jsonObjectArtistRequest = new JsonObjectRequest(Constants.getArtistByIdEndpoint(String.valueOf(ab.getArtist_id())), new JSONObject(), new Response.Listener<JSONObject>() {
-                                    @Override
-                                    public void onResponse(JSONObject response) {
-                                        Log.i("LOG_RESPONSE", String.valueOf(response));
-                                        Gson gson = new Gson();
-                                        Artist at = gson.fromJson(response.toString(), Artist.class);
-                                        artistName[0] = at.getName();
-                                        artistImg[0] = at.getCoverImg();
-                                        PlayerActivity.textViewArtistName.setText(artistName[0]);
-                                    }
-                                }, new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        Log.e("LOG_RESPONSE", error.toString());
-                                    }
-                                });
-                                HttpUtils.getInstance(getBaseContext()).getRequestQueue().add(jsonObjectArtistRequest);
-                            }
-                        }
+                    ContentActivity.textViewArtistName.setText(artist.getName());
+                    ContentActivity.buttonPlayPause.setImageResource(R.drawable.ic_pause);
+                    ContentActivity.appCompatSeekBar.setMax(newSong.getLength() * 1000);
+                    try {
+                        mediaPlayer.setDataSource(newSong.getUrl());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("LOG_RESPONSE", error.toString());
+                    mediaPlayer.prepareAsync();
+                    isPlaying = true;
+                    this.currentSong = newSong;
+                    sendNotificationMedia(newSong);
+                    if (PlayerActivity.isBound) {
+                        PlayerActivity.textViewSongName.setText(newSong.getName());
+                        PlayerActivity.textViewArtistName.setText(artist.getName());
+                        PlayerActivity.appCompatSeekBar.setMax(newSong.getLength() * 1000);
+                        PlayerActivity.textViewMax.setText(Utils.formatTime(newSong.getLength() * 1000));
+                        PlayerActivity.textViewCurrentPosition.setText(Utils.formatTime(0));
+                        Picasso.get().load(newSong.getCover_img()).into(PlayerActivity.imageViewSong);
                     }
-                });
-                HttpUtils.getInstance(getBaseContext()).getRequestQueue().add(jsonObjectRequest);
-                PlayerActivity.appCompatSeekBar.setMax(newSong.getLength() * 1000);
-                PlayerActivity.textViewMax.setText(Utils.formatTime(newSong.getLength() * 1000));
-                PlayerActivity.textViewCurrentPosition.setText(Utils.formatTime(0));
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+                    Intent intentPrev = new Intent(ACTION_PREV);
+                    getBaseContext().sendBroadcast(intentPrev);
+                }, error -> Log.e("LOG_RESPONSE", error.toString()));
+        HttpUtils.getInstance(getBaseContext()).getRequestQueue().add(jsonObjectRequest);
     }
 
     public void pauseSongReceiver() {
@@ -416,6 +394,8 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
         if (PlayerActivity.isBound) {
             PlayerActivity.buttonPlayPause.setImageResource(R.drawable.ic_play_circle);
         }
+        Intent intentPause = new Intent(ACTION_PAUSE);
+        getBaseContext().sendBroadcast(intentPause);
     }
 
     public void resumeSongReceiver() {
@@ -426,6 +406,8 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
         if (PlayerActivity.isBound) {
             PlayerActivity.buttonPlayPause.setImageResource(R.drawable.ic_pause_circle);
         }
+        Intent intentNext = new Intent(ACTION_RESUME);
+        getBaseContext().sendBroadcast(intentNext);
     }
 
     public void nextSongReceiver(Song currentSong) {
@@ -438,115 +420,51 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnErrorLi
         if (newSong == null) {
             ContentActivity.musicPlayerService.isPlaying = false;
             ContentActivity.buttonPlayPause.setImageResource(R.drawable.ic_play_arrow);
-            if (PlayerActivity.isBound) {
-                PlayerActivity.buttonPlayPause.setImageResource(R.drawable.ic_play_circle);
-            }
             ContentActivity.musicPlayerService.sendNotificationMedia(currentSong);
             return;
         }
-        try {
-            ContentActivity.linearLayoutMiniPlayer.setVisibility(View.VISIBLE);
-            ContentActivity.textViewSongName.setText(newSong.getName());
-            JSONObject jsonBody = new JSONObject();
-            String mRequestBody = jsonBody.toString();
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Constants.getArtistByIdEndpoint(String.valueOf(newSong.getArtist_id())), new JSONObject(), new Response.Listener<JSONObject>() {
-                @SneakyThrows
-                @Override
-                public void onResponse(JSONObject response) {
+        this.mediaPlayer.reset();
+        ContentActivity.linearLayoutMiniPlayer.setVisibility(View.VISIBLE);
+        ContentActivity.textViewSongName.setText(newSong.getName());
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET,
+                Constants.getArtistByIdEndpoint(String.valueOf(newSong.getArtist_id())),
+                null,
+                response -> {
                     Log.i("LOG_RESPONSE", String.valueOf(response));
                     Gson gson = new Gson();
-                    JSONArray items = response.optJSONArray("artist");
-                    if (items != null) {
-                        for (int i = 0; i < items.length(); i++) {
-                            Album ab = gson.fromJson(items.get(i).toString(), Album.class);
-                            final String[] artistName = {""};
-                            final String[] artistImg = {""};
-                            JsonObjectRequest jsonObjectArtistRequest = new JsonObjectRequest(Constants.getArtistByIdEndpoint(String.valueOf(ab.getArtist_id())), new JSONObject(), new Response.Listener<JSONObject>() {
-                                @Override
-                                public void onResponse(JSONObject response) {
-                                    Log.i("LOG_RESPONSE", String.valueOf(response));
-                                    Gson gson = new Gson();
-                                    Artist at = gson.fromJson(response.toString(), Artist.class);
-                                    artistName[0] = at.getName();
-                                    artistImg[0] = at.getCoverImg();
-                                    ContentActivity.textViewArtistName.setText(artistName[0]);
-                                }
-                            }, new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    Log.e("LOG_RESPONSE", error.toString());
-                                }
-                            });
-                            HttpUtils.getInstance(getBaseContext()).getRequestQueue().add(jsonObjectArtistRequest);
-                        }
+                    JSONArray items = response.optJSONArray("artists");
+                    if (items == null) return;
+                    Artist artist;
+                    try {
+                        artist = gson.fromJson(items.get(0).toString(), Artist.class);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
                     }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e("LOG_RESPONSE", error.toString());
-                }
-            });
-            HttpUtils.getInstance(getBaseContext()).getRequestQueue().add(jsonObjectRequest);
-            ContentActivity.buttonPlayPause.setImageResource(R.drawable.ic_pause);
-            ContentActivity.appCompatSeekBar.setMax(newSong.getLength() * 1000);
-
-            ContentActivity.musicPlayerService.mediaPlayer.reset();
-            ContentActivity.musicPlayerService.mediaPlayer.setDataSource(newSong.getUrl());
-            ContentActivity.musicPlayerService.mediaPlayer.prepareAsync();
-            ContentActivity.musicPlayerService.isPlaying = true;
-            ContentActivity.musicPlayerService.sendNotificationMedia(newSong);
-            ContentActivity.musicPlayerService.currentSong = newSong;
-            if (PlayerActivity.isBound) {
-                PlayerActivity.textViewSongName.setText(newSong.getName());
-                jsonBody = new JSONObject();
-                mRequestBody = jsonBody.toString();
-                jsonObjectRequest = new JsonObjectRequest(Constants.getArtistByIdEndpoint(String.valueOf(newSong.getArtist_id())), new JSONObject(), new Response.Listener<JSONObject>() {
-                    @SneakyThrows
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.i("LOG_RESPONSE", String.valueOf(response));
-                        Gson gson = new Gson();
-                        JSONArray items = response.optJSONArray("artist");
-                        if (items != null) {
-                            for (int i = 0; i < items.length(); i++) {
-                                Album ab = gson.fromJson(items.get(i).toString(), Album.class);
-                                final String[] artistName = {""};
-                                final String[] artistImg = {""};
-                                JsonObjectRequest jsonObjectArtistRequest = new JsonObjectRequest(Constants.getArtistByIdEndpoint(String.valueOf(ab.getArtist_id())), new JSONObject(), new Response.Listener<JSONObject>() {
-                                    @Override
-                                    public void onResponse(JSONObject response) {
-                                        Log.i("LOG_RESPONSE", String.valueOf(response));
-                                        Gson gson = new Gson();
-                                        Artist at = gson.fromJson(response.toString(), Artist.class);
-                                        artistName[0] = at.getName();
-                                        artistImg[0] = at.getCoverImg();
-                                        PlayerActivity.textViewArtistName.setText(artistName[0]);
-                                    }
-                                }, new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        Log.e("LOG_RESPONSE", error.toString());
-                                    }
-                                });
-                                HttpUtils.getInstance(getBaseContext()).getRequestQueue().add(jsonObjectArtistRequest);
-                            }
-                        }
+                    ContentActivity.textViewArtistName.setText(artist.getName());
+                    ContentActivity.buttonPlayPause.setImageResource(R.drawable.ic_pause);
+                    ContentActivity.appCompatSeekBar.setMax(newSong.getLength() * 1000);
+                    try {
+                        mediaPlayer.setDataSource(newSong.getUrl());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
                     }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("LOG_RESPONSE", error.toString());
+                    mediaPlayer.prepareAsync();
+                    isPlaying = true;
+                    this.currentSong = newSong;
+                    sendNotificationMedia(newSong);
+                    if (PlayerActivity.isBound) {
+                        PlayerActivity.textViewSongName.setText(newSong.getName());
+                        PlayerActivity.textViewArtistName.setText(artist.getName());
+                        PlayerActivity.appCompatSeekBar.setMax(newSong.getLength() * 1000);
+                        PlayerActivity.textViewMax.setText(Utils.formatTime(newSong.getLength() * 1000));
+                        PlayerActivity.textViewCurrentPosition.setText(Utils.formatTime(0));
+                        Picasso.get().load(newSong.getCover_img()).into(PlayerActivity.imageViewSong);
                     }
-                });
-                HttpUtils.getInstance(getBaseContext()).getRequestQueue().add(jsonObjectRequest);
-                PlayerActivity.appCompatSeekBar.setMax(newSong.getLength() * 1000);
-                PlayerActivity.textViewMax.setText(Utils.formatTime(newSong.getLength() * 1000));
-                PlayerActivity.textViewCurrentPosition.setText(Utils.formatTime(0));
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+                    Intent intentNext = new Intent(ACTION_NEXT);
+                    getBaseContext().sendBroadcast(intentNext);
+                }, error -> Log.e("LOG_RESPONSE", error.toString()));
+        HttpUtils.getInstance(getBaseContext()).getRequestQueue().add(jsonObjectRequest);
     }
 
     @Override

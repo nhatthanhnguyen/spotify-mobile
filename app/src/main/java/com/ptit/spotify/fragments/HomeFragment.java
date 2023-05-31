@@ -40,9 +40,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeFragment extends Fragment implements OnItemHomeClickedListener {
-    private static final String ALBUM_DATA = "Album";
-    private static final String ARTIST_DATA = "Artist";
-    private static final String PLAYLIST_DATA = "Playlist";
+    public static final String ALBUM_DATA = "Album";
+    public static final String ARTIST_DATA = "Artist";
+    public static final String PLAYLIST_DATA = "Playlist";
     private RecyclerView recyclerView;
     private HomeAdapter homeAdapter;
     private SessionManager session;

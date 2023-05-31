@@ -79,7 +79,7 @@
                 android:background="@drawable/spotify_button"
                 android:backgroundTint="@color/bright_lime_green"
                 android:fontFamily="@font/circular_bold"
-                android:text="Verifying"
+                android:text="Verify"
                 android:textAllCaps="false"
                 android:textColor="@color/dark_black"
                 android:textSize="@dimen/text_size_16" />

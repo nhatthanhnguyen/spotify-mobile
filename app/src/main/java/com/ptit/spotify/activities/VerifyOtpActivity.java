@@ -33,23 +33,27 @@ public class VerifyOtpActivity extends AppCompatActivity implements View.OnClick
     public static final String KEY_PASSWORD_TO_MAIN = "KEY_PASSWORD_TO_MAIN";
     public static final String KEY_USER_FROM_REGISTER = "KEY_USER_FROM_REGISTER";
     public static final int REQUEST_CODE_REGISTER = 1;
-    private Context context;
     private EditText editOtp;
     private SessionManager session;
     private ImageButton btnBack;
     private Button btnVerify;
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otp);
         setControl();
+        Intent i = getIntent();
+        Bundle bundle = i.getExtras();
+        if (bundle != null) {
+            username = bundle.getString("USERNAME");
+        }
 //        setAction();
-        context = this;
         session = new SessionManager(this);
 
         if(session.isLoggedIn()) {
-            Intent intent = new Intent(context, MainActivity.class);
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
         }
@@ -90,11 +94,10 @@ public class VerifyOtpActivity extends AppCompatActivity implements View.OnClick
     }
     private void verify() {
         String otp = editOtp.getText().toString().trim();
-        String username = "";
         if (validateInput(otp)) {
-            loginProcess(otp, username,  () -> {
+            verifyProcess(username, otp,  () -> {
                 Toast.makeText(VerifyOtpActivity.this, "Verify Success", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(context, StartActivity.class);
+                Intent intent = new Intent(this, StartActivity.class);
                 startActivity(intent);
                 session.setLogin(false);
             }, () -> Toast.makeText(VerifyOtpActivity.this, "Verify Fail", Toast.LENGTH_SHORT).show());
@@ -112,13 +115,13 @@ public class VerifyOtpActivity extends AppCompatActivity implements View.OnClick
     private boolean validateInput(String otp) {
         if (TextUtils.isEmpty(otp)) {
             editOtp.requestFocus();
-            editOtp.setError(context.getResources().getString(R.string.error_field_required));
+            editOtp.setError(this.getResources().getString(R.string.error_field_required));
             return false;
         }
         return true;
     }
 
-    private void loginProcess(String userName, String otp, final VolleyCallback success, final VolleyCallback err) {
+    private void verifyProcess(String userName, String otp, final VolleyCallback success, final VolleyCallback err) {
         try {
             JSONObject jsonBody = new JSONObject();
             jsonBody.put("username", userName);

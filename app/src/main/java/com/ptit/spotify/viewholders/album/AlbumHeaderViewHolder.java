@@ -19,7 +19,7 @@ public class AlbumHeaderViewHolder extends RecyclerView.ViewHolder {
     public ImageView imageViewArtist;
     public TextView textViewArtistName;
     public TextView textViewAlbumDateReleased;
-    public ImageButton buttonPlayAlbum;
+    public ImageButton buttonPlayPauseAlbum;
     public ImageButton buttonLikeAlbum;
     public ImageButton buttonMoreSettingAlbum;
 
@@ -32,7 +32,7 @@ public class AlbumHeaderViewHolder extends RecyclerView.ViewHolder {
         imageViewArtist = itemView.findViewById(R.id.imageViewArtist);
         textViewArtistName = itemView.findViewById(R.id.textViewArtistName);
         textViewAlbumDateReleased = itemView.findViewById(R.id.textViewAlbumDateReleased);
-        buttonPlayAlbum = itemView.findViewById(R.id.buttonPlayAlbum);
+        buttonPlayPauseAlbum = itemView.findViewById(R.id.buttonPlayAlbum);
         buttonLikeAlbum = itemView.findViewById(R.id.buttonLikeAlbum);
         buttonMoreSettingAlbum = itemView.findViewById(R.id.buttonMoreSettingAlbum);
     }

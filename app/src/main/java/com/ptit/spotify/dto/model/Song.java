@@ -1,5 +1,7 @@
 package com.ptit.spotify.dto.model;
 
+import java.io.Serializable;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Song {
+public class Song implements Serializable {
     private int song_id;
     private String name;
     private int album_id;
@@ -17,4 +19,5 @@ public class Song {
     private String url;
     private String youtube_link;
     private String song_cloud_id;
+    private String cover_img;
 }

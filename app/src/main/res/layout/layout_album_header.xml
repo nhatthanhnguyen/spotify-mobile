@@ -15,7 +15,8 @@
             android:id="@+id/imageViewAlbumImage"
             android:layout_width="@dimen/album_image"
             android:layout_height="@dimen/album_image"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:src="@drawable/spotify_icon_rgb_white" />
 
         <ImageButton
             android:id="@+id/buttonBack"
@@ -53,7 +54,8 @@
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imageViewArtist"
                 android:layout_width="@dimen/artist_image_small"
-                android:layout_height="@dimen/artist_image_small" />
+                android:layout_height="@dimen/artist_image_small"
+                android:src="@drawable/spotify_icon_rgb_white" />
 
             <TextView
                 android:id="@+id/textViewArtistName"

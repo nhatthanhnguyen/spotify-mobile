@@ -25,6 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/mini_player_height"
         android:layout_marginHorizontal="@dimen/spacing_8"
+        android:visibility="gone"
         app:cardBackgroundColor="@color/basic_black">
 
         <LinearLayout
@@ -97,7 +98,9 @@
             <SeekBar
                 android:id="@+id/seekBar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:progressTint="@color/bright_lime_green"
+                android:thumbTint="@color/dark_black" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

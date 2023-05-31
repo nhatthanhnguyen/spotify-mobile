@@ -9,7 +9,7 @@ public class SpotifyApplication extends Application {
     public static final String CHANNEL_ID = "channel";
     public static final String OBJECT_SONG = "object_song";
     public static final String BUNDLE_STATUS_PLAYER = "status_player";
-    public static final String BUNDLE_MUSIC_ACTION = "music_action";
+    public static final String MUSIC_ACTION = "music_action";
     public static final String LOG_MUSIC_PLAYER = "Music Player";
     public static final String INTENT_MUSIC_ACTION = "music_action";
     public static final String INTENT_MUSIC_ACTION_TO_SERVICE = "music_action_service";
@@ -18,6 +18,8 @@ public class SpotifyApplication extends Application {
     public static final String ACTION_RESUME = "resume";
     public static final String ACTION_NEXT = "next";
     public static final String ACTION_PREV = "prev";
+    public static final String ACTION_LIKE = "like";
+    public static final String ACTION_UNLIKE = "unlike";
 
     @Override
     public void onCreate() {
@@ -30,7 +32,7 @@ public class SpotifyApplication extends Application {
             NotificationChannel channel = new NotificationChannel(
                     CHANNEL_ID,
                     "Music Service Channel",
-                    NotificationManager.IMPORTANCE_HIGH
+                    NotificationManager.IMPORTANCE_DEFAULT
             );
             channel.setSound(null, null);
             NotificationManager manager = getSystemService(NotificationManager.class);

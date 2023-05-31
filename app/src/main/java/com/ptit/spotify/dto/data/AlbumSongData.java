@@ -12,4 +12,6 @@ public class AlbumSongData {
     private String name;
     private String imageUrl;
     private String artistName;
+    private boolean liked;
+    private boolean selected;
 }

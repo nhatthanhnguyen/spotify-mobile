@@ -84,7 +84,7 @@ public class PlaylistFragment extends Fragment implements OnItemPlaylistClickedL
                 playlistResponse -> {
                     Log.i("LOG_RESPONSE", String.valueOf(playlistResponse));
                     Gson gson = new Gson();
-                    JSONArray items = playlistResponse.optJSONArray("playlists");
+                    JSONArray items = playlistResponse.optJSONArray("play_lists");
                     if (items == null) return;
                     PlayList playList;
                     try {

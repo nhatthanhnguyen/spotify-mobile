@@ -22,11 +22,7 @@ public class SearchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
-        ImageButton buttonMicro = view.findViewById(R.id.buttonMicro);
         LinearLayout linearLayoutSearch = view.findViewById(R.id.linearLayoutSearch);
-        buttonMicro.setOnClickListener(v -> {
-            Toast.makeText(getContext(), "Micro has been start", Toast.LENGTH_SHORT).show();
-        });
         linearLayoutSearch.setOnClickListener(v -> {
             FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
             SearchResultFragment fragment = new SearchResultFragment();

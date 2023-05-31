@@ -1,20 +1,33 @@
 package com.ptit.spotify.fragments;
 
+import static com.ptit.spotify.application.SpotifyApplication.ACTION_LIKE;
+import static com.ptit.spotify.application.SpotifyApplication.ACTION_NEXT;
+import static com.ptit.spotify.application.SpotifyApplication.ACTION_PAUSE;
+import static com.ptit.spotify.application.SpotifyApplication.ACTION_PREV;
+import static com.ptit.spotify.application.SpotifyApplication.ACTION_RESUME;
+import static com.ptit.spotify.application.SpotifyApplication.ACTION_UNLIKE;
+import static com.ptit.spotify.fragments.HomeFragment.ARTIST_DATA;
+import static com.ptit.spotify.utils.ItemType.ALBUM;
 import static com.ptit.spotify.utils.ItemType.SETTING_DESTINATION_ADD_TO_PLAYLIST;
 import static com.ptit.spotify.utils.ItemType.SETTING_DESTINATION_ARTIST;
 import static com.ptit.spotify.utils.ItemType.SETTING_LIKE;
-import static com.ptit.spotify.utils.ItemType.SETTING_LIKE_ALL_SONG;
+import static com.ptit.spotify.utils.Utils.getYear;
 
+import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +37,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.ptit.spotify.R;
+import com.ptit.spotify.activities.ContentActivity;
 import com.ptit.spotify.adapters.album.AlbumAdapter;
 import com.ptit.spotify.dto.data.AlbumHeaderData;
 import com.ptit.spotify.dto.data.AlbumSettingHeaderData;
@@ -44,9 +58,79 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AlbumFragment extends Fragment implements OnItemAlbumClickedListener {
+public class AlbumFragment extends Fragment implements OnItemAlbumClickedListener, OnItemSettingClickedListener {
     private static final String ALBUM_DATA = "Album";
     private List<Object> albumItems;
+    private AlbumAdapter albumAdapter;
+    private SettingFragment settingFragment;
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action != null) {
+                updateData(action);
+            }
+        }
+    };
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void updateData(String action) {
+        Log.d("ALBUM FRAGMENT", action);
+        if (action.equals(ACTION_PAUSE)) {
+            AlbumHeaderData headerData = (AlbumHeaderData) albumItems.get(0);
+            headerData.setPlaying(false);
+        }
+        if (action.equals(ACTION_RESUME)) {
+            AlbumHeaderData headerData = (AlbumHeaderData) albumItems.get(0);
+            headerData.setPlaying(true);
+        }
+        if (action.equals(ACTION_NEXT)) {
+            int pos = posOfSong();
+            Log.d("POS", String.valueOf(pos));
+            if (pos == -1) return;
+            updateSong(pos);
+        }
+
+        if (action.equals(ACTION_PREV)) {
+            int pos = posOfSong();
+            if (pos == -1) return;
+            Log.d("POS", String.valueOf(pos));
+            updateSong(pos);
+        }
+
+        if (action.equals(ACTION_LIKE)) {
+            int pos = posOfSong();
+            if (pos == -1) return;
+            AlbumSongData songData = (AlbumSongData) albumItems.get(pos);
+            songData.setLiked(true);
+        }
+
+        if (action.equals(ACTION_UNLIKE)) {
+            int pos = posOfSong();
+            if (pos == -1) return;
+            AlbumSongData songData = (AlbumSongData) albumItems.get(pos);
+            songData.setLiked(false);
+        }
+        albumAdapter.notifyDataSetChanged();
+    }
+
+    private void updateSong(int pos) {
+        for (int i = 1; i < albumItems.size(); ++i) {
+            AlbumSongData songData = (AlbumSongData) albumItems.get(i);
+            songData.setSelected(i == pos);
+        }
+    }
+
+    private int posOfSong() {
+        for (int i = 1; i < albumItems.size(); ++i) {
+            AlbumSongData songData = (AlbumSongData) albumItems.get(i);
+            if (songData.getId().equals(String.valueOf(ContentActivity.musicPlayerService.currentSong.getSong_id()))) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -56,6 +140,16 @@ public class AlbumFragment extends Fragment implements OnItemAlbumClickedListene
         if (bundle != null) {
             albumId = String.valueOf(bundle.getInt(ALBUM_DATA, 0));
         }
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ACTION_PAUSE);
+        intentFilter.addAction(ACTION_RESUME);
+        intentFilter.addAction(ACTION_NEXT);
+        intentFilter.addAction(ACTION_PREV);
+        intentFilter.addAction(ACTION_LIKE);
+        intentFilter.addAction(ACTION_UNLIKE);
+        getActivity().registerReceiver(receiver, intentFilter);
+
         int spacing = getContext().getResources().getDimensionPixelSize(R.dimen.spacing_16);
         albumItems = new ArrayList<>();
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
@@ -99,12 +193,21 @@ public class AlbumFragment extends Fragment implements OnItemAlbumClickedListene
                                     } catch (JSONException e) {
                                         throw new RuntimeException(e);
                                     }
+                                    boolean isPlayingAlbum = ContentActivity.musicPlayerService.type != null &&
+                                            (ContentActivity.musicPlayerService.type == ALBUM &&
+                                                    ContentActivity.musicPlayerService.id == Integer.parseInt(finalAlbumId) &&
+                                                    ContentActivity.musicPlayerService.isPlaying
+                                            );
                                     AlbumHeaderData headerData = new AlbumHeaderData(
+                                            Integer.parseInt(finalAlbumId),
                                             finalAlbum.getCover_img(),
                                             finalAlbum.getName(),
+                                            artist.getArtist_id(),
                                             artist.getName(),
                                             artist.getCoverImg(),
-                                            "20-12-2022");
+                                            getYear(finalAlbum.getCreated_at()),
+                                            false,
+                                            isPlayingAlbum);
                                     albumItems.add(headerData);
                                     JsonObjectRequest jsonObjectSongRequest = new JsonObjectRequest(
                                             Request.Method.GET,
@@ -112,7 +215,6 @@ public class AlbumFragment extends Fragment implements OnItemAlbumClickedListene
                                             null,
                                             responseSong -> {
                                                 Log.i("LOG_RESPONSE", String.valueOf(responseSong));
-                                                Gson gson2 = new Gson();
                                                 JSONArray itemSongs = responseSong.optJSONArray("songs");
                                                 if (itemSongs == null) return;
                                                 for (int i = 0; i < itemSongs.length(); i++) {
@@ -138,17 +240,22 @@ public class AlbumFragment extends Fragment implements OnItemAlbumClickedListene
                                                                 } catch (JSONException e) {
                                                                     throw new RuntimeException(e);
                                                                 }
+                                                                boolean isSelected = ContentActivity.musicPlayerService.currentSong != null &&
+                                                                        ContentActivity.musicPlayerService.currentSong.getSong_id() == finalSong.getSong_id();
                                                                 AlbumSongData albumSongData = new AlbumSongData(
                                                                         String.valueOf(finalSong.getSong_id()),
                                                                         finalSong.getName(),
                                                                         "",
-                                                                        artistSong.getName());
+                                                                        artistSong.getName(),
+                                                                        false,
+                                                                        isSelected
+                                                                );
                                                                 albumItems.add(albumSongData);
+                                                                albumAdapter = new AlbumAdapter(albumItems, this);
+                                                                recyclerView.setAdapter(albumAdapter);
                                                             }, error -> Log.e("LOG_RESPONSE", error.toString()));
                                                     requestQueue.add(jsonObjectRequestArtistSong);
                                                 }
-                                                AlbumAdapter albumAdapter = new AlbumAdapter(albumItems, this);
-                                                recyclerView.setAdapter(albumAdapter);
                                             }, error -> Log.e("LOG_RESPONSE", error.toString()));
                                     requestQueue.add(jsonObjectSongRequest);
                                 }, error -> Log.e("LOG_RESPONSE", error.toString()));
@@ -156,6 +263,12 @@ public class AlbumFragment extends Fragment implements OnItemAlbumClickedListene
                     }
                 }, error -> Log.e("LOG_RESPONSE", error.toString()));
         requestQueue.add(jsonObjectRequest);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unregisterReceiver(receiver);
     }
 
     @Nullable
@@ -191,17 +304,30 @@ public class AlbumFragment extends Fragment implements OnItemAlbumClickedListene
     @Override
     public void onAlbumSettingClickedListener(AlbumHeaderData data) {
         List<Object> items = new ArrayList<>();
+        boolean isAlbumLiked = ((AlbumHeaderData) albumItems.get(0)).isLiked();
         items.add(new AlbumSettingHeaderData(data.getImageUrl(), data.getAlbumName(), data.getArtistName()));
-        items.add(new SettingOptionData(R.drawable.ic_like_outlined, "Like", SETTING_LIKE));
+        items.add(new SettingOptionData(isAlbumLiked ? R.drawable.ic_like_filled : R.drawable.ic_like_outlined, "Like", SETTING_LIKE));
         items.add(new SettingOptionData(R.drawable.ic_view_artist, "View Artist", SETTING_DESTINATION_ARTIST));
         items.add(new SettingOptionData(R.drawable.ic_add_to_playlist, "Add to playlist", SETTING_DESTINATION_ADD_TO_PLAYLIST));
-        items.add(new SettingOptionData(R.drawable.ic_like_outlined, "Like all songs", SETTING_LIKE_ALL_SONG));
-        SettingFragment settingFragment = new SettingFragment(items, new OnItemSettingClickedListener() {
-            @Override
-            public void onSettingItemClickedListener(Object data) {
-                Toast.makeText(getContext(), data.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        settingFragment = new SettingFragment(items, this);
         settingFragment.show(getParentFragmentManager(), settingFragment.getTag());
+    }
+
+    @Override
+    public void onSettingItemClickedListener(Object data) {
+        if (data instanceof SettingOptionData) {
+            SettingOptionData optionData = (SettingOptionData) data;
+            if (optionData.getItemType() == SETTING_DESTINATION_ARTIST) {
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                Bundle bundle = new Bundle();
+                bundle.putInt(ARTIST_DATA, ((AlbumHeaderData) albumItems.get(0)).getArtistId());
+                ArtistFragment fragment = new ArtistFragment();
+                fragment.setArguments(bundle);
+                transaction.replace(R.id.fragment_container, fragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        }
+        settingFragment.dismiss();
     }
 }

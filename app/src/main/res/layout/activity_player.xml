@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activities.PlayerActivity">
-    
+
     <ImageButton
         android:id="@+id/buttonBack"
         android:layout_width="wrap_content"
@@ -20,6 +20,7 @@
         android:layout_width="380dp"
         android:layout_height="380dp"
         android:layout_gravity="center"
+        android:layout_marginHorizontal="@dimen/spacing_16"
         android:layout_marginTop="@dimen/spacing_16"
         android:src="@drawable/spotify_icon_rgb_white" />
 
@@ -42,6 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="marquee"
+                android:fontFamily="@font/circular_bold"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:maxLines="1"
                 android:text="Song name"
@@ -52,6 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="marquee"
+                android:fontFamily="@font/circular_book"
                 android:marqueeRepeatLimit="marquee_forever"
                 android:text="Artist name"
                 android:textColor="@color/gray" />
@@ -69,7 +72,9 @@
         android:id="@+id/seekBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_16" />
+        android:layout_marginTop="@dimen/spacing_16"
+        android:progressBackgroundTint="@color/basic_black"
+        android:progressTint="@color/bright_lime_green" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -81,6 +86,7 @@
             android:id="@+id/textViewCurrentPosition"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/circular_book"
             android:text="0:00"
             android:textColor="@color/gray" />
 
@@ -93,6 +99,7 @@
             android:id="@+id/textViewMax"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/circular_book"
             android:text="0:00"
             android:textColor="@color/gray" />
     </LinearLayout>

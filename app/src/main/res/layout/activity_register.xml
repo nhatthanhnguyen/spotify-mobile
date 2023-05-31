@@ -70,13 +70,13 @@
             android:paddingHorizontal="@dimen/spacing_24">
 
             <EditText
-                android:id="@+id/edit_register_password"
+                android:id="@+id/edit_register_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/spotify_input"
                 android:fontFamily="@font/circular_book"
-                android:hint="Your password"
-                android:inputType="textPassword"
+                android:hint="Your Username"
+                android:inputType="text"
                 android:textColor="@color/dark_black"
                 android:textColorHint="@color/gray"
                 android:textSize="@dimen/text_size_14" />
@@ -89,12 +89,12 @@
             android:paddingHorizontal="@dimen/spacing_24">
 
             <EditText
-                android:id="@+id/edit_register_confirm_password"
+                android:id="@+id/edit_register_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/spotify_input"
                 android:fontFamily="@font/circular_book"
-                android:hint="Confirm password"
+                android:hint="Your Password"
                 android:inputType="textPassword"
                 android:textColor="@color/dark_black"
                 android:textColorHint="@color/gray"

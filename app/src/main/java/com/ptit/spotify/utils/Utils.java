@@ -2,6 +2,9 @@ package com.ptit.spotify.utils;
 
 import android.annotation.SuppressLint;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 public class Utils {
@@ -20,5 +23,19 @@ public class Utils {
     public static int generateRandomNumberInRange(int n) {
         Random random = new Random();
         return random.nextInt(n);
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    public static String getYear(String time) {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+        try {
+            Date dateTime = format.parse(time);
+            SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+            assert dateTime != null;
+            return yearFormat.format(dateTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 }

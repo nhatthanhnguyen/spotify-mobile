@@ -98,128 +98,128 @@ public class LibraryFragment extends Fragment implements
     void addData(String userId) {
         // TODO DONE: LẤY NHỮNG PLAYLIST, ALBUM, NGHỆ SĨ ĐÃ THÍCH, ADD_ARTIST GIỮ NGUYÊN
         resultItems = new ArrayList<>();
-        JsonObjectRequest jsonObjectPlaylistRequest = new JsonObjectRequest(Constants.getPlaylistInteractionEndpoint(userId), new JSONObject(), new Response.Listener<JSONObject>() {
-            @SneakyThrows
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.i("LOG_RESPONSE", String.valueOf(response));
-                Gson gson = new Gson();
-                JSONArray items = response.optJSONArray("playlists");
-                if (items != null) {
-                    for (int i = 0; i < items.length(); i++) {
-                        Playlist at = gson.fromJson(items.get(i).toString(), Playlist.class);
-                        LibraryItemData data = new LibraryItemData(
-                                String.valueOf(at.getId()),
-                                at.getImageUrl(),
-                                at.getName(),
-                                "",
-                                at.getName(),
-                                at.getName(),
-                                PLAYLIST
-                        );
-                        resultItems.add(data);
-                    }
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("LOG_RESPONSE", error.toString());
-            }
-        });
-        HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectPlaylistRequest);
-
-        JsonObjectRequest jsonObjectAlbumRequest = new JsonObjectRequest(
-                Request.Method.GET,
-                Constants.getAlbumInteractionEndpoint(userId),
-                null,
-                response -> {
-                    Log.i("LOG_RESPONSE", String.valueOf(response));
-                    Gson gson = new Gson();
-                    JSONArray items = response.optJSONArray("albums");
-                    if (items != null) {
-                        for (int i = 0; i < items.length(); i++) {
-                            Album at = null;
-                            try {
-                                at = gson.fromJson(items.get(i).toString(), Album.class);
-                            } catch (JSONException e) {
-                                throw new RuntimeException(e);
-                            }
-                            LibraryItemData data = new LibraryItemData(
-                                    String.valueOf(at.getAlbum_id()),
-                                    at.getCover_img(),
-                                    at.getName(),
-                                    "",
-                                    at.getName(),
-                                    at.getName(),
-                                    ALBUM
-                            );
-                            resultItems.add(data);
-                        }
-                    }
-                }, error -> Log.e("LOG_RESPONSE", error.toString()));
-        HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectAlbumRequest);
-
-        JsonObjectRequest jsonObjectArtistRequest = new JsonObjectRequest(Constants.getArtistInteractionEndpoint(userId), new JSONObject(), new Response.Listener<JSONObject>() {
-            @SneakyThrows
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.i("LOG_RESPONSE", String.valueOf(response));
-                Gson gson = new Gson();
-                JSONArray items = response.optJSONArray("artists");
-                if (items != null) {
-                    for (int i = 0; i < items.length(); i++) {
-                        Artist at = gson.fromJson(items.get(i).toString(), Artist.class);
-                        LibraryItemData data = new LibraryItemData(
-                                String.valueOf(at.getArtist_id()),
-                                at.getCoverImg(),
-                                at.getName(),
-                                "",
-                                at.getName(),
-                                at.getName(),
-                                ARTIST
-                        );
-                        resultItems.add(data);
-                    }
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("LOG_RESPONSE", error.toString());
-            }
-        });
-        HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectArtistRequest);
+//        JsonObjectRequest jsonObjectPlaylistRequest = new JsonObjectRequest(Constants.getPlaylistInteractionEndpoint(userId), new JSONObject(), new Response.Listener<JSONObject>() {
+//            @SneakyThrows
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                Log.i("LOG_RESPONSE", String.valueOf(response));
+//                Gson gson = new Gson();
+//                JSONArray items = response.optJSONArray("playlists");
+//                if (items != null) {
+//                    for (int i = 0; i < items.length(); i++) {
+//                        Playlist at = gson.fromJson(items.get(i).toString(), Playlist.class);
+//                        LibraryItemData data = new LibraryItemData(
+//                                String.valueOf(at.getId()),
+//                                at.getImageUrl(),
+//                                at.getName(),
+//                                "",
+//                                at.getName(),
+//                                at.getName(),
+//                                PLAYLIST
+//                        );
+//                        resultItems.add(data);
+//                    }
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.e("LOG_RESPONSE", error.toString());
+//            }
+//        });
+//        HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectPlaylistRequest);
+//
+//        JsonObjectRequest jsonObjectAlbumRequest = new JsonObjectRequest(
+//                Request.Method.GET,
+//                Constants.getAlbumInteractionEndpoint(userId),
+//                null,
+//                response -> {
+//                    Log.i("LOG_RESPONSE", String.valueOf(response));
+//                    Gson gson = new Gson();
+//                    JSONArray items = response.optJSONArray("albums");
+//                    if (items != null) {
+//                        for (int i = 0; i < items.length(); i++) {
+//                            Album at = null;
+//                            try {
+//                                at = gson.fromJson(items.get(i).toString(), Album.class);
+//                            } catch (JSONException e) {
+//                                throw new RuntimeException(e);
+//                            }
+//                            LibraryItemData data = new LibraryItemData(
+//                                    String.valueOf(at.getAlbum_id()),
+//                                    at.getCover_img(),
+//                                    at.getName(),
+//                                    "",
+//                                    at.getName(),
+//                                    at.getName(),
+//                                    ALBUM
+//                            );
+//                            resultItems.add(data);
+//                        }
+//                    }
+//                }, error -> Log.e("LOG_RESPONSE", error.toString()));
+//        HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectAlbumRequest);
+//
+//        JsonObjectRequest jsonObjectArtistRequest = new JsonObjectRequest(Constants.getArtistInteractionEndpoint(userId), new JSONObject(), new Response.Listener<JSONObject>() {
+//            @SneakyThrows
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                Log.i("LOG_RESPONSE", String.valueOf(response));
+//                Gson gson = new Gson();
+//                JSONArray items = response.optJSONArray("artists");
+//                if (items != null) {
+//                    for (int i = 0; i < items.length(); i++) {
+//                        Artist at = gson.fromJson(items.get(i).toString(), Artist.class);
+//                        LibraryItemData data = new LibraryItemData(
+//                                String.valueOf(at.getArtist_id()),
+//                                at.getCoverImg(),
+//                                at.getName(),
+//                                "",
+//                                at.getName(),
+//                                at.getName(),
+//                                ARTIST
+//                        );
+//                        resultItems.add(data);
+//                    }
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.e("LOG_RESPONSE", error.toString());
+//            }
+//        });
+//        HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectArtistRequest);
 
 
 //        resultItems = new ArrayList<>();
-//        resultItems.add(new LibraryItemData(
-//                "",
-//                "https://i.scdn.co/image/ab67706f00000002ca5a7517156021292e5663a6",
-//                "Peaceful Piano",
-//                "Relax and indulge with beautiful piano pieces",
-//                "Spotify",
-//                null,
-//                PLAYLIST)
-//        );
-//        resultItems.add(new LibraryItemData(
-//                "",
-//                "https://i.scdn.co/image/ab67616d00001e02b94f78cf2a6ac9c700ee2812",
-//                "Emanuel Fremont",
-//                null,
-//                null,
-//                null,
-//                ARTIST
-//        ));
-//        resultItems.add(new LibraryItemData(
-//                "",
-//                "https://i.scdn.co/image/ab67616d0000b273b94f78cf2a6ac9c700ee2812",
-//                "Saying Things",
-//                null,
-//                "Emanuel Fremont",
-//                null,
-//                ALBUM
-//        ));
+        resultItems.add(new LibraryItemData(
+                "",
+                "https://i.scdn.co/image/ab67706f00000002ca5a7517156021292e5663a6",
+                "Peaceful Piano",
+                "Relax and indulge with beautiful piano pieces",
+                "Spotify",
+                null,
+                PLAYLIST)
+        );
+        resultItems.add(new LibraryItemData(
+                "",
+                "https://i.scdn.co/image/ab67616d00001e02b94f78cf2a6ac9c700ee2812",
+                "Emanuel Fremont",
+                null,
+                null,
+                null,
+                ARTIST
+        ));
+        resultItems.add(new LibraryItemData(
+                "",
+                "https://i.scdn.co/image/ab67616d0000b273b94f78cf2a6ac9c700ee2812",
+                "Saying Things",
+                null,
+                "Emanuel Fremont",
+                null,
+                ALBUM
+        ));
         resultItems.add(new LibraryItemData(
                 "",
                 null,
