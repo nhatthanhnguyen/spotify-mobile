@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.ptit.spotify.R;
@@ -52,7 +53,7 @@ public class VerifyOtpActivity extends AppCompatActivity implements View.OnClick
 //        setAction();
         session = new SessionManager(this);
 
-        if(session.isLoggedIn()) {
+        if (session.isLoggedIn()) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
@@ -80,6 +81,7 @@ public class VerifyOtpActivity extends AppCompatActivity implements View.OnClick
         editOtp = findViewById(R.id.edit_login_username);
         findViewById(R.id.buttonVerify).setOnClickListener(this);
     }
+
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View view) {
@@ -92,10 +94,11 @@ public class VerifyOtpActivity extends AppCompatActivity implements View.OnClick
                 finish();
         }
     }
+
     private void verify() {
         String otp = editOtp.getText().toString().trim();
         if (validateInput(otp)) {
-            verifyProcess(username, otp,  () -> {
+            verifyProcess(username, otp, () -> {
                 Toast.makeText(VerifyOtpActivity.this, "Verify Success", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this, StartActivity.class);
                 startActivity(intent);
@@ -112,6 +115,7 @@ public class VerifyOtpActivity extends AppCompatActivity implements View.OnClick
             editOtp.setText(userName);
         }
     }
+
     private boolean validateInput(String otp) {
         if (TextUtils.isEmpty(otp)) {
             editOtp.requestFocus();
@@ -128,20 +132,23 @@ public class VerifyOtpActivity extends AppCompatActivity implements View.OnClick
             jsonBody.put("otp", otp);
             final String mRequestBody = jsonBody.toString();
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Constants.getVerifyEndpoint(), null, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    Log.i("LOG_RESPONSE", String.valueOf(response));
-                    success.handleCallback();
-                }
-            }, error -> {
-                Log.e("LOG_RESPONSE", error.toString());
-                err.handleCallback();
-            }) {
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                    Request.Method.POST,
+                    Constants.getVerifyEndpoint(),
+                    new JSONObject(),
+                    response -> {
+                        Log.i("LOG_RESPONSE", String.valueOf(response));
+                        success.handleCallback();
+                    }, error -> {
+                        Log.e("LOG_RESPONSE", error.toString());
+                        err.handleCallback();
+                    }
+            ) {
                 @Override
                 public String getBodyContentType() {
                     return "application/json; charset=utf-8";
                 }
+
                 @Override
                 public byte[] getBody() {
                     return mRequestBody.getBytes(StandardCharsets.UTF_8);
