@@ -14,6 +14,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,11 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.ptit.spotify.R;
 import com.ptit.spotify.adapters.search.ButtonFilterAdapter;
 import com.ptit.spotify.adapters.search.SearchResultAdapter;
@@ -34,12 +40,20 @@ import com.ptit.spotify.dto.data.LibraryItemData;
 import com.ptit.spotify.dto.data.SearchItemResultData;
 import com.ptit.spotify.dto.data.SettingOptionData;
 import com.ptit.spotify.dto.data.SongSettingHeaderData;
+import com.ptit.spotify.dto.model.Album;
+import com.ptit.spotify.dto.model.Artist;
+import com.ptit.spotify.dto.model.PlayList;
+import com.ptit.spotify.dto.model.Song;
 import com.ptit.spotify.itemdecorations.HorizontalViewItemDecoration;
 import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
+import com.ptit.spotify.utils.Constants;
 import com.ptit.spotify.utils.ItemType;
 import com.ptit.spotify.utils.OnItemButtonFilterClickedListener;
 import com.ptit.spotify.utils.OnItemSearchResultClickedListener;
 import com.ptit.spotify.utils.OnItemSettingClickedListener;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -130,151 +144,6 @@ public class SearchResultFragment extends Fragment implements
             resultItems = null;
             filterItems = null;
         });
-//        List<SearchItemResultData> data = new ArrayList<>();
-//        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
-//        JsonObjectRequest jsonArtistRequest = new JsonObjectRequest(
-//                Request.Method.GET,
-//                Constants.getAllArtistEndpoint(),
-//                null,
-//                response -> {
-//                    Log.i("LOG_RESPONSE", response.toString());
-//                    Gson gson = new Gson();
-//                    JSONArray artists = response.optJSONArray("artists");
-//                    if (artists == null) return;
-//                    for (int i = 0; i < artists.length(); ++i) {
-//                        try {
-//                            Artist artist = gson.fromJson(artists.get(i).toString(), Artist.class);
-//                            data.add(new SearchItemResultData(
-//                                    String.valueOf(artist.getArtist_id()),
-//                                    artist.getCoverImg(),
-//                                    artist.getName(),
-//                                    null,
-//                                    null,
-//                                    null,
-//                                    ARTIST
-//                            ));
-//                        } catch (JSONException e) {
-//                            throw new RuntimeException(e);
-//                        }
-//                    }
-//                },
-//                error -> Log.e("LOG_RESPONSE", error.toString())
-//        );
-//        requestQueue.add(jsonArtistRequest);
-//        JsonObjectRequest jsonAlbumRequest = new JsonObjectRequest(
-//                Request.Method.GET,
-//                Constants.getAllAlbumsEndpoint(),
-//                null,
-//                response -> {
-//                    Gson gson = new Gson();
-//                    JSONArray albums = response.optJSONArray("albums");
-//                    if (albums == null) return;
-//                    for (int i = 0; i < albums.length(); ++i) {
-//                        Album album;
-//                        try {
-//                            album = gson.fromJson(albums.get(i).toString(), Album.class);
-//                        } catch (JSONException e) {
-//                            throw new RuntimeException(e);
-//                        }
-//                        JsonObjectRequest jsonAlbumArtistRequest = new JsonObjectRequest(
-//                                Request.Method.GET,
-//                                Constants.getArtistByIdEndpoint(String.valueOf(album.getArtist_id())),
-//                                null,
-//                                response1 -> {
-//                                    JSONArray albumArtists = response1.optJSONArray("artists");
-//                                    if (albumArtists == null) return;
-//                                    Artist albumArtist = null;
-//                                    try {
-//                                        albumArtist = gson.fromJson(albumArtists.get(0).toString(), Artist.class);
-//                                    } catch (JSONException e) {
-//                                        throw new RuntimeException(e);
-//                                    }
-//                                    data.add(new SearchItemResultData(
-//                                            String.valueOf(album.getAlbum_id()),
-//                                            album.getCover_img(),
-//                                            album.getName(),
-//                                            null,
-//                                            albumArtist.getName(),
-//                                            null,
-//                                            ALBUM
-//                                    ));
-//                                },
-//                                error -> Log.e("LOG_RESPONSE", error.toString())
-//                        );
-//                        requestQueue.add(jsonAlbumArtistRequest);
-//                    }
-//                },
-//                error -> Log.e("LOG_RESPONSE", error.toString())
-//        );
-//        requestQueue.add(jsonAlbumRequest);
-//        JsonObjectRequest jsonSongRequest = new JsonObjectRequest(
-//                Request.Method.GET,
-//                Constants.getAllSongEndpoint(),
-//                null,
-//                response -> {
-//                    Log.i("LOG_RESPONSE", response.toString());
-//                    Gson gson = new Gson();
-//                    JSONArray songs = response.optJSONArray("songs");
-//                    if (songs == null) return;
-//                    for (int i = 0; i < songs.length(); ++i) {
-//                        Song song = null;
-//                        try {
-//                            song = gson.fromJson(songs.get(i).toString(), Song.class);
-//                        } catch (JSONException e) {
-//                            throw new RuntimeException(e);
-//                        }
-//                        Song finalSong = song;
-//                        JsonObjectRequest jsonSongArtistRequest = new JsonObjectRequest(
-//                                Request.Method.GET,
-//                                Constants.getArtistByIdEndpoint(String.valueOf(song.getArtist_id())),
-//                                null,
-//                                response1 -> {
-//                                    Log.i("LOG_RESPONSE", response1.toString());
-//                                    JSONArray songArtists = response1.optJSONArray("artists");
-//                                    if (songArtists == null) return;
-//                                    Artist artist = null;
-//                                    try {
-//                                        artist = gson.fromJson(songArtists.get(0).toString(), Artist.class);
-//                                    } catch (JSONException e) {
-//                                        throw new RuntimeException(e);
-//                                    }
-//                                    Artist finalArtist = artist;
-//                                    JsonObjectRequest jsonSongAlbumRequest = new JsonObjectRequest(
-//                                            Request.Method.GET,
-//                                            Constants.getAlbumsByIdEndpoint(String.valueOf(finalSong.getAlbum_id())),
-//                                            null,
-//                                            response2 -> {
-//                                                Log.i("LOG_RESPONSE", response2.toString());
-//                                                JSONArray songAlbums = response2.optJSONArray("albums");
-//                                                if (songAlbums == null) return;
-//                                                Album album = null;
-//                                                try {
-//                                                    album = gson.fromJson(songAlbums.get(0).toString(), Album.class);
-//                                                } catch (JSONException e) {
-//                                                    throw new RuntimeException(e);
-//                                                }
-//                                                data.add(new SearchItemResultData(
-//                                                        String.valueOf(finalSong.getSong_id()),
-//                                                        finalSong.getCover_img(),
-//                                                        finalSong.getName(),
-//                                                        null,
-//                                                        finalArtist.getName(),
-//                                                        album.getName(),
-//                                                        SONG
-//                                                ));
-//                                            },
-//                                            error -> Log.e("LOG_RESPONSE", error.toString())
-//                                    );
-//                                    requestQueue.add(jsonSongAlbumRequest);
-//                                },
-//                                error -> Log.e("LOG_RESPONSE", error.toString())
-//                        );
-//                        requestQueue.add(jsonSongArtistRequest);
-//                    }
-//                },
-//                error -> Log.e("LOG_RESPONSE", error.toString())
-//        );
-//        requestQueue.add(jsonSongRequest);
         editTextSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -295,22 +164,124 @@ public class SearchResultFragment extends Fragment implements
                 buttonCancel.setVisibility(View.VISIBLE);
                 recyclerViewFilter.setVisibility(View.VISIBLE);
                 recyclerViewResult.setVisibility(View.VISIBLE);
-                addData();
-                resultItemsAll = new ArrayList<>(resultItems);
-                filterItems = new ArrayList<>();
-                for (SearchItemResultData item : resultItems) {
-                    if (!checkIsInList(item.getType())) {
-                        filterItems.add(new ButtonFilterData(item.getType(), false));
-                    }
-                }
-                filterItems.sort(Comparator.comparing(ButtonFilterData::getType));
-                filterItems.add(0, new ButtonFilterData(TOP_RESULT, true));
-                filterAdapter = new ButtonFilterAdapter(filterItems,
-                        SearchResultFragment.this);
-                resultAdapter = new SearchResultAdapter(resultItems, false,
-                        SearchResultFragment.this);
-                recyclerViewFilter.setAdapter(filterAdapter);
-                recyclerViewResult.setAdapter(resultAdapter);
+                resultItems = new ArrayList<>();
+                List<Artist> artistTempList = new ArrayList<>();
+                List<Album> albumTempList = new ArrayList<>();
+                List<PlayList> playListTempList = new ArrayList<>();
+                List<Song> songTempList = new ArrayList<>();
+                RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+                Gson gson = new Gson();
+                JsonObjectRequest jsonArtistRequest = new JsonObjectRequest(
+                        Request.Method.GET,
+                        Constants.getAllArtistEndpoint(),
+                        null,
+                        artistsResponse -> {
+                            Log.i("LOG RESPONSE", artistsResponse.toString());
+                            JSONArray artists = artistsResponse.optJSONArray("artists");
+                            if (artists == null) return;
+                            for (int i = 0; i < artists.length(); i++) {
+                                Artist artist = null;
+                                try {
+                                    artist = gson.fromJson(artists.get(i).toString(), Artist.class);
+                                } catch (JSONException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                artistTempList.add(artist);
+                                if (artist.getName().contains(s)) {
+                                    resultItems.add(new SearchItemResultData(
+                                            String.valueOf(artist.getArtist_id()),
+                                            artist.getCoverImg(),
+                                            artist.getName(),
+                                            null,
+                                            null,
+                                            null,
+                                            ARTIST
+                                    ));
+                                }
+                            }
+                            JsonObjectRequest jsonAlbumsRequest = new JsonObjectRequest(
+                                    Request.Method.GET,
+                                    Constants.getAllAlbumsEndpoint(),
+                                    null,
+                                    albumsResponse -> {
+                                        Log.i("LOG RESPONSE", albumsResponse.toString());
+                                        JSONArray albums = albumsResponse.optJSONArray("albums");
+                                        if (albums == null) return;
+                                        for (int i = 0; i < albums.length(); i++) {
+                                            Album album = null;
+                                            try {
+                                                album = gson.fromJson(albums.get(i).toString(), Album.class);
+                                            } catch (JSONException e) {
+                                                throw new RuntimeException(e);
+                                            }
+                                            albumTempList.add(album);
+                                            if (album.getName().contains(s)) {
+                                                resultItems.add(new SearchItemResultData(
+                                                        String.valueOf(album.getAlbum_id()),
+                                                        album.getCover_img(),
+                                                        album.getName(),
+                                                        null,
+                                                        findArtist(artistTempList, album.getArtist_id()).getName(),
+                                                        null,
+                                                        ALBUM
+                                                ));
+                                            }
+                                        }
+                                        JsonObjectRequest jsonSongsRequest = new JsonObjectRequest(
+                                                Request.Method.GET,
+                                                Constants.getAllSongEndpoint(),
+                                                null,
+                                                songsResponse -> {
+                                                    Log.i("LOG RESPONSE", songsResponse.toString());
+                                                    JSONArray songs = songsResponse.optJSONArray("songs");
+                                                    if (songs == null) return;
+                                                    for (int i = 0; i < songs.length(); i++) {
+                                                        Song song = null;
+                                                        try {
+                                                            song = gson.fromJson(songs.get(i).toString(), Song.class);
+                                                        } catch (JSONException e) {
+                                                            throw new RuntimeException(e);
+                                                        }
+                                                        songTempList.add(song);
+                                                        if (song.getName().contains(s)) {
+                                                            resultItems.add(new SearchItemResultData(
+                                                                    String.valueOf(song.getSong_id()),
+                                                                    song.getCover_img(),
+                                                                    song.getName(),
+                                                                    null,
+                                                                    findArtist(artistTempList, song.getArtist_id()).getName(),
+                                                                    findAlbum(albumTempList, song.getAlbum_id()).getName(),
+                                                                    SONG
+                                                            ));
+                                                        }
+                                                    }
+                                                    resultItemsAll = new ArrayList<>(resultItems);
+                                                    filterItems = new ArrayList<>();
+                                                    for (SearchItemResultData item : resultItems) {
+                                                        if (!checkIsInList(item.getType())) {
+                                                            filterItems.add(new ButtonFilterData(item.getType(), false));
+                                                        }
+                                                    }
+                                                    filterItems.sort(Comparator.comparing(ButtonFilterData::getType));
+                                                    filterItems.add(0, new ButtonFilterData(TOP_RESULT, true));
+                                                    filterAdapter = new ButtonFilterAdapter(filterItems,
+                                                            SearchResultFragment.this);
+                                                    resultAdapter = new SearchResultAdapter(resultItems, false,
+                                                            SearchResultFragment.this);
+                                                    recyclerViewFilter.setAdapter(filterAdapter);
+                                                    recyclerViewResult.setAdapter(resultAdapter);
+                                                },
+                                                error -> Log.e("LOG RESPONSE", error.toString())
+                                        );
+                                        requestQueue.add(jsonSongsRequest);
+                                    },
+                                    error -> Log.e("LOG RESPONSE", error.toString())
+                            );
+                            requestQueue.add(jsonAlbumsRequest);
+                        },
+                        error -> Log.e("LOG RESPONSE", error.toString())
+                );
+                requestQueue.add(jsonArtistRequest);
             }
 
             @Override
@@ -319,6 +290,24 @@ public class SearchResultFragment extends Fragment implements
             }
         });
         return view;
+    }
+
+    private Artist findArtist(List<Artist> artists, int artistId) {
+        for (int i = 0; i < artists.size(); i++) {
+            if (artists.get(i).getArtist_id() == artistId) {
+                return artists.get(i);
+            }
+        }
+        return null;
+    }
+
+    private Album findAlbum(List<Album> albums, int albumId) {
+        for (int i = 0; i < albums.size(); i++) {
+            if (albums.get(i).getAlbum_id() == albumId) {
+                return albums.get(i);
+            }
+        }
+        return null;
     }
 
     private boolean checkIsInList(ItemType type) {
@@ -331,7 +320,6 @@ public class SearchResultFragment extends Fragment implements
     }
 
     void addData() {
-        // TODO: LẤY TOÀN BỘ KẾT QUẢ TÌM KIẾM ĐƯỢC: SONG, PLAYLIST, ALBUM, ARTIST
         resultItems = new ArrayList<>();
         resultItems.add(new SearchItemResultData(
                 "",
@@ -411,22 +399,29 @@ public class SearchResultFragment extends Fragment implements
     @Override
     public void onItemClickedListener(SearchItemResultData data) {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        Bundle bundle = new Bundle();
         if (data.getType() == ARTIST) {
+            bundle.putInt("Artist", Integer.parseInt(data.getId()));
             ArtistFragment fragment = new ArtistFragment();
+            fragment.setArguments(bundle);
             transaction.replace(R.id.fragment_container, fragment);
             transaction.addToBackStack(null);
             transaction.commit();
             return;
         }
         if (data.getType() == ALBUM) {
+            bundle.putInt("Album", Integer.parseInt(data.getId()));
             AlbumFragment fragment = new AlbumFragment();
+            fragment.setArguments(bundle);
             transaction.replace(R.id.fragment_container, fragment);
             transaction.addToBackStack(null);
             transaction.commit();
             return;
         }
         if (data.getType() == PLAYLIST) {
+            bundle.putInt("Playlist", Integer.parseInt(data.getId()));
             PlaylistFragment fragment = new PlaylistFragment();
+            fragment.setArguments(bundle);
             transaction.replace(R.id.fragment_container, fragment);
             transaction.addToBackStack(null);
             transaction.commit();

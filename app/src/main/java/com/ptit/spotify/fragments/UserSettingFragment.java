@@ -190,15 +190,6 @@ public class UserSettingFragment extends Fragment implements OnItemUserSettingCl
     }
 
     @Override
-    public void onUserClickedListener() {
-        UserFragment fragment = new UserFragment();
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
-    @Override
     public void onEmailClickedListener() {
         ChangeEmailFragment fragment = new ChangeEmailFragment();
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();

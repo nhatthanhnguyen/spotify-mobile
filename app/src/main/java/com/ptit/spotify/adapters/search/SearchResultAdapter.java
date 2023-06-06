@@ -53,13 +53,13 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchItemViewHold
             holder.buttonMoreSetting.setVisibility(View.GONE);
             holder.imageView.setVisibility(View.GONE);
             if (data.getImageUrl() == null) holder.imageViewCircle.setVisibility(View.GONE);
-            else Picasso.get().load(data.getImageUrl()).into(holder.imageViewCircle);
+            else Picasso.get().load(data.getImageUrl()).error(R.drawable.spotify_icon_rgb_white).into(holder.imageViewCircle);
         }
         if (type == PLAYLIST || type == ALBUM) {
             holder.buttonMoreSetting.setVisibility(View.GONE);
             holder.imageViewCircle.setVisibility(View.GONE);
             if (data.getImageUrl() == null) holder.imageView.setVisibility(View.GONE);
-            else Picasso.get().load(data.getImageUrl()).into(holder.imageView);
+            else Picasso.get().load(data.getImageUrl()).error(R.drawable.spotify_icon_rgb_white).into(holder.imageView);
         }
         if (type == SONG) {
             holder.imageViewCircle.setVisibility(View.GONE);
@@ -67,7 +67,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchItemViewHold
                 onItemSearchResultClickedListener.onSongSettingClickedListener(data);
             });
             if (data.getImageUrl() == null) holder.imageView.setVisibility(View.GONE);
-            else Picasso.get().load(data.getImageUrl()).into(holder.imageView);
+            else Picasso.get().load(data.getImageUrl()).error(R.drawable.spotify_icon_rgb_white).into(holder.imageView);
         }
         holder.itemView.setOnClickListener(v -> {
             onItemSearchResultClickedListener.onItemClickedListener(data);

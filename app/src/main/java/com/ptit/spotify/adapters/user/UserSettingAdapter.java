@@ -25,7 +25,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class  UserSettingAdapter extends RecyclerView.Adapter {
+public class UserSettingAdapter extends RecyclerView.Adapter {
     private List<Object> userSettingsItems;
     private OnItemUserSettingClickedListener onItemUserSettingClickedListener;
 
@@ -86,13 +86,7 @@ public class  UserSettingAdapter extends RecyclerView.Adapter {
         if (holder instanceof UserSettingsHeaderViewHolder) {
             UserSettingsHeaderViewHolder headerViewHolder = (UserSettingsHeaderViewHolder) holder;
             UserSettingHeaderData data = (UserSettingHeaderData) userSettingsItems.get(position);
-            if (data.getAccountImageUrl() != null) {
-                Picasso.get().load(data.getAccountImageUrl()).into(headerViewHolder.imageViewAccount);
-            }
             headerViewHolder.textViewAccountName.setText(data.getAccountName());
-            headerViewHolder.itemView.setOnClickListener(v -> {
-                onItemUserSettingClickedListener.onUserClickedListener();
-            });
         }
 
         if (holder instanceof UserSettingsCaptionViewHolder) {

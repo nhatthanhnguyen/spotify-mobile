@@ -10,12 +10,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ptit.spotify.R;
 
 public class UserSettingsHeaderViewHolder extends RecyclerView.ViewHolder {
-    public ImageView imageViewAccount;
     public TextView textViewAccountName;
 
     public UserSettingsHeaderViewHolder(@NonNull View itemView) {
         super(itemView);
-        imageViewAccount = itemView.findViewById(R.id.imageViewAccount);
         textViewAccountName = itemView.findViewById(R.id.textViewAccountName);
     }
 }

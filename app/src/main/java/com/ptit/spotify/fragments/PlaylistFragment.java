@@ -120,8 +120,8 @@ public class PlaylistFragment extends Fragment implements OnItemPlaylistClickedL
                                                     Request.Method.GET,
                                                     Constants.getTotalTimePlaylist(playList.getPlay_list_id()),
                                                     null,
-                                                    totalLength -> {
-                                                        TotalTimeResponse totalTimeResponse = gson.fromJson(totalLength.toString(), TotalTimeResponse.class);
+                                                    totalLengthResponse -> {
+                                                        TotalTimeResponse totalTimeResponse = gson.fromJson(totalLengthResponse.toString(), TotalTimeResponse.class);
                                                         CountResponse countResponse = gson.fromJson(likes.toString(), CountResponse.class);
                                                         PlaylistHeaderData data = new PlaylistHeaderData(
                                                                 playList.getName(),
@@ -137,9 +137,9 @@ public class PlaylistFragment extends Fragment implements OnItemPlaylistClickedL
                                                                 Request.Method.GET,
                                                                 Constants.getSongByPlaylistIdEndpoint(finalPlaylistId),
                                                                 null,
-                                                                response -> {
-                                                                    Log.i("LOG_RESPONSE", String.valueOf(response));
-                                                                    JSONArray songItems = response.optJSONArray("songs");
+                                                                songsResponse -> {
+                                                                    Log.i("LOG_RESPONSE", String.valueOf(songsResponse));
+                                                                    JSONArray songItems = songsResponse.optJSONArray("songs");
                                                                     if (songItems == null) return;
                                                                     if (songItems.length() == 0) {
                                                                         PlaylistAdapter adapter = new PlaylistAdapter(playlistItems, this);
@@ -158,9 +158,9 @@ public class PlaylistFragment extends Fragment implements OnItemPlaylistClickedL
                                                                                 Request.Method.GET,
                                                                                 Constants.getArtistByIdEndpoint(String.valueOf(song.getArtist_id())),
                                                                                 null,
-                                                                                response1 -> {
-                                                                                    Log.i("LOG_RESPONSE", String.valueOf(response1));
-                                                                                    JSONArray artistItems = response1.optJSONArray("artists");
+                                                                                artistResponse -> {
+                                                                                    Log.i("LOG_RESPONSE", String.valueOf(artistResponse));
+                                                                                    JSONArray artistItems = artistResponse.optJSONArray("artists");
                                                                                     if (artistItems == null)
                                                                                         return;
                                                                                     Artist artistSong = null;
@@ -175,9 +175,9 @@ public class PlaylistFragment extends Fragment implements OnItemPlaylistClickedL
                                                                                             Request.Method.GET,
                                                                                             Constants.getAlbumsByIdEndpoint(String.valueOf(finalSong.getAlbum_id())),
                                                                                             null,
-                                                                                            response2 -> {
-                                                                                                Log.i("LOG RESPONSE", String.valueOf(response2));
-                                                                                                JSONArray albumItems = response2.optJSONArray("albums");
+                                                                                            albumResponse -> {
+                                                                                                Log.i("LOG RESPONSE", String.valueOf(albumResponse));
+                                                                                                JSONArray albumItems = albumResponse.optJSONArray("albums");
                                                                                                 if (albumItems == null)
                                                                                                     return;
                                                                                                 Album albumSong = null;

@@ -3,6 +3,7 @@ package com.ptit.spotify.adapters.library;
 import static com.ptit.spotify.utils.ItemType.ADD_ARTIST;
 import static com.ptit.spotify.utils.ItemType.ALBUM;
 import static com.ptit.spotify.utils.ItemType.ARTIST;
+import static com.ptit.spotify.utils.ItemType.LIKED_PLAYLIST;
 import static com.ptit.spotify.utils.ItemType.PLAYLIST;
 
 import android.annotation.SuppressLint;
@@ -55,10 +56,11 @@ public class LibraryAdapter extends RecyclerView.Adapter<LibraryItemViewHolder> 
             if (data.getImageUrl() == null) holder.imageViewCircle.setVisibility(View.GONE);
             else Picasso.get().load(data.getImageUrl()).into(holder.imageViewCircle);
         }
-        if (type == PLAYLIST || type == ALBUM) {
+        if (type == PLAYLIST || type == ALBUM || type == LIKED_PLAYLIST) {
             holder.imageViewCircle.setVisibility(View.GONE);
             if (data.getImageUrl() == null) holder.imageView.setVisibility(View.GONE);
-            else Picasso.get().load(data.getImageUrl()).into(holder.imageView);
+            else
+                Picasso.get().load(data.getImageUrl()).error(R.drawable.spotify_icon_rgb_white).into(holder.imageView);
         }
         if (type == ADD_ARTIST) {
             holder.imageView.setVisibility(View.GONE);
