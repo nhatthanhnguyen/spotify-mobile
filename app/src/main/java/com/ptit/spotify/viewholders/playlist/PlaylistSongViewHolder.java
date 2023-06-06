@@ -13,7 +13,6 @@ import com.ptit.spotify.R;
 public class PlaylistSongViewHolder extends RecyclerView.ViewHolder {
     public ImageView imageViewSong;
     public TextView textViewSongName;
-    public ImageView imageViewSongDownloaded;
     public TextView textViewArtistName;
     public ImageButton buttonLikeSong;
     public ImageButton buttonMoreSettingSong;
@@ -22,7 +21,6 @@ public class PlaylistSongViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         imageViewSong = itemView.findViewById(R.id.imageViewSong);
         textViewSongName = itemView.findViewById(R.id.textViewSongName);
-        imageViewSongDownloaded = itemView.findViewById(R.id.imageViewSongDownloaded);
         textViewArtistName = itemView.findViewById(R.id.textViewArtistName);
         buttonLikeSong = itemView.findViewById(R.id.buttonLikeSong);
         buttonMoreSettingSong = itemView.findViewById(R.id.buttonMoreSettingSong);

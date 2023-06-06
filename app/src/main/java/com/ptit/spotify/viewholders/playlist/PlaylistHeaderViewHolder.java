@@ -22,7 +22,6 @@ public class PlaylistHeaderViewHolder extends RecyclerView.ViewHolder {
     public TextView textViewNumberOfLikes;
     public TextView textViewTotalLength;
     public ImageButton buttonLikePlaylist;
-    public ImageButton buttonDownloadPlaylist;
     public ImageButton buttonMoreSettingPlaylist;
     public ImageButton buttonPlayPlaylist;
 
@@ -33,12 +32,10 @@ public class PlaylistHeaderViewHolder extends RecyclerView.ViewHolder {
         linearLayoutSearch = itemView.findViewById(R.id.linearLayoutSearch);
         imageViewPlaylist = itemView.findViewById(R.id.imageViewPlaylist);
         textViewPlaylistDescription = itemView.findViewById(R.id.textViewPlaylistDescription);
-        imageViewUserCreated = itemView.findViewById(R.id.imageViewUserCreated);
         textViewUserCreated = itemView.findViewById(R.id.textViewUserCreated);
         textViewNumberOfLikes = itemView.findViewById(R.id.textViewNumberOfLikes);
         textViewTotalLength = itemView.findViewById(R.id.textViewTotalLength);
         buttonLikePlaylist = itemView.findViewById(R.id.buttonLikePlaylist);
-        buttonDownloadPlaylist = itemView.findViewById(R.id.buttonDownloadPlaylist);
         buttonMoreSettingPlaylist = itemView.findViewById(R.id.buttonMoreSettingPlaylist);
         buttonPlayPlaylist = itemView.findViewById(R.id.buttonPlayPlaylist);
     }

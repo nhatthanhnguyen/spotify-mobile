@@ -59,7 +59,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/spacing_16"
         android:background="@android:color/transparent"
-        android:src="@drawable/spotify_icon_rgb_green" />
+        android:src="@drawable/spotify_icon_rgb_white" />
 
     <TextView
         android:id="@+id/textViewPlaylistDescription"
@@ -81,17 +81,10 @@
         android:gravity="start|center"
         android:paddingHorizontal="@dimen/spacing_16">
 
-        <ImageView
-            android:id="@+id/imageViewUserCreated"
-            android:layout_width="@dimen/playlist_user_created_image"
-            android:layout_height="@dimen/playlist_user_created_image"
-            android:src="@drawable/spotify_icon_rgb_green" />
-
         <TextView
             android:id="@+id/textViewUserCreated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/spacing_8"
             android:fontFamily="@font/circular_book"
             android:text="Spotify" />
     </LinearLayout>
@@ -148,14 +141,6 @@
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_like_outlined" />
-
-            <ImageButton
-                android:id="@+id/buttonDownloadPlaylist"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_16"
-                android:background="@android:color/transparent"
-                android:src="@drawable/ic_download_outlined" />
 
             <ImageButton
                 android:id="@+id/buttonMoreSettingPlaylist"

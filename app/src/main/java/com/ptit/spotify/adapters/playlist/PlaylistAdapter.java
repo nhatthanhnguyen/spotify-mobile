@@ -125,7 +125,9 @@ public class PlaylistAdapter extends RecyclerView.Adapter {
 
                 }
             });
-            Picasso.get().load(data.getUserCreatedImageUrl()).into(viewHolder.imageViewUserCreated);
+            if (!data.getUserCreatedImageUrl().isEmpty()) {
+                Picasso.get().load(data.getUserCreatedImageUrl()).error(R.drawable.spotify_icon_rgb_white).into(viewHolder.imageViewUserCreated);
+            }
         }
 
         if (holder instanceof PlaylistSongViewHolder) {

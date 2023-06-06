@@ -5,6 +5,7 @@ import static com.ptit.spotify.utils.ItemType.USER_SETTING_LOG_OUT;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,15 +16,26 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 import com.ptit.spotify.R;
 import com.ptit.spotify.activities.StartActivity;
 import com.ptit.spotify.adapters.user.UserSettingAdapter;
 import com.ptit.spotify.dto.data.UserSettingHeaderData;
 import com.ptit.spotify.dto.data.UserSettingOptionData;
+import com.ptit.spotify.dto.model.Account;
 import com.ptit.spotify.helper.SessionManager;
 import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
+import com.ptit.spotify.utils.Constants;
 import com.ptit.spotify.utils.OnItemUserSettingClickedListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -91,18 +103,63 @@ public class UserSettingFragment extends Fragment implements OnItemUserSettingCl
         View view = inflater.inflate(R.layout.fragment_user_setting, container, false);
         int spacing = getContext().getResources().getDimensionPixelSize(R.dimen.spacing_24);
         List<Object> userSettingsItems = new ArrayList<>();
-        String username = "";
-        addItems(userSettingsItems, username);
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.addItemDecoration(new VerticalViewItemDecoration(spacing));
-        UserSettingAdapter adapter = new UserSettingAdapter(userSettingsItems, this);
-        recyclerView.setAdapter(adapter);
+        int userId = sessionManager.getUserId();
+        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("user_id", userId);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        String requestBody = jsonBody.toString();
+        Gson gson = new Gson();
+        JsonObjectRequest jsonUserRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                Constants.getAccountInfoEndpoint(),
+                new JSONObject(),
+                response -> {
+                    Account account = null;
+                    try {
+                        account = gson.fromJson(response.getString("account"), Account.class);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    userSettingsItems.add(new UserSettingHeaderData(null, account.getUsername()));
+                    userSettingsItems.add(new UserSettingOptionData(
+                            "Email",
+                            account.getEmail(),
+                            USER_SETTING_EMAIL
+                    ));
+                    userSettingsItems.add("Other");
+                    userSettingsItems.add(new UserSettingOptionData(
+                            "Sign out",
+                            "You are sign in under the name " + account.getUsername(),
+                            USER_SETTING_LOG_OUT
+                    ));
+                    RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    recyclerView.addItemDecoration(new VerticalViewItemDecoration(spacing));
+                    UserSettingAdapter adapter = new UserSettingAdapter(userSettingsItems, this);
+                    recyclerView.setAdapter(adapter);
 
-        ImageButton buttonBack = view.findViewById(R.id.buttonBack);
-        buttonBack.setOnClickListener(v -> {
-            getParentFragmentManager().popBackStack();
-        });
+                    ImageButton buttonBack = view.findViewById(R.id.buttonBack);
+                    buttonBack.setOnClickListener(v -> {
+                        getParentFragmentManager().popBackStack();
+                    });
+                },
+                error -> Log.e("LOG RESPONSE", error.toString())
+        ) {
+            @Override
+            public String getBodyContentType() {
+                return "application/json; charset=utf-8";
+            }
+
+            @Override
+            public byte[] getBody() {
+                return requestBody.getBytes(StandardCharsets.UTF_8);
+            }
+        };
+        requestQueue.add(jsonUserRequest);
         return view;
     }
 

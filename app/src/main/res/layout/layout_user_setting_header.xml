@@ -6,16 +6,9 @@
     android:paddingHorizontal="@dimen/spacing_16"
     android:paddingTop="@dimen/spacing_16">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imageViewAccount"
-        android:layout_width="@dimen/account_image"
-        android:layout_height="@dimen/account_image"
-        android:src="@drawable/ic_account" />
-
     <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_marginStart="@dimen/spacing_12"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="start|center"
         android:orientation="vertical">
