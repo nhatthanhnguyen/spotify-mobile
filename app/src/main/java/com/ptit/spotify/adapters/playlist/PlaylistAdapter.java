@@ -19,6 +19,7 @@ import com.ptit.spotify.R;
 import com.ptit.spotify.dto.data.PlaylistHeaderData;
 import com.ptit.spotify.dto.data.PlaylistSongData;
 import com.ptit.spotify.utils.OnItemPlaylistClickedListener;
+import com.ptit.spotify.utils.Utils;
 import com.ptit.spotify.viewholders.blank.BlankViewHolder;
 import com.ptit.spotify.viewholders.playlist.PlaylistHeaderViewHolder;
 import com.ptit.spotify.viewholders.playlist.PlaylistSongViewHolder;
@@ -82,7 +83,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter {
             viewHolder.textViewPlaylistDescription.setText(data.getPlaylistDescription());
             viewHolder.textViewUserCreated.setText(data.getUserCreatedName());
             viewHolder.textViewNumberOfLikes.setText(data.getNumberOfLikes() + " likes");
-            viewHolder.textViewTotalLength.setText("12h 48m");
+            viewHolder.textViewTotalLength.setText(Utils.formatTimeOther(data.getTotalLength() * 1000));
             viewHolder.buttonLikePlaylist.setImageResource(R.drawable.ic_like_outlined);
             if (data.isLiked())
                 viewHolder.buttonLikePlaylist.setImageResource(R.drawable.ic_like_filled);

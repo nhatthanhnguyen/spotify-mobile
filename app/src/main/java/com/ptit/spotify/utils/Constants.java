@@ -167,4 +167,12 @@ public class Constants {
     public static String getArtistInteractionEndpoint(String userId) {
         return ApiURL + ArtistURL + "/interactions/" + userId;
     }
+
+    public static String getCountLiked(int type, int id) {
+        return ApiURL + InteractionURL + "/count/" + type + "/" + id;
+    }
+
+    public static String getTotalTimePlaylist(int id) {
+        return ApiURL + PlaylistURL + "/total_time/" + id;
+    }
 }
