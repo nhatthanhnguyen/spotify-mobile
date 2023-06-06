@@ -175,4 +175,12 @@ public class Constants {
     public static String getTotalTimePlaylist(int id) {
         return ApiURL + PlaylistURL + "/total_time/" + id;
     }
+
+    public static String postDeleteInteraction() {
+        return ApiURL + InteractionURL + "/remove_in";
+    }
+
+    public static String postAddInteraction() {
+        return ApiURL + InteractionURL + "/add_new";
+    }
 }

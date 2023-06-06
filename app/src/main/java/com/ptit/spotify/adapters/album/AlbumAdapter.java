@@ -102,13 +102,7 @@ public class AlbumAdapter extends RecyclerView.Adapter {
             }
 
             viewHolder.buttonLikeAlbum.setOnClickListener(v -> {
-                if (data.isLiked()) {
-                    data.setLiked(false);
-                    notifyDataSetChanged();
-                } else {
-                    data.setLiked(true);
-                    notifyDataSetChanged();
-                }
+                onItemAlbumClickedListener.onLikeButtonClickedListener(data);
             });
 
             viewHolder.buttonPlayPauseAlbum.setOnClickListener(v -> {

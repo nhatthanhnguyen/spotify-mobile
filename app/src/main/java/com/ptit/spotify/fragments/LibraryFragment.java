@@ -281,6 +281,15 @@ public class LibraryFragment extends Fragment implements
                                                     requestQueue.add(jsonObjectRequestUser);
                                                 }
                                             } else {
+                                                resultItems.add(0, new LibraryItemData(
+                                                        "",
+                                                        "https://misc.scdn.co/liked-songs/liked-songs-640.png",
+                                                        "Like Song",
+                                                        null,
+                                                        username,
+                                                        null,
+                                                        PLAYLIST
+                                                ));
                                                 resultItemsAll = new ArrayList<>(resultItems);
                                                 filterItems = new ArrayList<>();
                                                 for (LibraryItemData item : resultItems) {
