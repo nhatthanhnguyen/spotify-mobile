@@ -115,7 +115,6 @@ public class AlbumAdapter extends RecyclerView.Adapter {
                     ContentActivity.musicPlayerService.isLiked = data.isLiked();
                     ContentActivity.buttonPlayPause.setImageResource(R.drawable.ic_play_arrow);
                     ContentActivity.musicPlayerService.sendNotificationMedia(ContentActivity.musicPlayerService.currentSong);
-                    Picasso.get().load(ContentActivity.musicPlayerService.currentSong.getCover_img()).error(R.drawable.spotify_icon_rgb_white).into(ContentActivity.imageViewSong);
                     if (PlayerActivity.isBound) {
                         PlayerActivity.buttonPlayPause.setImageResource(R.drawable.ic_play_circle);
                     }
@@ -144,7 +143,6 @@ public class AlbumAdapter extends RecyclerView.Adapter {
                                 }
                                 viewHolder.buttonPlayPauseAlbum.setImageResource(R.drawable.ic_pause_green_large);
                                 ContentActivity.musicPlayerService.songs = songs;
-                                Picasso.get().load(ContentActivity.musicPlayerService.currentSong.getCover_img()).error(R.drawable.spotify_icon_rgb_white).into(ContentActivity.imageViewSong);
                                 // trước đó đã có bài hát?
                                 if (ContentActivity.musicPlayerService.currentSong != null) {
                                     if (ContentActivity.musicPlayerService.type == ALBUM && ContentActivity.musicPlayerService.id == data.getId()) {
@@ -173,6 +171,7 @@ public class AlbumAdapter extends RecyclerView.Adapter {
                                     ContentActivity.appCompatSeekBar.setMax(ContentActivity.musicPlayerService.currentSong.getLength() * 1000);
                                     ContentActivity.appCompatSeekBar.setProgress(0);
                                     ContentActivity.musicPlayerService.sendNotificationMedia(ContentActivity.musicPlayerService.currentSong);
+                                    Picasso.get().load(ContentActivity.musicPlayerService.currentSong.getCover_img()).error(R.drawable.spotify_icon_rgb_white).into(ContentActivity.imageViewSong);
                                     this.notifyDataSetChanged();
                                     if (PlayerActivity.isBound) {
                                         PlayerActivity.buttonPlayPause.setImageResource(R.drawable.ic_pause_circle);
@@ -198,6 +197,7 @@ public class AlbumAdapter extends RecyclerView.Adapter {
                                         ContentActivity.appCompatSeekBar.setMax(ContentActivity.musicPlayerService.currentSong.getLength() * 1000);
                                         ContentActivity.appCompatSeekBar.setProgress(0);
                                         ContentActivity.musicPlayerService.sendNotificationMedia(ContentActivity.musicPlayerService.currentSong);
+                                        Picasso.get().load(ContentActivity.musicPlayerService.currentSong.getCover_img()).error(R.drawable.spotify_icon_rgb_white).into(ContentActivity.imageViewSong);
                                         if (PlayerActivity.isBound) {
                                             PlayerActivity.buttonPlayPause.setImageResource(R.drawable.ic_pause);
                                             PlayerActivity.textViewSongName.setText(((AlbumSongData) albumData.get(1)).getName());
