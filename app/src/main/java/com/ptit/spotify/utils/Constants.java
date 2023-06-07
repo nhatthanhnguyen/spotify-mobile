@@ -84,8 +84,8 @@ public class Constants {
         return ApiURL + SongURL + "/play_list/" + id;
     }
 
-    public static String getSongInteractionEndpoint(String id) {
-        return ApiURL + SongURL + "/interactions/" + id;
+    public static String getSongInteractionEndpoint(String userId, String id) {
+        return ApiURL + SongURL + "/interactions/" + userId + "/" + id;
     }
 
     public static String getSongByAlbumIdEndpoint(String id) {

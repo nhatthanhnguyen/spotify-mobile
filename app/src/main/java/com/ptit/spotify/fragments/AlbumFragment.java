@@ -8,7 +8,6 @@ import static com.ptit.spotify.application.SpotifyApplication.ACTION_RESUME;
 import static com.ptit.spotify.application.SpotifyApplication.ACTION_UNLIKE;
 import static com.ptit.spotify.fragments.HomeFragment.ARTIST_DATA;
 import static com.ptit.spotify.utils.ItemType.ALBUM;
-import static com.ptit.spotify.utils.ItemType.SETTING_DESTINATION_ADD_TO_PLAYLIST;
 import static com.ptit.spotify.utils.ItemType.SETTING_DESTINATION_ARTIST;
 import static com.ptit.spotify.utils.ItemType.SETTING_LIKE;
 import static com.ptit.spotify.utils.Utils.getYear;
@@ -43,6 +42,7 @@ import com.ptit.spotify.dto.data.AlbumHeaderData;
 import com.ptit.spotify.dto.data.AlbumSettingHeaderData;
 import com.ptit.spotify.dto.data.AlbumSongData;
 import com.ptit.spotify.dto.data.SettingOptionData;
+import com.ptit.spotify.dto.data.SongSettingHeaderData;
 import com.ptit.spotify.dto.model.Album;
 import com.ptit.spotify.dto.model.Artist;
 import com.ptit.spotify.dto.model.Song;
@@ -275,17 +275,32 @@ public class AlbumFragment extends Fragment implements OnItemAlbumClickedListene
                                                                             }
                                                                             boolean isSelected = ContentActivity.musicPlayerService.currentSong != null &&
                                                                                     ContentActivity.musicPlayerService.currentSong.getSong_id() == finalSong.getSong_id();
-                                                                            AlbumSongData albumSongData = new AlbumSongData(
-                                                                                    String.valueOf(finalSong.getSong_id()),
-                                                                                    finalSong.getName(),
-                                                                                    "",
-                                                                                    artistSong.getName(),
-                                                                                    false,
-                                                                                    isSelected
+                                                                            Artist finalArtistSong = artistSong;
+                                                                            JsonObjectRequest jsonSongLikeRequest = new JsonObjectRequest(
+                                                                                    Request.Method.GET,
+                                                                                    Constants.getSongInteractionEndpoint(String.valueOf(userId), String.valueOf(finalSong.getSong_id())),
+                                                                                    null,
+                                                                                    songLikeResponse -> {
+                                                                                        boolean isSongLiked = true;
+                                                                                        Log.i("LOG RESPONSE", songLikeResponse.toString());
+                                                                                        JSONArray songLikes = songLikeResponse.optJSONArray("songs");
+                                                                                        if (songLikes == null)
+                                                                                            isSongLiked = false;
+                                                                                        AlbumSongData albumSongData = new AlbumSongData(
+                                                                                                String.valueOf(finalSong.getSong_id()),
+                                                                                                finalSong.getName(),
+                                                                                                finalSong.getCover_img(),
+                                                                                                finalArtistSong.getName(),
+                                                                                                isSongLiked,
+                                                                                                isSelected
+                                                                                        );
+                                                                                        albumItems.add(albumSongData);
+                                                                                        albumAdapter = new AlbumAdapter(albumItems, this);
+                                                                                        recyclerView.setAdapter(albumAdapter);
+                                                                                    },
+                                                                                    error -> Log.e("LOG RESPONSE", error.toString())
                                                                             );
-                                                                            albumItems.add(albumSongData);
-                                                                            albumAdapter = new AlbumAdapter(albumItems, this);
-                                                                            recyclerView.setAdapter(albumAdapter);
+                                                                            requestQueue.add(jsonSongLikeRequest);
                                                                         }, error -> Log.e("LOG_RESPONSE", error.toString()));
                                                                 requestQueue.add(jsonObjectRequestArtistSong);
                                                             }
@@ -339,14 +354,24 @@ public class AlbumFragment extends Fragment implements OnItemAlbumClickedListene
     }
 
     @Override
-    public void onAlbumSettingClickedListener(AlbumHeaderData data) {
+    public void onAlbumSettingClickedListener(AlbumHeaderData headerData) {
         List<Object> items = new ArrayList<>();
         boolean isAlbumLiked = ((AlbumHeaderData) albumItems.get(0)).isLiked();
-        items.add(new AlbumSettingHeaderData(data.getImageUrl(), data.getAlbumName(), data.getArtistName()));
-        items.add(new SettingOptionData(isAlbumLiked ? R.drawable.ic_like_filled : R.drawable.ic_like_outlined, "Like", SETTING_LIKE));
+        items.add(new AlbumSettingHeaderData(headerData.getImageUrl(), headerData.getAlbumName(), headerData.getArtistName()));
+        items.add(new SettingOptionData(isAlbumLiked ? R.drawable.ic_like_filled : R.drawable.ic_like_outlined, isAlbumLiked ? "Like" : "Dislike", SETTING_LIKE));
         items.add(new SettingOptionData(R.drawable.ic_view_artist, "View Artist", SETTING_DESTINATION_ARTIST));
-        items.add(new SettingOptionData(R.drawable.ic_add_to_playlist, "Add to playlist", SETTING_DESTINATION_ADD_TO_PLAYLIST));
-        settingFragment = new SettingFragment(items, this);
+        settingFragment = new SettingFragment(items, headerData, this);
+        settingFragment.show(getParentFragmentManager(), settingFragment.getTag());
+    }
+
+    @Override
+    public void onSongSettingClickedListener(int position, AlbumSongData data) {
+        List<Object> items = new ArrayList<>();
+        boolean isSongLiked = ((AlbumSongData) albumItems.get(position)).isLiked();
+        items.add(new SongSettingHeaderData(data.getImageUrl(), data.getName(), data.getArtistName(), ((AlbumSongData) albumItems.get(position)).getName()));
+        items.add(new SettingOptionData(isSongLiked ? R.drawable.ic_like_filled : R.drawable.ic_like_outlined, isSongLiked ? "Like" : "Dislike", SETTING_LIKE));
+        items.add(new SettingOptionData(R.drawable.ic_view_artist, "View Artist", SETTING_DESTINATION_ARTIST));
+        settingFragment = new SettingFragment(items, data, this);
         settingFragment.show(getParentFragmentManager(), settingFragment.getTag());
     }
 
@@ -413,8 +438,9 @@ public class AlbumFragment extends Fragment implements OnItemAlbumClickedListene
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     @Override
-    public void onSettingItemClickedListener(Object data) {
+    public void onSettingItemClickedListener(Object headerData, Object data) {
         if (data instanceof SettingOptionData) {
             SettingOptionData optionData = (SettingOptionData) data;
             if (optionData.getItemType() == SETTING_DESTINATION_ARTIST) {
@@ -426,6 +452,130 @@ public class AlbumFragment extends Fragment implements OnItemAlbumClickedListene
                 transaction.replace(R.id.fragment_container, fragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
+            }
+            if (optionData.getItemType() == SETTING_LIKE) {
+                if (headerData instanceof AlbumHeaderData) {
+                    AlbumHeaderData albumHeaderData = (AlbumHeaderData) headerData;
+                    JSONObject request = new JSONObject();
+                    try {
+                        request.put("user_id", Integer.parseInt(userId));
+                        request.put("object_id", albumHeaderData.getId());
+                        request.put("object_type", 2);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    String requestBody = request.toString();
+                    if (albumHeaderData.isLiked()) {
+                        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+                        JsonObjectRequest jsonDeleteInteraction = new JsonObjectRequest(
+                                Request.Method.POST,
+                                Constants.postDeleteInteraction(),
+                                new JSONObject(),
+                                response -> {
+                                    Log.i("LOG RESPONSE", response.toString());
+                                    albumHeaderData.setLiked(false);
+                                    albumAdapter.notifyDataSetChanged();
+                                },
+                                error -> Log.e("LOG RESPONSE", error.toString())
+                        ) {
+                            @Override
+                            public String getBodyContentType() {
+                                return "application/json; charset=utf-8";
+                            }
+
+                            @Override
+                            public byte[] getBody() {
+                                return requestBody.getBytes(StandardCharsets.UTF_8);
+                            }
+                        };
+                        requestQueue.add(jsonDeleteInteraction);
+                    } else {
+                        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+                        JsonObjectRequest jsonAddInteraction = new JsonObjectRequest(
+                                Request.Method.POST,
+                                Constants.postAddInteraction(),
+                                new JSONObject(),
+                                response -> {
+                                    Log.i("LOG RESPONSE", response.toString());
+                                    albumHeaderData.setLiked(true);
+                                    albumAdapter.notifyDataSetChanged();
+                                },
+                                error -> Log.e("LOG RESPONSE", error.toString())
+                        ) {
+                            @Override
+                            public String getBodyContentType() {
+                                return "application/json; charset=utf-8";
+                            }
+
+                            @Override
+                            public byte[] getBody() {
+                                return requestBody.getBytes(StandardCharsets.UTF_8);
+                            }
+                        };
+                        requestQueue.add(jsonAddInteraction);
+                    }
+                }
+                if (headerData instanceof AlbumSongData) {
+                    AlbumSongData albumSongData = (AlbumSongData) headerData;
+                    JSONObject request = new JSONObject();
+                    try {
+                        request.put("user_id", Integer.parseInt(userId));
+                        request.put("object_id", Integer.parseInt(albumSongData.getId()));
+                        request.put("object_type", 2);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    String requestBody = request.toString();
+                    if (albumSongData.isLiked()) {
+                        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+                        JsonObjectRequest jsonDeleteInteraction = new JsonObjectRequest(
+                                Request.Method.POST,
+                                Constants.postDeleteInteraction(),
+                                new JSONObject(),
+                                response -> {
+                                    Log.i("LOG RESPONSE", response.toString());
+                                    albumSongData.setLiked(false);
+                                    albumAdapter.notifyDataSetChanged();
+                                },
+                                error -> Log.e("LOG RESPONSE", error.toString())
+                        ) {
+                            @Override
+                            public String getBodyContentType() {
+                                return "application/json; charset=utf-8";
+                            }
+
+                            @Override
+                            public byte[] getBody() {
+                                return requestBody.getBytes(StandardCharsets.UTF_8);
+                            }
+                        };
+                        requestQueue.add(jsonDeleteInteraction);
+                    } else {
+                        RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+                        JsonObjectRequest jsonAddInteraction = new JsonObjectRequest(
+                                Request.Method.POST,
+                                Constants.postAddInteraction(),
+                                new JSONObject(),
+                                response -> {
+                                    Log.i("LOG RESPONSE", response.toString());
+                                    albumSongData.setLiked(true);
+                                    albumAdapter.notifyDataSetChanged();
+                                },
+                                error -> Log.e("LOG RESPONSE", error.toString())
+                        ) {
+                            @Override
+                            public String getBodyContentType() {
+                                return "application/json; charset=utf-8";
+                            }
+
+                            @Override
+                            public byte[] getBody() {
+                                return requestBody.getBytes(StandardCharsets.UTF_8);
+                            }
+                        };
+                        requestQueue.add(jsonAddInteraction);
+                    }
+                }
             }
         }
         settingFragment.dismiss();

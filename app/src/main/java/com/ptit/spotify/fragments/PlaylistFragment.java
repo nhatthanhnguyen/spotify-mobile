@@ -283,9 +283,9 @@ public class PlaylistFragment extends Fragment implements OnItemPlaylistClickedL
                 R.drawable.ic_add_to_playlist,
                 "Add to another playlist",
                 SETTING_DESTINATION_ADD_TO_PLAYLIST));
-        SettingFragment settingFragment = new SettingFragment(items, new OnItemSettingClickedListener() {
+        SettingFragment settingFragment = new SettingFragment(items, data, new OnItemSettingClickedListener() {
             @Override
-            public void onSettingItemClickedListener(Object data) {
+            public void onSettingItemClickedListener(Object headerData, Object data) {
                 Toast.makeText(getContext(), data.toString(), Toast.LENGTH_SHORT).show();
             }
         });
@@ -339,9 +339,9 @@ public class PlaylistFragment extends Fragment implements OnItemPlaylistClickedL
                 "View artist",
                 SETTING_DESTINATION_ARTIST
         ));
-        SettingFragment settingFragment = new SettingFragment(items, new OnItemSettingClickedListener() {
+        SettingFragment settingFragment = new SettingFragment(items, data, new OnItemSettingClickedListener() {
             @Override
-            public void onSettingItemClickedListener(Object data) {
+            public void onSettingItemClickedListener(Object headerData, Object data) {
                 SettingOptionData settingOptionData = (SettingOptionData) data;
 
             }

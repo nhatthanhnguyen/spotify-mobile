@@ -21,13 +21,16 @@ import java.util.List;
 
 public class SettingFragment extends BottomSheetDialogFragment {
     private List<Object> items;
+    private Object headerData;
     private OnItemSettingClickedListener onItemSettingClickedListener;
 
     public SettingFragment(
             List<Object> items,
+            Object headerData,
             OnItemSettingClickedListener onItemSettingClickedListener
     ) {
         this.items = items;
+        this.headerData = headerData;
         this.onItemSettingClickedListener = onItemSettingClickedListener;
     }
 
@@ -41,7 +44,7 @@ public class SettingFragment extends BottomSheetDialogFragment {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayout = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayout);
-        SettingAdapter settingAdapter = new SettingAdapter(items, onItemSettingClickedListener);
+        SettingAdapter settingAdapter = new SettingAdapter(items, headerData, onItemSettingClickedListener);
         recyclerView.setAdapter(settingAdapter);
         int height = getContext().getResources().getDimensionPixelOffset(R.dimen.spacing_16);
         recyclerView.addItemDecoration(new SettingItemDecoration(height));

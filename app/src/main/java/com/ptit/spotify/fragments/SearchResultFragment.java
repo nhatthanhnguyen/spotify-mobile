@@ -387,9 +387,9 @@ public class SearchResultFragment extends Fragment implements
                 "View artist",
                 SETTING_DESTINATION_ARTIST
         ));
-        SettingFragment settingFragment = new SettingFragment(items, new OnItemSettingClickedListener() {
+        SettingFragment settingFragment = new SettingFragment(items, data, new OnItemSettingClickedListener() {
             @Override
-            public void onSettingItemClickedListener(Object data) {
+            public void onSettingItemClickedListener(Object headerData, Object data) {
                 Toast.makeText(getContext(), data.toString(), Toast.LENGTH_SHORT).show();
             }
         });

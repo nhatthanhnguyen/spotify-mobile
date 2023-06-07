@@ -33,12 +33,15 @@ import java.util.List;
 
 public class SettingAdapter extends RecyclerView.Adapter {
     private List<Object> items;
+    private Object headerData;
     private OnItemSettingClickedListener onItemSettingClickedListener;
 
     public SettingAdapter(
             List<Object> items,
+            Object headerData,
             OnItemSettingClickedListener onItemSettingClickedListener) {
         this.items = items;
+        this.headerData = headerData;
         this.onItemSettingClickedListener = onItemSettingClickedListener;
     }
 
@@ -136,7 +139,7 @@ public class SettingAdapter extends RecyclerView.Adapter {
             viewHolder.textViewSetting.setText(data.getDescription());
             viewHolder.imageViewSetting.setImageResource(data.getIconId());
             viewHolder.itemView.setOnClickListener(v -> {
-                onItemSettingClickedListener.onSettingItemClickedListener(data);
+                onItemSettingClickedListener.onSettingItemClickedListener(headerData, data);
             });
         }
     }

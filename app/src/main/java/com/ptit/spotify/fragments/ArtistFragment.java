@@ -30,6 +30,7 @@ import com.ptit.spotify.dto.data.ArtistSettingHeaderData;
 import com.ptit.spotify.dto.data.ArtistSongData;
 import com.ptit.spotify.dto.data.SettingOptionData;
 import com.ptit.spotify.dto.model.Artist;
+import com.ptit.spotify.dto.model.CountResponse;
 import com.ptit.spotify.dto.model.Song;
 import com.ptit.spotify.helper.SessionManager;
 import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
@@ -111,42 +112,54 @@ public class ArtistFragment extends Fragment implements OnItemArtistClickedListe
                                         }
                                     }
                                 }
-                                artistItems.add(new ArtistHeaderData(
-                                        finalArtistId,
-                                        finalArtist.getName(),
-                                        finalArtist.getCoverImg(),
-                                        1000,
-                                        isLike
-                                ));
-                                artistItems.add(new ArtistCaptionData("Popular"));
-                                JsonObjectRequest jsonObjectSongRequest = new JsonObjectRequest(
+                                boolean finalIsLike = isLike;
+                                JsonObjectRequest jsonCountLikeRequest = new JsonObjectRequest(
                                         Request.Method.GET,
-                                        Constants.getSongByArtistIdEndpoint(finalArtistId),
+                                        Constants.getCountLiked(3, Integer.parseInt(finalArtistId)),
                                         null,
-                                        responseSong -> {
-                                            Log.i("LOG_RESPONSE", String.valueOf(responseSong));
-                                            JSONArray itemSongs = responseSong.optJSONArray("songs");
-                                            if (itemSongs == null) return;
-                                            for (int i = 0; i < itemSongs.length(); i++) {
-                                                Song song = null;
-                                                try {
-                                                    song = gson.fromJson(itemSongs.get(i).toString(), Song.class);
-                                                } catch (JSONException e) {
-                                                    throw new RuntimeException(e);
-                                                }
-                                                artistItems.add(new ArtistSongData(
-                                                        String.valueOf(i + 1),
-                                                        song.getName(),
-                                                        song.getCover_img(),
-                                                        String.valueOf(Utils.generateRandomNumberInRange(10000))
-                                                ));
-                                            }
-                                            artistItems.add(new ArtistCaptionData("Description"));
-                                            artistItems.add(new ArtistDescriptionData(1_139_683, finalArtist.getDescription(), finalArtist.getCoverImg()));
-                                            artistAdapter = new ArtistAdapter(artistItems, this);
-                                            recyclerView.setAdapter(artistAdapter);
-                                        }, error -> Log.e("LOG_RESPONSE", error.toString()));
-                                requestQueue.add(jsonObjectSongRequest);
+                                        countLikeResponse -> {
+                                            Log.i("LOG RESPONSE", countLikeResponse.toString());
+                                            CountResponse count = gson.fromJson(countLikeResponse.toString(), CountResponse.class);
+                                            artistItems.add(new ArtistHeaderData(
+                                                    finalArtistId,
+                                                    finalArtist.getName(),
+                                                    finalArtist.getCoverImg(),
+                                                    count.getCount(),
+                                                    finalIsLike
+                                            ));
+                                            artistItems.add(new ArtistCaptionData("Popular"));
+                                            JsonObjectRequest jsonObjectSongRequest = new JsonObjectRequest(
+                                                    Request.Method.GET,
+                                                    Constants.getSongByArtistIdEndpoint(finalArtistId),
+                                                    null,
+                                                    responseSong -> {
+                                                        Log.i("LOG_RESPONSE", String.valueOf(responseSong));
+                                                        JSONArray itemSongs = responseSong.optJSONArray("songs");
+                                                        if (itemSongs == null) return;
+                                                        for (int i = 0; i < itemSongs.length(); i++) {
+                                                            Song song = null;
+                                                            try {
+                                                                song = gson.fromJson(itemSongs.get(i).toString(), Song.class);
+                                                            } catch (JSONException e) {
+                                                                throw new RuntimeException(e);
+                                                            }
+                                                            artistItems.add(new ArtistSongData(
+                                                                    String.valueOf(i + 1),
+                                                                    song.getName(),
+                                                                    song.getCover_img(),
+                                                                    String.valueOf(Utils.generateRandomNumberInRange(10000))
+                                                            ));
+                                                        }
+                                                        artistItems.add(new ArtistCaptionData("Description"));
+                                                        artistItems.add(new ArtistDescriptionData(1_139_683, finalArtist.getDescription(), finalArtist.getCoverImg()));
+                                                        artistAdapter = new ArtistAdapter(artistItems, this);
+                                                        recyclerView.setAdapter(artistAdapter);
+                                                    }, error -> Log.e("LOG_RESPONSE", error.toString()));
+                                            requestQueue.add(jsonObjectSongRequest);
+                                        },
+                                        error -> Log.e("LOG RESPONSE", error.toString())
+                                );
+                                requestQueue.add(jsonCountLikeRequest);
                             },
                             error -> Log.e("LOG RESPONSE", error.toString())
                     );
@@ -178,9 +191,9 @@ public class ArtistFragment extends Fragment implements OnItemArtistClickedListe
         List<Object> items = new ArrayList<>();
         items.add(new ArtistSettingHeaderData(data.getArtistImageUrl(), data.getArtistName()));
         items.add(new SettingOptionData(R.drawable.ic_artist_follow, "Follow", SETTING_LIKE));
-        SettingFragment settingFragment = new SettingFragment(items, new OnItemSettingClickedListener() {
+        SettingFragment settingFragment = new SettingFragment(items, data, new OnItemSettingClickedListener() {
             @Override
-            public void onSettingItemClickedListener(Object data) {
+            public void onSettingItemClickedListener(Object headerData, Object data) {
                 Toast.makeText(getContext(), data.toString(), Toast.LENGTH_SHORT).show();
             }
         });

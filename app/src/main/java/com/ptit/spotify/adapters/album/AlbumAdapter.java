@@ -253,6 +253,9 @@ public class AlbumAdapter extends RecyclerView.Adapter {
             AlbumSongData songData = (AlbumSongData) albumData.get(position);
             songViewHolder.textViewSongName.setText(songData.getName());
             songViewHolder.textViewArtistName.setText(songData.getArtistName());
+            songViewHolder.buttonMoreSettingSong.setOnClickListener(v -> {
+                onItemAlbumClickedListener.onSongSettingClickedListener(position, songData);
+            });
             if (songData.isSelected()) {
                 songViewHolder.textViewSongName.setTextColor(holder.itemView.getResources().getColor(R.color.bright_lime_green, holder.itemView.getContext().getTheme()));
             } else {
