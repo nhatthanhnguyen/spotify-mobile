@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlaylistHeaderData {
+    private String id;
     private String playlistName;
     private String playlistImageUrl;
     private String playlistDescription;

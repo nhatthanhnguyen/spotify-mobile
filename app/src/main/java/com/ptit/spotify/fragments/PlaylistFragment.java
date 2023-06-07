@@ -5,6 +5,7 @@ import static com.ptit.spotify.utils.ItemType.SETTING_DESTINATION_ALBUM;
 import static com.ptit.spotify.utils.ItemType.SETTING_DESTINATION_ARTIST;
 import static com.ptit.spotify.utils.ItemType.SETTING_LIKE;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,6 +39,7 @@ import com.ptit.spotify.dto.model.CountResponse;
 import com.ptit.spotify.dto.model.PlayList;
 import com.ptit.spotify.dto.model.Song;
 import com.ptit.spotify.dto.model.TotalTimeResponse;
+import com.ptit.spotify.helper.SessionManager;
 import com.ptit.spotify.itemdecorations.VerticalViewItemDecoration;
 import com.ptit.spotify.utils.Constants;
 import com.ptit.spotify.utils.OnItemPlaylistClickedListener;
@@ -57,6 +59,10 @@ public class PlaylistFragment extends Fragment implements OnItemPlaylistClickedL
     public PlaylistFragment() {
     }
 
+    private String username;
+    private String userId;
+    private PlaylistAdapter playlistAdapter;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -70,6 +76,9 @@ public class PlaylistFragment extends Fragment implements OnItemPlaylistClickedL
         if (bundle != null) {
             playlistId = String.valueOf(bundle.getInt(PLAYLIST_DATA, 0));
         }
+        SessionManager session = new SessionManager(getContext());
+        username = session.getUsername();
+        userId = String.valueOf(session.getUserId());
         View view = inflater.inflate(R.layout.fragment_content, container, false);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         int spacing = getContext().getResources().getDimensionPixelSize(R.dimen.spacing_16);
@@ -123,94 +132,124 @@ public class PlaylistFragment extends Fragment implements OnItemPlaylistClickedL
                                                     totalLengthResponse -> {
                                                         TotalTimeResponse totalTimeResponse = gson.fromJson(totalLengthResponse.toString(), TotalTimeResponse.class);
                                                         CountResponse countResponse = gson.fromJson(likes.toString(), CountResponse.class);
-                                                        PlaylistHeaderData data = new PlaylistHeaderData(
-                                                                playList.getName(),
-                                                                playList.getCover_img(),
-                                                                "",
-                                                                "",
-                                                                account.getUsername(),
-                                                                countResponse.getCount(),
-                                                                totalTimeResponse.getTotal_time(),
-                                                                false);
-                                                        playlistItems.add(data);
-                                                        JsonObjectRequest jsonObjectSongRequest = new JsonObjectRequest(
+                                                        JsonObjectRequest jsonPlaylistLikeRequest = new JsonObjectRequest(
                                                                 Request.Method.GET,
-                                                                Constants.getSongByPlaylistIdEndpoint(finalPlaylistId),
+                                                                Constants.getPlaylistInteractionEndpoint(userId),
                                                                 null,
-                                                                songsResponse -> {
-                                                                    Log.i("LOG_RESPONSE", String.valueOf(songsResponse));
-                                                                    JSONArray songItems = songsResponse.optJSONArray("songs");
-                                                                    if (songItems == null) return;
-                                                                    if (songItems.length() == 0) {
-                                                                        PlaylistAdapter adapter = new PlaylistAdapter(playlistItems, this);
-                                                                        recyclerView.setAdapter(adapter);
-                                                                        return;
-                                                                    }
-                                                                    for (int i = 0; i < songItems.length(); i++) {
-                                                                        Song song = null;
-                                                                        try {
-                                                                            song = gson.fromJson(songItems.get(i).toString(), Song.class);
-                                                                        } catch (JSONException e) {
-                                                                            throw new RuntimeException(e);
-                                                                        }
-                                                                        Song finalSong = song;
-                                                                        JsonObjectRequest jsonSongArtistRequest = new JsonObjectRequest(
-                                                                                Request.Method.GET,
-                                                                                Constants.getArtistByIdEndpoint(String.valueOf(song.getArtist_id())),
-                                                                                null,
-                                                                                artistResponse -> {
-                                                                                    Log.i("LOG_RESPONSE", String.valueOf(artistResponse));
-                                                                                    JSONArray artistItems = artistResponse.optJSONArray("artists");
-                                                                                    if (artistItems == null)
-                                                                                        return;
-                                                                                    Artist artistSong = null;
+                                                                playlistLikeResponse -> {
+                                                                    boolean playlistLiked = true;
+                                                                    JSONArray playlistLikes = playlistLikeResponse.optJSONArray("play_lists");
+                                                                    if (playlistLikes == null)
+                                                                        playlistLiked = false;
+                                                                    PlaylistHeaderData data = new PlaylistHeaderData(
+                                                                            String.valueOf(playList.getPlay_list_id()),
+                                                                            playList.getName(),
+                                                                            playList.getCover_img(),
+                                                                            "",
+                                                                            "",
+                                                                            account.getUsername(),
+                                                                            countResponse.getCount(),
+                                                                            totalTimeResponse.getTotal_time(),
+                                                                            playlistLiked);
+                                                                    playlistItems.add(data);
+                                                                    JsonObjectRequest jsonObjectSongRequest = new JsonObjectRequest(
+                                                                            Request.Method.GET,
+                                                                            Constants.getSongByPlaylistIdEndpoint(finalPlaylistId),
+                                                                            null,
+                                                                            songsResponse -> {
+                                                                                Log.i("LOG_RESPONSE", String.valueOf(songsResponse));
+                                                                                JSONArray songItems = songsResponse.optJSONArray("songs");
+                                                                                if (songItems == null)
+                                                                                    return;
+                                                                                if (songItems.length() == 0) {
+                                                                                    PlaylistAdapter adapter = new PlaylistAdapter(playlistItems, this);
+                                                                                    recyclerView.setAdapter(adapter);
+                                                                                    return;
+                                                                                }
+                                                                                for (int i = 0; i < songItems.length(); i++) {
+                                                                                    Song song = null;
                                                                                     try {
-                                                                                        artistSong = gson.fromJson(artistItems.get(0).toString(), Artist.class);
+                                                                                        song = gson.fromJson(songItems.get(i).toString(), Song.class);
                                                                                     } catch (
                                                                                             JSONException e) {
                                                                                         throw new RuntimeException(e);
                                                                                     }
-                                                                                    Artist finalArtistSong = artistSong;
-                                                                                    JsonObjectRequest jsonAlbumSongRequest = new JsonObjectRequest(
+                                                                                    Song finalSong = song;
+                                                                                    JsonObjectRequest jsonSongArtistRequest = new JsonObjectRequest(
                                                                                             Request.Method.GET,
-                                                                                            Constants.getAlbumsByIdEndpoint(String.valueOf(finalSong.getAlbum_id())),
+                                                                                            Constants.getArtistByIdEndpoint(String.valueOf(song.getArtist_id())),
                                                                                             null,
-                                                                                            albumResponse -> {
-                                                                                                Log.i("LOG RESPONSE", String.valueOf(albumResponse));
-                                                                                                JSONArray albumItems = albumResponse.optJSONArray("albums");
-                                                                                                if (albumItems == null)
+                                                                                            artistResponse -> {
+                                                                                                Log.i("LOG_RESPONSE", String.valueOf(artistResponse));
+                                                                                                JSONArray artistItems = artistResponse.optJSONArray("artists");
+                                                                                                if (artistItems == null)
                                                                                                     return;
-                                                                                                Album albumSong = null;
+                                                                                                Artist artistSong = null;
                                                                                                 try {
-                                                                                                    albumSong = gson.fromJson(albumItems.get(0).toString(), Album.class);
+                                                                                                    artistSong = gson.fromJson(artistItems.get(0).toString(), Artist.class);
                                                                                                 } catch (
                                                                                                         JSONException e) {
                                                                                                     throw new RuntimeException(e);
                                                                                                 }
-                                                                                                PlaylistSongData songData = new PlaylistSongData(
-                                                                                                        finalSong.getSong_id(),
-                                                                                                        finalSong.getCover_img(),
-                                                                                                        finalSong.getName(),
-                                                                                                        finalSong.getArtist_id(),
-                                                                                                        finalArtistSong.getName(),
-                                                                                                        finalSong.getAlbum_id(),
-                                                                                                        albumSong.getName(),
-                                                                                                        finalSong.getLength(),
-                                                                                                        false);
-                                                                                                playlistItems.add(songData);
-                                                                                                PlaylistAdapter adapter = new PlaylistAdapter(playlistItems, this);
-                                                                                                recyclerView.setAdapter(adapter);
+                                                                                                Artist finalArtistSong = artistSong;
+                                                                                                JsonObjectRequest jsonAlbumSongRequest = new JsonObjectRequest(
+                                                                                                        Request.Method.GET,
+                                                                                                        Constants.getAlbumsByIdEndpoint(String.valueOf(finalSong.getAlbum_id())),
+                                                                                                        null,
+                                                                                                        albumResponse -> {
+                                                                                                            Log.i("LOG RESPONSE", String.valueOf(albumResponse));
+                                                                                                            JSONArray albumItems = albumResponse.optJSONArray("albums");
+                                                                                                            if (albumItems == null)
+                                                                                                                return;
+                                                                                                            Album albumSong = null;
+                                                                                                            try {
+                                                                                                                albumSong = gson.fromJson(albumItems.get(0).toString(), Album.class);
+                                                                                                            } catch (
+                                                                                                                    JSONException e) {
+                                                                                                                throw new RuntimeException(e);
+                                                                                                            }
+                                                                                                            Album finalAlbumSong = albumSong;
+                                                                                                            JsonObjectRequest jsonSongLikedRequest = new JsonObjectRequest(
+                                                                                                                    Request.Method.GET,
+                                                                                                                    Constants.getSongInteractionEndpoint(userId, String.valueOf(finalSong.getSong_id())),
+                                                                                                                    null,
+                                                                                                                    songLikesResponse -> {
+                                                                                                                        boolean songLiked = true;
+                                                                                                                        Log.i("LOG RESPONSE", songLikesResponse.toString());
+                                                                                                                        JSONArray songLikes = songLikesResponse.optJSONArray("songs");
+                                                                                                                        if (songLikes == null) songLiked = false;
+                                                                                                                        PlaylistSongData songData = new PlaylistSongData(
+                                                                                                                                finalSong.getSong_id(),
+                                                                                                                                finalSong.getCover_img(),
+                                                                                                                                finalSong.getName(),
+                                                                                                                                finalSong.getArtist_id(),
+                                                                                                                                finalArtistSong.getName(),
+                                                                                                                                finalSong.getAlbum_id(),
+                                                                                                                                finalAlbumSong.getName(),
+                                                                                                                                finalSong.getLength(),
+                                                                                                                                songLiked);
+                                                                                                                        playlistItems.add(songData);
+                                                                                                                        playlistAdapter = new PlaylistAdapter(playlistItems, this);
+                                                                                                                        recyclerView.setAdapter(playlistAdapter);
+                                                                                                                    },
+                                                                                                                    error -> Log.e("LOG RESPONSE", error.toString())
+                                                                                                            );
+                                                                                                            requestQueue.add(jsonSongLikedRequest);
+                                                                                                        },
+                                                                                                        error -> Log.e("LOG RESPONSE", error.toString())
+                                                                                                );
+                                                                                                requestQueue.add(jsonAlbumSongRequest);
                                                                                             },
                                                                                             error -> Log.e("LOG RESPONSE", error.toString())
                                                                                     );
-                                                                                    requestQueue.add(jsonAlbumSongRequest);
-                                                                                },
-                                                                                error -> Log.e("LOG RESPONSE", error.toString())
-                                                                        );
-                                                                        requestQueue.add(jsonSongArtistRequest);
-                                                                    }
-                                                                }, error -> Log.e("LOG_RESPONSE", error.toString()));
-                                                        requestQueue.add(jsonObjectSongRequest);
+                                                                                    requestQueue.add(jsonSongArtistRequest);
+                                                                                }
+                                                                            }, error -> Log.e("LOG_RESPONSE", error.toString()));
+                                                                    requestQueue.add(jsonObjectSongRequest);
+                                                                },
+                                                                error -> Log.e("LOG RESPONSE", error.toString())
+                                                        );
+                                                        requestQueue.add(jsonPlaylistLikeRequest);
                                                     },
                                                     error -> Log.e("LOG RESPONSE", error.toString())
                                             );
@@ -290,6 +329,69 @@ public class PlaylistFragment extends Fragment implements OnItemPlaylistClickedL
             }
         });
         settingFragment.show(getParentFragmentManager(), settingFragment.getTag());
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    public void onLikeButtonClickedListener(PlaylistHeaderData data) {
+        JSONObject request = new JSONObject();
+        try {
+            request.put("user_id", Integer.parseInt(userId));
+            request.put("object_id", Integer.parseInt(data.getId()));
+            request.put("object_type", 1);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        String requestBody = request.toString();
+        if (data.isLiked()) {
+            RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+            JsonObjectRequest jsonDeleteInteraction = new JsonObjectRequest(
+                    Request.Method.POST,
+                    Constants.postDeleteInteraction(),
+                    new JSONObject(),
+                    response -> {
+                        Log.i("LOG RESPONSE", response.toString());
+                        data.setLiked(false);
+                        playlistAdapter.notifyDataSetChanged();
+                    },
+                    error -> Log.e("LOG RESPONSE", error.toString())
+            ) {
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public byte[] getBody() {
+                    return requestBody.getBytes(StandardCharsets.UTF_8);
+                }
+            };
+            requestQueue.add(jsonDeleteInteraction);
+        } else {
+            RequestQueue requestQueue = Volley.newRequestQueue(getContext());
+            JsonObjectRequest jsonAddInteraction = new JsonObjectRequest(
+                    Request.Method.POST,
+                    Constants.postAddInteraction(),
+                    new JSONObject(),
+                    response -> {
+                        Log.i("LOG RESPONSE", response.toString());
+                        data.setLiked(true);
+                        playlistAdapter.notifyDataSetChanged();
+                    },
+                    error -> Log.e("LOG RESPONSE", error.toString())
+            ) {
+                @Override
+                public String getBodyContentType() {
+                    return "application/json; charset=utf-8";
+                }
+
+                @Override
+                public byte[] getBody() {
+                    return requestBody.getBytes(StandardCharsets.UTF_8);
+                }
+            };
+            requestQueue.add(jsonAddInteraction);
+        }
     }
 
     @Override

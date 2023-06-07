@@ -88,10 +88,6 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             viewHolder.buttonUserSettings.setOnClickListener(view -> {
                 onItemHomeClickedListener.onUserSettingClickedListener();
             });
-
-            viewHolder.buttonRecentlyPlayed.setOnClickListener(view -> {
-                Toast.makeText(holder.itemView.getContext(), "You press the button recently played", Toast.LENGTH_SHORT).show();
-            });
         }
 
         if (holder instanceof HomeSectionViewHolder) {

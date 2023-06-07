@@ -18,8 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.Gson;
 import com.ptit.spotify.R;
@@ -44,18 +42,22 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.SneakyThrows;
-
 public class PlaylistSearchFragment extends Fragment implements OnItemPlaylistSearchClickedListener {
     public PlaylistSearchFragment() {
-        // Required empty public constructor
     }
+
     private String userId;
     private String username;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_playlist_search, container, false);
+        Bundle bundle = getArguments();
+        String playlistId = "";
+        if (bundle != null) {
+            playlistId = String.valueOf(bundle.getInt("Playlist", 0));
+        }
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         SessionManager sessionManager = new SessionManager(getContext());
         userId = String.valueOf(sessionManager.getUserId());
@@ -69,20 +71,9 @@ public class PlaylistSearchFragment extends Fragment implements OnItemPlaylistSe
         recyclerView.addItemDecoration(new VerticalViewItemDecoration(spacing));
         List<PlaylistSongData> items = new ArrayList<>();
         //TODO: truyền id cho playlist
-        String playlistId = "";
-        getPlaylistSongs(items, playlistId);
-        PlaylistSearchAdapter playlistAdapter = new PlaylistSearchAdapter(items, this);
-        recyclerView.setAdapter(playlistAdapter);
-        return view;
-    }
-
-    private void getPlaylistSongs(List<PlaylistSongData> playlistSongDataList, String id) {
-        // TODO DONE: LẤY TOÀN BỘ BÀI HÁT CỦA PLAYLIST
-        JSONObject jsonBody = new JSONObject();
-        final String mRequestBody = jsonBody.toString();
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                Constants.getSongByPlaylistIdEndpoint(id),
+                Constants.getSongByPlaylistIdEndpoint(playlistId),
                 null,
                 songsResponse -> {
                     Log.i("LOG_RESPONSE", String.valueOf(songsResponse));
@@ -133,7 +124,8 @@ public class PlaylistSearchFragment extends Fragment implements OnItemPlaylistSe
                                                                 boolean liked = true;
                                                                 Log.i("LOG_RESPONSE", String.valueOf(response1));
                                                                 JSONArray songsLike = response1.optJSONArray("songs");
-                                                                if (songsLike == null) liked = false;
+                                                                if (songsLike == null)
+                                                                    liked = false;
                                                                 PlaylistSongData data = new PlaylistSongData(
                                                                         finalSong.getSong_id(),
                                                                         finalSong.getUrl(),
@@ -144,7 +136,9 @@ public class PlaylistSearchFragment extends Fragment implements OnItemPlaylistSe
                                                                         finalAlbum.getName(),
                                                                         finalSong.getLength(),
                                                                         liked);
-                                                                playlistSongDataList.add(data);
+                                                                items.add(data);
+                                                                PlaylistSearchAdapter playlistAdapter = new PlaylistSearchAdapter(items, this);
+                                                                recyclerView.setAdapter(playlistAdapter);
                                                             }, error -> Log.e("LOG_RESPONSE", error.toString()));
                                                     HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectLikeRequest);
                                                 }, error -> Log.e("LOG_RESPONSE", error.toString()));
@@ -155,6 +149,10 @@ public class PlaylistSearchFragment extends Fragment implements OnItemPlaylistSe
                     }
                 }, error -> Log.e("LOG_RESPONSE", error.toString()));
         HttpUtils.getInstance(getContext()).getRequestQueue().add(jsonObjectRequest);
+        return view;
+    }
+
+    private void getPlaylistSongs(List<PlaylistSongData> playlistSongDataList, String id) {
 //        items.add(new PlaylistSongData("https://i.scdn.co/image/ab67616d0000485128ccaf8cb23d857cb9361ec4",
 //                "Tjärnheden",
 //                "Farsjön",

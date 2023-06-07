@@ -5,6 +5,7 @@ import com.ptit.spotify.dto.data.PlaylistSongData;
 
 public interface OnItemPlaylistClickedListener {
     void onPlaylistSettingClickedListener(PlaylistHeaderData data);
+    void onLikeButtonClickedListener(PlaylistHeaderData data);
 
     void onBackButtonClickedListener();
 

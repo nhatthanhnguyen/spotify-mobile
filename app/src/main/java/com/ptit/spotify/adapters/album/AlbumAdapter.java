@@ -112,8 +112,10 @@ public class AlbumAdapter extends RecyclerView.Adapter {
                     viewHolder.buttonPlayPauseAlbum.setImageResource(R.drawable.ic_play_green_large);
                     ContentActivity.musicPlayerService.mediaPlayer.pause();
                     ContentActivity.musicPlayerService.isPlaying = false;
+                    ContentActivity.musicPlayerService.isLiked = data.isLiked();
                     ContentActivity.buttonPlayPause.setImageResource(R.drawable.ic_play_arrow);
                     ContentActivity.musicPlayerService.sendNotificationMedia(ContentActivity.musicPlayerService.currentSong);
+                    Picasso.get().load(ContentActivity.musicPlayerService.currentSong.getCover_img()).error(R.drawable.spotify_icon_rgb_white).into(ContentActivity.imageViewSong);
                     if (PlayerActivity.isBound) {
                         PlayerActivity.buttonPlayPause.setImageResource(R.drawable.ic_play_circle);
                     }
@@ -142,6 +144,7 @@ public class AlbumAdapter extends RecyclerView.Adapter {
                                 }
                                 viewHolder.buttonPlayPauseAlbum.setImageResource(R.drawable.ic_pause_green_large);
                                 ContentActivity.musicPlayerService.songs = songs;
+                                Picasso.get().load(ContentActivity.musicPlayerService.currentSong.getCover_img()).error(R.drawable.spotify_icon_rgb_white).into(ContentActivity.imageViewSong);
                                 // trước đó đã có bài hát?
                                 if (ContentActivity.musicPlayerService.currentSong != null) {
                                     if (ContentActivity.musicPlayerService.type == ALBUM && ContentActivity.musicPlayerService.id == data.getId()) {
@@ -265,6 +268,7 @@ public class AlbumAdapter extends RecyclerView.Adapter {
                 ContentActivity.linearLayoutMiniPlayer.setVisibility(VISIBLE);
                 ContentActivity.musicPlayerService.mediaPlayer.reset();
                 RequestQueue requestQueue = Volley.newRequestQueue(holder.itemView.getContext());
+                Picasso.get().load(songData.getImageUrl()).error(R.drawable.spotify_icon_rgb_white).into(ContentActivity.imageViewSong);
                 JsonObjectRequest jsonObjectListSong = new JsonObjectRequest(
                         Request.Method.GET,
                         Constants.getSongByAlbumIdEndpoint(String.valueOf(((AlbumHeaderData) albumData.get(0)).getId())),

@@ -36,14 +36,14 @@
 <!--            android:contentDescription="Notification"-->
 <!--            app:srcCompat="@drawable/ic_notification" />-->
 
-        <ImageButton
-            android:id="@+id/buttonRecentlyPlayed"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="@dimen/spacing_20"
-            android:background="@android:color/transparent"
-            android:contentDescription="Recently played"
-            app:srcCompat="@drawable/ic_recently_played" />
+<!--        <ImageButton-->
+<!--            android:id="@+id/buttonRecentlyPlayed"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_marginEnd="@dimen/spacing_20"-->
+<!--            android:background="@android:color/transparent"-->
+<!--            android:contentDescription="Recently played"-->
+<!--            app:srcCompat="@drawable/ic_recently_played" />-->
 
         <ImageButton
             android:id="@+id/buttonUserSettings"
