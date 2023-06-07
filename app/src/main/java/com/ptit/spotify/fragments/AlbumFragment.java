@@ -371,7 +371,8 @@ public class AlbumFragment extends Fragment implements OnItemAlbumClickedListene
                     response -> {
                         Log.i("LOG RESPONSE", response.toString());
                         albumAdapter.notifyDataSetChanged();
-                    }, error -> Log.e("LOG RESPONSE", error.toString())
+                    },
+                    error -> Log.e("LOG RESPONSE", error.toString())
             ) {
                 @Override
                 public String getBodyContentType() {
@@ -394,7 +395,8 @@ public class AlbumFragment extends Fragment implements OnItemAlbumClickedListene
                     response -> {
                         Log.i("LOG RESPONSE", response.toString());
                         albumAdapter.notifyDataSetChanged();
-                    }, error -> Log.e("LOG RESPONSE", error.toString())
+                    },
+                    error -> Log.e("LOG RESPONSE", error.toString())
             ) {
                 @Override
                 public String getBodyContentType() {

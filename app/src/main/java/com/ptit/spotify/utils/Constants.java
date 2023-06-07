@@ -177,7 +177,7 @@ public class Constants {
     }
 
     public static String postDeleteInteraction() {
-        return ApiURL + InteractionURL + "/remove_in";
+        return ApiURL + InteractionURL + "/remove_in/";
     }
 
     public static String postAddInteraction() {

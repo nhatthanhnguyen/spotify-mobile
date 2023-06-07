@@ -159,7 +159,7 @@ public class LibraryFragment extends Fragment implements
     private void getLibrary(Gson gson, RequestQueue requestQueue, String userId, String username) {
         JsonObjectRequest jsonAlbumLikedRequest = new JsonObjectRequest(
                 Request.Method.GET,
-                Constants.getAlbumsByIdEndpoint(userId),
+                Constants.getAlbumInteractionEndpoint(userId),
                 null,
                 albumLikes -> {
                     Log.i("LOG RESPONSE", albumLikes.toString());
