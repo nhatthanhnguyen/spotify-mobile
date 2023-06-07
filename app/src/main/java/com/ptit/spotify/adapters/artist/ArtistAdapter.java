@@ -137,12 +137,7 @@ public class ArtistAdapter extends RecyclerView.Adapter {
                 viewHolder.buttonFollow.setText("Follow");
             }
             viewHolder.buttonFollow.setOnClickListener(view -> {
-                data.setFollow(!data.isFollow());
-                if (data.isFollow()) {
-                    viewHolder.buttonFollow.setText("Followed");
-                } else {
-                    viewHolder.buttonFollow.setText("Follow");
-                }
+                onItemArtistClickedListener.onArtistLikeClickedListener(data);
             });
         }
 

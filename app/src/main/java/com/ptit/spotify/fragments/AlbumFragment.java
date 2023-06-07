@@ -171,7 +171,7 @@ public class AlbumFragment extends Fragment implements OnItemAlbumClickedListene
                 Constants.getAlbumsByIdEndpoint(albumId),
                 null,
                 albumResponse -> {
-                    Log.i("LOG_RESPONSE", String.valueOf(albumResponse));
+                    Log.i("LOG RESPONSE", String.valueOf(albumResponse));
                     Gson gson = new Gson();
                     JSONArray items = albumResponse.optJSONArray("albums");
                     if (items != null) {
@@ -187,7 +187,7 @@ public class AlbumFragment extends Fragment implements OnItemAlbumClickedListene
                                 Constants.getArtistByIdEndpoint(String.valueOf(album.getArtist_id())),
                                 null,
                                 artistResponse -> {
-                                    Log.i("LOG_RESPONSE", String.valueOf(artistResponse));
+                                    Log.i("LOG RESPONSE", String.valueOf(artistResponse));
                                     Gson gson1 = new Gson();
                                     JSONArray itemArtists = artistResponse.optJSONArray("artists");
                                     if (itemArtists == null) {
@@ -215,17 +215,18 @@ public class AlbumFragment extends Fragment implements OnItemAlbumClickedListene
                                                 JSONArray albums = likeAlbums.optJSONArray("albums");
                                                 if (albums == null) {
                                                     isLiked = false;
-                                                }
-                                                for (int i = 0; i < albums.length(); ++i) {
-                                                    Album album1 = null;
-                                                    try {
-                                                        album1 = gson.fromJson(albums.get(i).toString(), Album.class);
-                                                    } catch (JSONException e) {
-                                                        throw new RuntimeException(e);
-                                                    }
-                                                    if (album1.getAlbum_id() == Integer.parseInt(finalAlbumId1)) {
-                                                        isLiked = true;
-                                                        break;
+                                                } else {
+                                                    for (int i = 0; i < albums.length(); ++i) {
+                                                        Album album1 = null;
+                                                        try {
+                                                            album1 = gson.fromJson(albums.get(i).toString(), Album.class);
+                                                        } catch (JSONException e) {
+                                                            throw new RuntimeException(e);
+                                                        }
+                                                        if (album1.getAlbum_id() == Integer.parseInt(finalAlbumId1)) {
+                                                            isLiked = true;
+                                                            break;
+                                                        }
                                                     }
                                                 }
                                                 AlbumHeaderData headerData = new AlbumHeaderData(

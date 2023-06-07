@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ArtistHeaderData {
+    private String id;
     private String artistName;
     private String artistImageUrl;
     private long numberOfLikes;
